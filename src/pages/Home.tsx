@@ -1,5 +1,6 @@
 import { Eye, GraduationCap, HeartHandshake, PlayCircle, Sparkles, Target } from 'lucide-react'
-import { FormEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
 import { storiesService } from '../services/stories.ts'
 import { subscribersService } from '../services/subscribers.ts'
 import type { Story } from '../types/index.ts'
