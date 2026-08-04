@@ -4,6 +4,8 @@ import girlsImage from '../assets/program-girls-sponsorship.jpg'
 import girlsDetail from '../assets/program-homework2.jpg'
 import vocationalImage from '../assets/program-vocational.jpg'
 import vocationalDetail from '../assets/program-vocational1.jpg'
+import communityGardenImage from '../assets/program-community-garden2.jpg'
+import communityGardenDetail from '../assets/program-comunity-garden.JPG'
 
 export type Program = {
   title: string
@@ -67,6 +69,31 @@ export const programs: Program[] = [
       'Review the training schedule and available trades.',
       'Submit the vocational intake form.',
       'Attend orientation and begin practical training.',
+    ],
+  },
+  {
+    title: 'Community Garden',
+    slug: 'community-garden',
+    summary:
+      'Growing food, skills, and opportunities for the community through hands-on farming and scholarship pathways.',
+    image: communityGardenImage,
+    detailImage: communityGardenDetail,
+    overview:
+      'The Community Garden Programme creates opportunities for young women to gain practical agricultural skills while improving their livelihoods. Participants work in the garden each day, receiving hands-on training, meals, maize, and fresh vegetables. Produce from the garden supports the Professional Cookery course, while surplus vegetables are sold locally to create additional income.',
+    highlights: [
+      'Fresh vegetables and food support',
+      'Practical farming skills',
+      'Vocational scholarships and education access',
+    ],
+    outcomes: [
+      'Young women gain practical agricultural training.',
+      'Garden produce supports learning and local income generation.',
+      'Scholarship pathways open access to vocational education and independence.',
+    ],
+    enrollSteps: [
+      'Contact the Mwayi Trust team to express interest in the garden programme.',
+      'Attend an intake conversation and understand the daily garden routine.',
+      'Begin practical farming training and become eligible for scholarship opportunities.',
     ],
   },
 ]

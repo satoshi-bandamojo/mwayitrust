@@ -2,7 +2,6 @@ import { ArrowRight, HeartHandshake } from 'lucide-react'
 import aboutImage from '../assets/about.jpg'
 import teamMember1 from '../assets/team-member1.jpg'
 import teamMember2 from '../assets/team-member2.jpg'
-import teamMember3 from '../assets/team-member3.jpg'
 
 const milestones = [
   {
@@ -145,29 +144,22 @@ export default function About() {
       <section className="about-team">
         <div className="section-heading">
           <p className="section-kicker">Meet the team</p>
-          <h2>People who guide Mwayi Trust every day.</h2>
+          <h2>Leaders with heart, purpose, and a deep commitment to the communities we serve.</h2>
         </div>
 
         <div className="team-grid">
           <article className="team-card">
-            <img src={teamMember1} alt="Patricia Banda" />
+            <img src={teamMember2} alt="Sandra Trevorthan" />
             <div>
-              <h3>---------------------</h3>
-              <p>---------------------</p>
+              <h3>Sandra Trevorthan</h3>
+              <p>Executive Director</p>
             </div>
           </article>
           <article className="team-card">
-            <img src={teamMember2} alt="Esther Moyo" />
+            <img src={teamMember1} alt="Linda Banda" />
             <div>
               <h3>Linda Banda</h3>
-              <p>---------------------</p>
-            </div>
-          </article>
-          <article className="team-card">
-            <img src={teamMember3} alt="Joseph Phiri" />
-            <div>
-              <h3>Sandra</h3>
-              <p>---------------------</p>
+              <p>General Manager</p>
             </div>
           </article>
         </div>

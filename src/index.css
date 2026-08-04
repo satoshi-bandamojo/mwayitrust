@@ -124,14 +124,14 @@ a {
 }
 
 .btn-primary {
-  background: #2563eb;
+  background: #38bdf8;
   color: white;
-  border-color: #2563eb;
+  border-color: #38bdf8;
 }
 
 .btn-secondary {
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #f0f9ff;
+  color: #0284c7;
   border: 1px solid #bae6fd;
 }
 
@@ -208,8 +208,8 @@ a {
   width: 2.7rem;
   height: 2.7rem;
   border-radius: 0.35rem;
-  background: #eff6ff;
-  color: #2563eb;
+  background: #e0f2fe;
+  color: #0ea5e9;
   margin-bottom: 0.8rem;
 }
 
@@ -256,7 +256,7 @@ a {
 .section-heading h2 {
   margin: 0;
   font-size: 1.35rem;
-  color: #0f172a;
+  color: #0284c7;
 }
 
 .section-heading a {
@@ -423,7 +423,7 @@ a {
   gap: 0.2rem;
   padding: 1rem 1.1rem;
   border-radius: 0.35rem;
-  background: #2563eb;
+  background: #38bdf8;
   color: white;
   text-align: center;
 }
@@ -432,41 +432,64 @@ a {
   padding: 0.5rem 0 1rem;
 }
 
+.about-team .section-heading {
+  margin-bottom: 2rem;
+}
+
+.about-team .section-heading h2 {
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 720px;
+  color: #0f172a;
+}
+
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(220px, 300px));
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: stretch;
 }
 
 .team-card {
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 1.25rem;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
   overflow: hidden;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.team-card > div {
+  text-align: center;
+  padding: 0 1rem 1.2rem;
 }
 
 .team-card img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   display: block;
-  min-height: 360px;
+  min-height: 280px;
 }
 
 .team-card h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.35rem;
   font-size: 1.15rem;
-  color: #0f172a;
+  color: #0284c7;
+  text-align: center;
+  font-weight: 500;
 }
 
 .team-card p {
   margin: 0;
-  color: #475569;
+  color: #075985;
   line-height: 1.7;
-  padding: 0 1rem 1.2rem;
+  text-align: center;
 }
 
 @media (max-width: 1024px) {
@@ -498,7 +521,7 @@ a {
 
 .about-story-content h2 {
   margin: 0 0 0.8rem;
-  color: #0f172a;
+  color: #0284c7;
 }
 
 .about-story-content p {
@@ -694,10 +717,124 @@ a {
   list-style: decimal inside;
 }
 
-.program-detail-actions {
+.vocational-shell {
+  gap: 1.25rem;
+}
+
+.vocational-hero {
+  background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+}
+
+.vocational-spotlight {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.vocational-spotlight-copy {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.vocational-spotlight-copy h2 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: clamp(1.6rem, 2vw, 2.3rem);
+}
+
+.vocational-spotlight-copy p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.8;
+}
+
+.vocational-spotlight-image {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+  border-radius: 1rem;
+  display: block;
+}
+
+.vocational-courses {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+}
+
+.course-card img {
+  width: 100%;
+  height: 220px;
+  display: block;
+  object-fit: cover;
+  background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+}
+
+.course-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.course-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.course-card h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.2rem;
+}
+
+.course-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.vocational-actions {
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .vocational-spotlight,
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .link-back {

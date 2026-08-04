@@ -28,7 +28,6 @@ export default function Events() {
   const [events, setEvents] = useState<EventItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [sortBy, setSortBy] = useState('date-asc')
   const [visibleCount, setVisibleCount] = useState(6)
 
   useEffect(() => {
@@ -58,28 +57,8 @@ export default function Events() {
     }
   }, [])
 
-  const sortedEvents = useMemo(() => {
-    let result = [...events]
-
-    result.sort((a, b) => {
-      switch (sortBy) {
-        case 'date-desc':
-          return b.event_date.localeCompare(a.event_date)
-        case 'category':
-          return (a.category || '').localeCompare(b.category || '')
-        case 'popularity':
-          return Number(b.featured) - Number(a.featured)
-        case 'date-asc':
-        default:
-          return a.event_date.localeCompare(b.event_date)
-      }
-    })
-
-    return result
-  }, [sortBy, events])
-
-  const displayedEvents = sortedEvents.slice(0, visibleCount)
-  const hasMore = visibleCount < sortedEvents.length
+  const displayedEvents = events.slice(0, visibleCount)
+  const hasMore = visibleCount < events.length
 
   return (
     <div className="events-shell">
@@ -106,18 +85,7 @@ export default function Events() {
       <div className="events-layout">
         <main id="events-list" className="events-main">
           <div className="events-toolbar">
-            <div className="events-toolbar__left">
-              <div className="events-sort-group">
-                <label htmlFor="event-sort">Sort by</label>
-                <select id="event-sort" value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
-                  <option value="date-asc">Date (earliest first)</option>
-                  <option value="date-desc">Date (latest first)</option>
-                  <option value="popularity">Popularity</option>
-                  <option value="category">Category</option>
-                </select>
-              </div>
-            </div>
-            <p className="events-count">Showing {displayedEvents.length} of {sortedEvents.length} events</p>
+            <p className="events-count">Showing {displayedEvents.length} of {events.length} events</p>
           </div>
 
           {loading ? (
