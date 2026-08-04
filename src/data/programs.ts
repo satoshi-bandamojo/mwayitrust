@@ -5,7 +5,7 @@ import girlsDetail from '../assets/program-homework2.jpg'
 import vocationalImage from '../assets/program-vocational.jpg'
 import vocationalDetail from '../assets/program-vocational1.jpg'
 import communityGardenImage from '../assets/program-community-garden2.jpg'
-import communityGardenDetail from '../assets/program-comunity-garden.jpg'
+import communityGardenDetail from '../assets/program-community-garden2.jpg'
 
 export type Program = {
   title: string
