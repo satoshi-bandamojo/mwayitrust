@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { programs } from '../data/programs.ts'
 import carpentryImage from '../assets/carpentry.jpg'
-import cookeryImage from '../assets/cookery2.JPG'
+import cookeryImage from '../assets/cookery2.jpg'
 import houseKeepingImage from '../assets/house-keeping.jpg'
 import tailoringImage from '../assets/program-vocational2.jpg'
 

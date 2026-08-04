@@ -1,5 +1,5 @@
 import { ArrowRight, CalendarDays, MapPin, TimerReset } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { eventsService } from '../services/events.ts'
 import type { EventItem } from '../types/index.ts'
 
