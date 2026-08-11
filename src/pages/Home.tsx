@@ -6,7 +6,7 @@ import { programs } from '../data/programs.ts'
 import { storiesService } from '../services/stories.ts'
 import { subscribersService } from '../services/subscribers.ts'
 import type { Story } from '../types/index.ts'
-import heroImage from '../assets/hero.jpg'
+import heroImage from '../assets/hero.webp'
 
 const stats = [
   { value: '3,000+', label: 'students supported' },
