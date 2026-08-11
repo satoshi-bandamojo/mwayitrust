@@ -7,6 +7,9 @@ export default function AdminSidebar() {
         <li><a href="/admin/stories">Stories</a></li>
         <li><a href="/admin/events">Events</a></li>
         <li><a href="/admin/gallery">Gallery</a></li>
+        <li><a href="/admin/donations">Donations</a></li>
+        <li><a href="/admin/subscribers">Subscribers</a></li>
+        <li><a href="/admin/contacts">Messages</a></li>
       </ul>
     </aside>
   )

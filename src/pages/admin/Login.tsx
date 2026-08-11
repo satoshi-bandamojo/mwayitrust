@@ -1,11 +1,15 @@
 import { ArrowLeft, Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { signInAdmin } from '../../services/admin.ts'
 
 export default function Login() {
+  const navigate = useNavigate()
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({ email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const validate = () => {
     const nextErrors = { email: '', password: '' }
@@ -31,7 +35,7 @@ export default function Login() {
     return valid
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSubmitError('')
 
@@ -40,8 +44,16 @@ export default function Login() {
       return
     }
 
-    setSubmitError('')
-    // Placeholder: form submission and auth handling go here.
+    try {
+      setIsSubmitting(true)
+      await signInAdmin(credentials.email.trim(), credentials.password)
+      navigate('/admin', { replace: true })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Invalid email or password.'
+      setSubmitError(message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -103,13 +115,15 @@ export default function Login() {
             {errors.password ? <span className="form-error">{errors.password}</span> : null}
           </label>
 
-          <button type="submit" className="btn btn-primary admin-login-submit">
-            Sign in
+          <button type="submit" className="btn btn-primary admin-login-submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
         <div className="admin-login-footer">
-          <a href="/"> <ArrowLeft size={16} /> Back to Website</a>
+          <a href="/">
+            <ArrowLeft size={16} /> Back to Website
+          </a>
         </div>
       </div>
     </div>

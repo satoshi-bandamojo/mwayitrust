@@ -5,6 +5,7 @@ export type Story = {
   excerpt: string
   content: string
   category?: string
+  cover_image?: string
   featured_image?: string
   image_url?: string
   published_at?: string

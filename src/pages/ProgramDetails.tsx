@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { programs } from '../data/programs.ts'
-import carpentryImage from '../assets/carpentry.jpg'
-import cookeryImage from '../assets/cookery2.jpg'
+import carpentryImage from '../assets/carpentry.webp'
+import cookeryImage from '../assets/cookery2.webp'
 import houseKeepingImage from '../assets/house-keeping.jpg'
-import tailoringImage from '../assets/program-vocational2.jpg'
+import tailoringImage from '../assets/program-vocational2.webp'
 
 const vocationalCourses = [
   {

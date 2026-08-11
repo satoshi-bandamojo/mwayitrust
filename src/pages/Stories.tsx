@@ -49,7 +49,7 @@ export default function Stories() {
   const featuredStories = useMemo(() => stories.filter((story) => story.featured).slice(0, 2), [stories])
   const regularStories = useMemo(() => stories.filter((story) => !story.featured), [stories])
 
-  const coverImage = (story: Story) => story.featured_image || story.image_url || ''
+  const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
   const storyCategory = (story: Story) => story.category || 'Story'
   const storyDate = (story: Story) => formatDate(story.published_at || story.created_at || '')
 

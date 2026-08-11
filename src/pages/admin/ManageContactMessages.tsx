@@ -1,37 +1,6 @@
 import { RefreshCcw, Mail, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-interface ContactMessage {
-  id: number
-  name: string
-  email: string
-  message: string
-  created_at: string
-}
-
-const initialMessages: ContactMessage[] = [
-  {
-    id: 1,
-    name: 'Grace Mwale',
-    email: 'grace.mwale@example.com',
-    message: 'I would like to volunteer with the after-school programme. Can you share the next training dates?',
-    created_at: '2026-07-22T10:24:00Z',
-  },
-  {
-    id: 2,
-    name: 'John Banda',
-    email: 'john.banda@example.com',
-    message: 'Can you provide more information about the scholarship fund and the application process?',
-    created_at: '2026-07-21T14:40:00Z',
-  },
-  {
-    id: 3,
-    name: 'Mercy Phiri',
-    email: 'mercy.phiri@example.com',
-    message: 'I have supplies that might help the learning hubs. Who should I contact to arrange a donation?',
-    created_at: '2026-07-20T08:15:00Z',
-  },
-]
+import { deleteContactMessage, getContactMessages, type ContactMessageRecord } from '../../services/admin.ts'
 
 function formatMessageDate(value: string) {
   return new Intl.DateTimeFormat('en-GB', {
@@ -41,7 +10,7 @@ function formatMessageDate(value: string) {
 }
 
 export default function ManageContactMessages() {
-  const [messages, setMessages] = useState<ContactMessage[]>(initialMessages)
+  const [messages, setMessages] = useState<ContactMessageRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -54,8 +23,8 @@ export default function ManageContactMessages() {
     setError('')
 
     try {
-      await new Promise((resolve) => window.setTimeout(resolve, 500))
-      setMessages(initialMessages)
+      const result = await getContactMessages()
+      setMessages(result)
     } catch {
       setError('Unable to refresh inbox at this time.')
     } finally {
@@ -63,11 +32,16 @@ export default function ManageContactMessages() {
     }
   }
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number | string) => {
     const confirmed = window.confirm('Delete this message? This cannot be undone.')
     if (!confirmed) return
 
-    setMessages((current) => current.filter((message) => message.id !== id))
+    try {
+      await deleteContactMessage(id)
+      setMessages((current) => current.filter((message) => message.id !== id))
+    } catch {
+      setError('Unable to delete this message.')
+    }
   }
 
   return (
@@ -107,7 +81,7 @@ export default function ManageContactMessages() {
         ) : (
           <div className="message-list">
             {messages.map((message) => (
-              <article key={message.id} className="message-card">
+              <article key={String(message.id)} className="message-card">
                 <div className="message-card__header">
                   <div>
                     <h3 className="message-card__name">{message.name}</h3>
@@ -115,7 +89,7 @@ export default function ManageContactMessages() {
                   </div>
                   <div className="message-card__actions">
                     <span className="message-card__date">{formatMessageDate(message.created_at)}</span>
-                    <button type="button" className="message-card__delete" onClick={() => handleDelete(message.id)}>
+                    <button type="button" className="message-card__delete" onClick={() => void handleDelete(message.id)}>
                       <Trash2 size={14} />
                       Delete
                     </button>

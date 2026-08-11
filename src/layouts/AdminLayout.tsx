@@ -4,12 +4,12 @@ import AdminTopbar from '../components/admin/AdminTopbar.tsx'
 
 export default function AdminLayout() {
   return (
-    <div className="min-h-screen bg-brand-muted dark:bg-slate-950">
-      <div className="flex">
+    <div className="admin-layout-shell min-h-screen bg-brand-muted dark:bg-slate-950">
+      <div className="admin-layout-content">
         <AdminSidebar />
-        <div className="flex-1">
+        <div className="admin-main-panel">
           <AdminTopbar />
-          <div className="p-4 md:p-6">
+          <div className="admin-main-panel__body p-4 md:p-6">
             <Outlet />
           </div>
         </div>

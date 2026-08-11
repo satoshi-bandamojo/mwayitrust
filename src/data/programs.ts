@@ -4,8 +4,8 @@ import girlsImage from '../assets/program-girls-sponsorship.jpg'
 import girlsDetail from '../assets/program-homework2.jpg'
 import vocationalImage from '../assets/program-vocational.jpg'
 import vocationalDetail from '../assets/program-vocational1.jpg'
-import communityGardenImage from '../assets/program-community-garden2.jpg'
-import communityGardenDetail from '../assets/program-community-garden2.jpg'
+import communityGardenImage from '../assets/program-community-garden2.webp'
+import communityGardenDetail from '../assets/program-community-garden2.webp'
 
 export type Program = {
   title: string
