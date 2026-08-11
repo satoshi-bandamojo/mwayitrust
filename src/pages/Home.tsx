@@ -1,6 +1,8 @@
-import { Eye, GraduationCap, HeartHandshake, PlayCircle, Sparkles, Target } from 'lucide-react'
+import { ArrowRight, Eye, GraduationCap, HeartHandshake, PlayCircle, Sparkles, Target } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
+import { Link } from 'react-router-dom'
+import { programs } from '../data/programs.ts'
 import { storiesService } from '../services/stories.ts'
 import { subscribersService } from '../services/subscribers.ts'
 import type { Story } from '../types/index.ts'
@@ -28,6 +30,7 @@ const missionSnapshot = [
 ]
 
 const featuredStoriesDefault: Story[] = []
+const featuredPrograms = programs.slice(0, 3)
 
 export default function Home() {
   const [featuredStories, setFeaturedStories] = useState<Story[]>(featuredStoriesDefault)
@@ -94,7 +97,7 @@ export default function Home() {
         <div className="hero-content">
           <div className="hero-badge">
             <Sparkles size={16} />
-            Education for every child
+            Joining Hands. Opening Doors.
           </div>
           <h1>Building brighter futures through learning and care.</h1>
           <p>
@@ -110,19 +113,19 @@ export default function Home() {
               Learn more
             </a>
           </div>
+
+          <div className="hero-stats" aria-label="Impact statistics">
+            {stats.map((stat) => (
+              <div key={stat.label} className="stat-card">
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="stats-strip" aria-label="Impact statistics">
-        {stats.map((stat) => (
-          <div key={stat.label} className="stat-card">
-            <strong>{stat.value}</strong>
-            <span>{stat.label}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className="mission-snapshot-section" aria-label="Mission snapshot">
+      <section className="section-divider mission-snapshot-section" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
             <p className="section-kicker">Who we are</p>
@@ -148,13 +151,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="content-section">
+      <section className="section-divider content-section programs-home-section">
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">Programs available</p>
+            <h2>Support the opportunities families need most.</h2>
+          </div>
+          <a href="/programs">View all programs</a>
+        </div>
+
+        <div className="home-programs-grid">
+          {featuredPrograms.map((program) => (
+            <Link key={program.slug} to={`/programs/${program.slug}`} className="home-program-card">
+              <img src={program.image} alt={program.title} />
+              <div className="home-program-body">
+                <h3>{program.title}</h3>
+                <p>{program.summary}</p>
+                <span>
+                  Learn more
+                  <ArrowRight size={16} />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-divider content-section">
         <div className="section-heading">
           <div>
             <p className="section-kicker">Featured stories</p>
             <h2>See how support turns into lasting change.</h2>
           </div>
-          <a href="/stories">View all stories</a>
         </div>
         <div className="card-grid">
           {storiesLoading ? (
@@ -172,6 +200,11 @@ export default function Home() {
               </article>
             ))
           )}
+        </div>
+        <div className="section-cta">
+          <a className="btn btn-primary" href="/stories">
+            Read Stories
+          </a>
         </div>
       </section>
 
