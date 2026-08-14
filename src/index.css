@@ -653,6 +653,42 @@ a {
   margin-bottom: 0.8rem;
 }
 
+/* Story details */
+.story-details article {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+}
+
+.story-meta {
+  color: #6b7280;
+  margin: 0.4rem 0 1rem;
+}
+
+.story-cover {
+  width: 100%;
+  height: clamp(220px, 40vh, 520px);
+  object-fit: cover;
+  display: block;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.story-content {
+  color: #374151;
+  line-height: 1.75;
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .story-details article {
+    padding: 0.75rem 1rem;
+  }
+  .story-cover {
+    height: clamp(160px, 32vh, 320px);
+  }
+}
+
 .milestone-list {
   display: flex;
   flex-direction: column;

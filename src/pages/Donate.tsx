@@ -1,5 +1,6 @@
 import { ArrowRight, BadgeCheck, Banknote, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone, Sparkles } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { createDonation } from '../services/donations'
 
 type DonationTierType = 'learning_materials' | 'student_term' | 'student_year' | 'community_champion'
 type PaymentMethodId = 'airtel' | 'tnm' | 'bank' | 'paypal'
@@ -155,7 +156,48 @@ export default function Donate() {
     }
 
     const reference = `MT-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
-    setSubmitMessage(`Thank you for your generosity. Your donation reference is ${reference}.`)
+    ;(async () => {
+      setSubmitMessage('Saving donation...')
+
+      const payload = {
+        donor_name: isAnonymous ? null : form.donor_name || null,
+        email: isAnonymous ? '' : form.email,
+        phone: form.phone || null,
+        amount: finalAmount,
+        currency: 'MWK',
+        payment_reference: reference,
+        purpose: selectedTier === 'custom' ? 'custom' : selectedTier || null,
+        donation_type: selectedTier === 'custom' ? 'custom' : selectedTier || null,
+      }
+
+      const { error } = await createDonation(payload)
+      if (error) {
+        console.error('Failed to create donation', error)
+        setSubmitMessage('Failed to save donation. Please try again.')
+        return
+      }
+
+      // If PayChangu checkout URL is configured, redirect there with query params.
+      const checkoutBase = import.meta.env.VITE_PAYCHANGU_CHECKOUT_URL
+      if (checkoutBase) {
+        const params = new URLSearchParams({
+          amount: String(finalAmount),
+          currency: 'MWK',
+          reference,
+          email: form.email || '',
+          phone: form.phone || '',
+          name: form.donor_name || '',
+          callback: `${window.location.origin}/donation-callback`,
+        })
+        const url = `${checkoutBase.replace(/\/$/, '')}?${params.toString()}`
+        setSubmitMessage('Redirecting to payment gateway...')
+        window.location.href = url
+        return
+      }
+
+      // No checkout configured — show the donation reference so a backend can complete payment.
+      setSubmitMessage(`Thank you for your generosity. Your donation reference is ${reference}.`)
+    })()
   }
 
   return (

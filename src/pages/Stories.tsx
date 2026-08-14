@@ -46,8 +46,14 @@ export default function Stories() {
     }
   }, [])
 
-  const featuredStories = useMemo(() => stories.filter((story) => story.featured).slice(0, 2), [stories])
-  const regularStories = useMemo(() => stories.filter((story) => !story.featured), [stories])
+  const featuredStories = useMemo(
+    () => stories.filter((story) => story.featured && story.published !== false).slice(0, 2),
+    [stories],
+  )
+  const regularStories = useMemo(
+    () => stories.filter((story) => !story.featured && story.published !== false),
+    [stories],
+  )
 
   const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
   const storyCategory = (story: Story) => story.category || 'Story'
@@ -94,7 +100,7 @@ export default function Stories() {
             </article>
           ))
         ) : (
-          <p>No featured stories available yet.</p>
+          <p></p>
         )}
       </section>
 

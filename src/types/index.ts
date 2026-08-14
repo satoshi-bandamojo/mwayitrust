@@ -4,10 +4,12 @@ export type Story = {
   slug: string
   excerpt: string
   content: string
+  author?: string
   category?: string
   cover_image?: string
   featured_image?: string
   image_url?: string
+  published?: boolean
   published_at?: string
   featured?: boolean
   created_at?: string
@@ -52,7 +54,9 @@ export type Donation = {
 export type Subscriber = {
   id: string
   email: string
-  created_at?: string
+  subscribed: boolean
+  subscribed_at?: string
+  source?: string
 }
 
 export type ContactMessage = {

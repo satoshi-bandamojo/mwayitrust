@@ -1,5 +1,6 @@
 import { Briefcase, Globe2, Mail, MessageCircle, MessageSquare, Phone, PlayCircle, HeartHandshake } from 'lucide-react'
 import { useState } from 'react'
+import { createContactMessage } from '../services/contactMessages'
 
 const locations = [
   {
@@ -113,7 +114,12 @@ export default function Contact() {
     setErrorMessage('')
 
     try {
-      await new Promise((resolve) => window.setTimeout(resolve, 800))
+      const { error } = await createContactMessage({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: formData.message.trim(),
+      })
+      if (error) throw error
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
       setTimeout(() => setStatus('idle'), 3000)
