@@ -105,4 +105,4 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 For backend/webhook setup or database schema questions, reach out to the maintainer or the team managing the Supabase project.
 
 ---
-_Generated README: updated to describe Mwayi Trust app flows and setup._
+
