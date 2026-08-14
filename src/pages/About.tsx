@@ -1,5 +1,5 @@
 import { ArrowRight, HeartHandshake } from 'lucide-react'
-import aboutImage from '../assets/about.jpg'
+import aboutImage from '../assets/about.webp'
 import teamMember1 from '../assets/team-member1.jpg'
 import teamMember2 from '../assets/team-member2.jpg'
 
