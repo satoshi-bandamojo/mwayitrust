@@ -26,6 +26,8 @@ export type EventItem = {
   end_time?: string
   location: string
   image?: string
+  image_url?: string
+  cover_image?: string
   featured?: boolean
   full_description?: string
 }

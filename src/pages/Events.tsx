@@ -25,6 +25,8 @@ const getStatus = (date: string): EventStatus => {
   return 'upcoming'
 }
 
+const eventImage = (event: EventItem) => event.image || event.image_url || event.cover_image || ''
+
 export default function Events() {
   const [events, setEvents] = useState<EventItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -100,7 +102,7 @@ export default function Events() {
                 return (
                   <article key={event.id} className="event-card">
                     <div className="event-card__image-wrap">
-                      {event.image ? <img src={event.image} alt={event.title} /> : null}
+                      {eventImage(event) ? <img src={eventImage(event)} alt={event.title} /> : null}
                       <span className={`event-card__status event-card__status--${status}`}>
                         {status.charAt(0).toUpperCase() + status.slice(1)}
                       </span>
