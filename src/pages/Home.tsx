@@ -31,6 +31,7 @@ const missionSnapshot = [
 
 const featuredStoriesDefault: Story[] = []
 const featuredPrograms = programs.slice(0, 3)
+const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
 
 export default function Home() {
   const [featuredStories, setFeaturedStories] = useState<Story[]>(featuredStoriesDefault)
@@ -191,12 +192,19 @@ export default function Home() {
             <p className="error-message">{storiesError}</p>
           ) : (
             featuredStories.map((story) => (
-              <article key={story.id} className="info-card">
-                <div className="icon-pill">
-                  <GraduationCap size={18} />
+              <article key={story.id} className="info-card story-card">
+                {coverImage(story) ? (
+                  <div className="story-card__image-wrap">
+                    <img src={coverImage(story)} alt={story.title} />
+                  </div>
+                ) : null}
+                <div className="story-card__body">
+                  <div className="icon-pill">
+                    <GraduationCap size={18} />
+                  </div>
+                  <h3>{story.title}</h3>
+                  <p>{story.excerpt}</p>
                 </div>
-                <h3>{story.title}</h3>
-                <p>{story.excerpt}</p>
               </article>
             ))
           )}
