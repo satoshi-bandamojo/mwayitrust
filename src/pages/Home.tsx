@@ -7,6 +7,7 @@ import { storiesService } from '../services/stories.ts'
 import { subscribersService } from '../services/subscribers.ts'
 import type { Story } from '../types/index.ts'
 import heroImage from '../assets/hero.webp'
+import LoadingState from '../components/ui/LoadingState.tsx'
 
 const stats = [
   { value: '3,000+', label: 'students supported' },
@@ -93,7 +94,7 @@ export default function Home() {
 
   return (
     <div className="homepage-shell">
-      <section className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section className="hero-section reveal-on-scroll" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-badge">
@@ -126,7 +127,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider mission-snapshot-section" aria-label="Who we are">
+      <section className="section-divider mission-snapshot-section reveal-on-scroll" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
             <p className="section-kicker">Who we are</p>
@@ -152,7 +153,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider content-section programs-home-section">
+      <section className="section-divider content-section programs-home-section reveal-on-scroll">
         <div className="section-heading">
           <div>
             <p className="section-kicker">Programs available</p>
@@ -178,7 +179,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider content-section">
+      <section className="section-divider content-section reveal-on-scroll">
         <div className="section-heading">
           <div>
             <p className="section-kicker">Featured stories</p>
@@ -187,7 +188,7 @@ export default function Home() {
         </div>
         <div className="card-grid">
           {storiesLoading ? (
-            <p>Loading featured stories…</p>
+            <LoadingState label="Loading featured stories" />
           ) : storiesError ? (
             <p className="error-message">{storiesError}</p>
           ) : (
@@ -216,7 +217,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="newsletter-section">
+      <section className="newsletter-section reveal-on-scroll">
         <div>
           <p className="section-kicker">Stay connected</p>
           <h2>Receive updates from Mwayi Trust.</h2>

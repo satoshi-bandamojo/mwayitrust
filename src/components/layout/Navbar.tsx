@@ -1,4 +1,6 @@
-import { Menu, HeartHandshake } from 'lucide-react'
+import { Menu, X, HeartHandshake } from 'lucide-react'
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
 const links = [
   { label: 'About', href: '/about' },
@@ -10,22 +12,39 @@ const links = [
 ]
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const closeMenu = () => setMenuOpen(false)
+
   return (
     <header className="navbar-shell">
       <div className="navbar-inner">
-        <a className="brand" href="/">
+        <Link className="brand" to="/" onClick={closeMenu}>
           <HeartHandshake size={20} />
           <span>Mwayi Trust</span>
-        </a>
-        <nav className="nav-links" aria-label="Primary navigation">
+        </Link>
+
+        <nav className={`nav-links ${menuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">
           {links.map((link) => (
-            <a key={link.href} href={link.href}>
+            <NavLink
+              key={link.href}
+              to={link.href}
+              className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+              onClick={closeMenu}
+            >
               {link.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
-        <button className="nav-mobile" type="button" aria-label="Open navigation">
-          <Menu size={20} />
+
+        <button
+          className={`nav-mobile ${menuOpen ? 'is-open' : ''}`}
+          type="button"
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
     </header>

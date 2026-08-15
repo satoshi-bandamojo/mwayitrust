@@ -2,6 +2,7 @@ import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { storiesService } from '../services/stories.ts'
 import type { Story } from '../types/index.ts'
+import LoadingState from '../components/ui/LoadingState.tsx'
 
 const initialStories: Story[] = []
 
@@ -61,7 +62,7 @@ export default function Stories() {
 
   return (
     <div className="stories-shell">
-      <section className="stories-hero">
+      <section className="stories-hero reveal-on-scroll">
         <div className="stories-hero__content">
           <p className="section-kicker">Stories of impact</p>
           <h1>Read the stories behind the change.</h1>
@@ -83,7 +84,7 @@ export default function Stories() {
 
       <section className="story-featured-grid" aria-label="Featured stories">
         {loading ? (
-          <p>Loading featured stories…</p>
+          <LoadingState label="Loading featured stories" />
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : featuredStories.length ? (
@@ -106,7 +107,7 @@ export default function Stories() {
 
       <section id="story-grid" className="story-grid" aria-label="Stories">
         {loading ? (
-          <p>Loading stories…</p>
+          <LoadingState label="Loading stories" />
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : regularStories.length ? (

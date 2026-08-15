@@ -2,6 +2,7 @@ import { ArrowRight, CalendarDays, MapPin, TimerReset } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { eventsService } from '../services/events.ts'
 import type { EventItem } from '../types/index.ts'
+import LoadingState from '../components/ui/LoadingState.tsx'
 
 type EventStatus = 'upcoming' | 'ongoing' | 'past'
 
@@ -62,7 +63,7 @@ export default function Events() {
 
   return (
     <div className="events-shell">
-      <section className="events-hero">
+      <section className="events-hero reveal-on-scroll">
         <div className="events-hero__content">
           <p className="section-kicker">Upcoming programs</p>
           <h1>Explore the events and learning experiences shaping our community.</h1>
@@ -89,7 +90,7 @@ export default function Events() {
           </div>
 
           {loading ? (
-            <p>Loading events…</p>
+            <LoadingState label="Loading events" />
           ) : error ? (
             <p className="error-message">{error}</p>
           ) : displayedEvents.length ? (

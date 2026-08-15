@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { storiesService } from '../services/stories.ts'
 import type { Story } from '../types/index.ts'
+import LoadingState from '../components/ui/LoadingState.tsx'
 
 const formatDate = (value: string) => {
   if (!value) return ''
@@ -58,7 +59,7 @@ export default function StoryDetails() {
     }
   }, [id])
 
-  if (loading) return <div className="page-shell">Loading story…</div>
+  if (loading) return <div className="page-shell"><LoadingState label="Loading story" /></div>
   if (error) return <div className="page-shell"><p className="error-message">{error}</p></div>
   if (!story) return <div className="page-shell"><p>Story not found.</p></div>
 
