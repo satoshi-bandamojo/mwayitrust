@@ -179,9 +179,12 @@ export default function Donate() {
       }
 
       try {
-        // Initiate payment with Paychangu API
+        const appBaseUrl = import.meta.env.VITE_APP_URL || window.location.origin
+        const callbackUrl = `${appBaseUrl.replace(/\/$/, '')}/donation-callback`
+        const returnUrl = `${appBaseUrl.replace(/\/$/, '')}/donate`
+
         setSubmitMessage('Redirecting to payment gateway...')
-        
+
         const { checkoutUrl } = await initiatePaychanguPayment({
           amount: finalAmount,
           currency: 'MWK',
@@ -190,11 +193,10 @@ export default function Donate() {
           first_name: form.donor_name ? form.donor_name.split(' ')[0] : 'Donor',
           last_name: form.donor_name ? form.donor_name.split(' ').slice(1).join(' ') : '',
           phone: form.phone || undefined,
-          callback_url: `${window.location.origin}/donation-callback`,
-          return_url: `${window.location.origin}/donate`,
+          callback_url: callbackUrl,
+          return_url: returnUrl,
         })
 
-        // Redirect to Paychangu checkout
         window.location.href = checkoutUrl
       } catch (err) {
         console.error('Failed to initiate payment', err)
