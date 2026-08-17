@@ -1,6 +1,7 @@
 import { ArrowRight, BadgeCheck, Banknote, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone, Sparkles } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { createDonation } from '../services/donations'
+import { initiatePaychanguPayment } from '../services/paychangu'
 
 type DonationTierType = 'learning_materials' | 'student_term' | 'student_year' | 'community_champion'
 type PaymentMethodId = 'airtel' | 'tnm' | 'bank' | 'paypal'
@@ -177,26 +178,28 @@ export default function Donate() {
         return
       }
 
-      // If PayChangu checkout URL is configured, redirect there with query params.
-      const checkoutBase = import.meta.env.VITE_PAYCHANGU_CHECKOUT_URL
-      if (checkoutBase) {
-        const params = new URLSearchParams({
-          amount: String(finalAmount),
-          currency: 'MWK',
-          reference,
-          email: form.email || '',
-          phone: form.phone || '',
-          name: form.donor_name || '',
-          callback: `${window.location.origin}/donation-callback`,
-        })
-        const url = `${checkoutBase.replace(/\/$/, '')}?${params.toString()}`
+      try {
+        // Initiate payment with Paychangu API
         setSubmitMessage('Redirecting to payment gateway...')
-        window.location.href = url
-        return
-      }
+        
+        const { checkoutUrl } = await initiatePaychanguPayment({
+          amount: finalAmount,
+          currency: 'MWK',
+          email: form.email || 'noreply@mwayitrust.org',
+          tx_ref: reference,
+          first_name: form.donor_name ? form.donor_name.split(' ')[0] : 'Donor',
+          last_name: form.donor_name ? form.donor_name.split(' ').slice(1).join(' ') : '',
+          phone: form.phone || undefined,
+          callback_url: `${window.location.origin}/donation-callback`,
+          return_url: `${window.location.origin}/donate`,
+        })
 
-      // No checkout configured — show the donation reference so a backend can complete payment.
-      setSubmitMessage(`Thank you for your generosity. Your donation reference is ${reference}.`)
+        // Redirect to Paychangu checkout
+        window.location.href = checkoutUrl
+      } catch (err) {
+        console.error('Failed to initiate payment', err)
+        setSubmitMessage(`Error: ${err instanceof Error ? err.message : 'Failed to initiate payment. Please try again.'}`)
+      }
     })()
   }
 

@@ -13,6 +13,7 @@ const StoryDetails = lazy(() => import('./pages/StoryDetails.tsx'))
 const Events = lazy(() => import('./pages/Events.tsx'))
 const Gallery = lazy(() => import('./pages/Gallery.tsx'))
 const Donate = lazy(() => import('./pages/Donate.tsx'))
+const DonationCallback = lazy(() => import('./pages/DonationCallback.tsx'))
 const Contact = lazy(() => import('./pages/Contact.tsx'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.tsx'))
 
@@ -38,6 +39,7 @@ export const routes = [
       { path: '/events', element: <Events /> },
       { path: '/gallery', element: <Gallery /> },
       { path: '/donate', element: <Donate /> },
+      { path: '/donation-callback', element: <DonationCallback /> },
       { path: '/contact', element: <Contact /> },
       { path: '/privacy-policy', element: <PrivacyPolicy /> },
     ],
