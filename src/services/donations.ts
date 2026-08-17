@@ -25,8 +25,8 @@ export async function createDonation(payload: CreateDonationPayload) {
     payment_metadata: payload.payment_metadata ?? null,
   }
 
-  const { data, error } = await supabase.from('donations').insert([insert]).select().single()
-  return { data, error }
+  const { error } = await supabase.from('donations').insert([insert])
+  return { error }
 }
 
 export async function getDonationByReference(reference: string) {
