@@ -10,8 +10,6 @@ const normalizeStories = (records: Story[] = []) =>
   }))
 
 export const storiesService = {
-  // ...existing getFeatured, getAll, getById, getBySlug...
-
   async getFeatured() {
     const { data, error } = await supabase
       .from('stories')
@@ -23,6 +21,20 @@ export const storiesService = {
 
     if (error) throw error
     return normalizeStories((data as Story[]) ?? [])
+  },
+
+  async getById(id: string) {
+    const { data, error } = await supabase.from('stories').select('*').eq('id', id).maybeSingle()
+
+    if (error) throw error
+    return data ? normalizeStories([data as Story])[0] : null
+  },
+
+  async getBySlug(slug: string) {
+    const { data, error } = await supabase.from('stories').select('*').eq('slug', slug).maybeSingle()
+
+    if (error) throw error
+    return data ? normalizeStories([data as Story])[0] : null
   },
 
   async getAll() {
