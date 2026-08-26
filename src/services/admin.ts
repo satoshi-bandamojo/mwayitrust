@@ -208,3 +208,63 @@ export async function getDashboardSummary() {
     messages: counts.messages ?? 0,
   }
 }
+
+import type { GalleryImage } from '../types/index.ts'
+
+export async function getGallery(): Promise<GalleryImage[]> {
+  const { data, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false })
+  if (error) {
+    if (isMissingTableError(error)) return []
+    throw error
+  }
+  return (data ?? []) as GalleryImage[]
+}
+
+export async function addGalleryImage(image: Partial<GalleryImage>) {
+  const { data, error } = await supabase.from('gallery').insert([image]).select().single()
+  if (error) throw error
+  return data as GalleryImage
+}
+
+export async function deleteGalleryImage(id: string) {
+  const { error } = await supabase.from('gallery').delete().eq('id', id)
+  if (error) throw error
+}
+
+import type { EventItem } from '../types/index.ts'
+
+export async function getEvents(): Promise<EventItem[]> {
+  const { data, error } = await supabase.from('events').select('*').order('event_date', { ascending: true })
+  if (error) {
+    if (isMissingTableError(error)) return []
+    throw error
+  }
+  return (data ?? []) as EventItem[]
+}
+
+export async function addEvent(event: Partial<EventItem>) {
+  const { data, error } = await supabase.from('events').insert([event]).select().single()
+  if (error) throw error
+  return data as EventItem
+}
+
+export async function deleteEvent(id: string) {
+  const { error } = await supabase.from('events').delete().eq('id', id)
+  if (error) throw error
+}
+
+import type { Subscriber } from '../types/index.ts'
+
+export async function getSubscribers(): Promise<Subscriber[]> {
+  const { data, error } = await supabase.from('subscribers').select('*').order('subscribed_at', { ascending: false })
+  if (error) {
+    if (isMissingTableError(error)) return []
+    throw error
+  }
+  return (data ?? []) as Subscriber[]
+}
+
+export async function deleteSubscriber(id: string) {
+  const { error } = await supabase.from('subscribers').delete().eq('id', id)
+  if (error) throw error
+}

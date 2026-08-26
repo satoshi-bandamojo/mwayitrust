@@ -10,20 +10,19 @@ const normalizeStories = (records: Story[] = []) =>
   }))
 
 export const storiesService = {
+  // ...existing getFeatured, getAll, getById, getBySlug...
+
   async getFeatured() {
     const { data, error } = await supabase
       .from('stories')
       .select('*')
       .eq('featured', true)
+      .eq('published', true)
+      .order('published_at', { ascending: false })
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    const items = normalizeStories((data as Story[]) ?? [])
-    return items.sort((a, b) => {
-      const da = new Date(a.published_at || a.created_at || '').getTime() || 0
-      const db = new Date(b.published_at || b.created_at || '').getTime() || 0
-      return db - da
-    })
+    return normalizeStories((data as Story[]) ?? [])
   },
 
   async getAll() {
@@ -33,32 +32,34 @@ export const storiesService = {
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    const items = normalizeStories((data as Story[]) ?? [])
-    return items.sort((a, b) => {
-      const da = new Date(a.published_at || a.created_at || '').getTime() || 0
-      const db = new Date(b.published_at || b.created_at || '').getTime() || 0
-      return db - da
-    })
+    return normalizeStories((data as Story[]) ?? [])
   },
 
-  async getById(id: string) {
+  async create(story: Partial<Story>) {
     const { data, error } = await supabase
       .from('stories')
-      .select('*')
+      .insert([story])
+      .select()
+      .single()
+
+    if (error) throw error
+    return normalizeStories([data as Story])[0]
+  },
+
+  async update(id: string, updates: Partial<Story>) {
+    const { data, error } = await supabase
+      .from('stories')
+      .update(updates)
       .eq('id', id)
+      .select()
       .single()
 
     if (error) throw error
     return normalizeStories([data as Story])[0]
   },
-  async getBySlug(slug: string) {
-    const { data, error } = await supabase
-      .from('stories')
-      .select('*')
-      .eq('slug', slug)
-      .single()
 
+  async remove(id: string) {
+    const { error } = await supabase.from('stories').delete().eq('id', id)
     if (error) throw error
-    return normalizeStories([data as Story])[0]
   },
 }

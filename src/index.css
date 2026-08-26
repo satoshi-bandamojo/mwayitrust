@@ -3109,6 +3109,7 @@ a {
   font-size: 0.9rem;
 }
 
+.message-card__reply,
 .message-card__delete {
   display: inline-flex;
   align-items: center;
@@ -3119,6 +3120,14 @@ a {
   color: #b91c1c;
   padding: 0.55rem 0.85rem;
   font-size: 0.85rem;
+}
+
+.message-card__reply {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.55rem 0.85rem;
 }
 
 .message-card__body {

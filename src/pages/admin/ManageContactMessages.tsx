@@ -44,6 +44,12 @@ export default function ManageContactMessages() {
     }
   }
 
+  const replyToMessage = (message: ContactMessageRecord) => {
+    const subject = 'Re: Your message to Mwayi Trust'
+    const body = `Hello ${message.name},\n\nThank you for contacting Mwayi Trust.\n\n\n--- Original message ---\n${message.message}`
+    window.location.href = `mailto:${message.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
+
   return (
     <div className="admin-page-shell">
       <section className="admin-page-header">
@@ -89,6 +95,10 @@ export default function ManageContactMessages() {
                   </div>
                   <div className="message-card__actions">
                     <span className="message-card__date">{formatMessageDate(message.created_at)}</span>
+                    <button type="button" className="message-card__reply" onClick={() => replyToMessage(message)}>
+                      <Mail size={14} />
+                      Reply
+                    </button>
                     <button type="button" className="message-card__delete" onClick={() => void handleDelete(message.id)}>
                       <Trash2 size={14} />
                       Delete
