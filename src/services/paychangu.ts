@@ -37,7 +37,6 @@ export interface PaychanguInitiatePaymentResponse {
 export interface PaychanguCallbackParams {
   tx_ref?: string
   status?: string
-  transaction_id?: string
   [key: string]: string | undefined
 }
 
@@ -99,14 +98,13 @@ export async function initiatePaychanguPayment(
 
 /**
  * Extract payment callback parameters from URL
- * Paychangu redirects with tx_ref, status, and transaction_id
+ * Paychangu redirects with tx_ref and status
  */
 export function extractPaymentCallbackParams(): PaychanguCallbackParams {
   const params = new URLSearchParams(window.location.search)
   return {
     tx_ref: params.get('tx_ref') ?? undefined,
     status: params.get('status') ?? undefined,
-    transaction_id: params.get('transaction_id') ?? undefined,
   }
 }
 

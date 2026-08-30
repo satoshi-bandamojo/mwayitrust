@@ -94,7 +94,7 @@ export default function Home() {
 
   return (
     <div className="homepage-shell">
-      <section className="hero-section reveal-on-scroll" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-badge">
@@ -127,7 +127,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider mission-snapshot-section reveal-on-scroll" aria-label="Who we are">
+      <section className="section-divider mission-snapshot-section" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
             <p className="section-kicker">Who we are</p>
@@ -153,7 +153,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider content-section programs-home-section reveal-on-scroll">
+      <section className="section-divider content-section programs-home-section">
         <div className="section-heading">
           <div>
             <p className="section-kicker">Programs available</p>
@@ -179,7 +179,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-divider content-section reveal-on-scroll">
+      <section className="section-divider content-section">
         <div className="section-heading">
           <div>
             <p className="section-kicker">Featured stories</p>
@@ -217,7 +217,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="newsletter-section reveal-on-scroll">
+      <section className="newsletter-section">
         <div>
           <p className="section-kicker">Stay connected</p>
           <h2>Receive updates from Mwayi Trust.</h2>

@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { programs } from '../data/programs.ts'
 import carpentryImage from '../assets/carpentry.webp'
 import cookeryImage from '../assets/cookery2.webp'
-import houseKeepingImage from '../assets/house-keeping.jpg'
+import houseKeepingImage from '../assets/house-keeping.webp'
 import tailoringImage from '../assets/program-vocational2.webp'
 
 const vocationalCourses = [

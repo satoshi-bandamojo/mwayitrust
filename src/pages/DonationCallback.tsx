@@ -51,7 +51,6 @@ export default function DonationCallback() {
             {
               paychangu_status: params.status,
               paychangu_tx_ref: params.tx_ref,
-              paychangu_transaction_id: params.transaction_id,
               verified_at: new Date().toISOString(),
             }
           )

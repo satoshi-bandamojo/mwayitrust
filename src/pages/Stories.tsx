@@ -62,7 +62,7 @@ export default function Stories() {
 
   return (
     <div className="stories-shell">
-      <section className="stories-hero reveal-on-scroll">
+      <section className="stories-hero">
         <div className="stories-hero__content">
           <p className="section-kicker">Stories of impact</p>
           <h1>Read the stories behind the change.</h1>
