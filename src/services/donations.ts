@@ -6,27 +6,36 @@ export interface CreateDonationPayload {
   phone?: string | null
   amount: number
   currency?: string
-  payment_reference: string
+  payment_reference?: string
   purpose?: string | null
   donation_type?: string | null
-  payment_metadata?: Record<string, unknown> | null
+}
+
+export interface CreateDonationResponse {
+  success: boolean
+  checkout_url: string
+  tx_ref: string
 }
 
 export async function createDonation(payload: CreateDonationPayload) {
-  const insert = {
-    donor_name: payload.donor_name ?? null,
-    email: payload.email,
-    phone: payload.phone ?? null,
-    amount: payload.amount,
-    currency: payload.currency ?? 'MWK',
-    payment_reference: payload.payment_reference,
-    purpose: payload.purpose ?? null,
-    donation_type: payload.donation_type ?? null,
-    payment_metadata: payload.payment_metadata ?? null,
+  const { data, error } = await supabase.functions.invoke<CreateDonationResponse>('create-donation', {
+    body: {
+      donor_name: payload.donor_name ?? null,
+      email: payload.email,
+      phone: payload.phone ?? null,
+      amount: payload.amount,
+      currency: payload.currency ?? 'MWK',
+      payment_reference: payload.payment_reference ?? null,
+      purpose: payload.purpose ?? null,
+      donation_type: payload.donation_type ?? null,
+    },
+  })
+
+  if (error) {
+    return { data: null, error }
   }
 
-  const { error } = await supabase.from('donations').insert([insert])
-  return { error }
+  return { data, error: null }
 }
 
 export async function getDonationByReference(reference: string) {

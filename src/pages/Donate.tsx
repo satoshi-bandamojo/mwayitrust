@@ -166,41 +166,29 @@ export default function Donate() {
         phone: form.phone || null,
         amount: finalAmount,
         currency: 'MWK',
-        payment_reference: reference,
         purpose: selectedTier === 'custom' ? 'custom' : selectedTier || null,
         donation_type: selectedTier === 'custom' ? 'custom' : selectedTier || null,
       }
 
-      const { error } = await createDonation(payload)
-      if (error) {
-        console.error('Failed to create donation', error)
-        setSubmitMessage('Failed to save donation. Please try again.')
-        return
-      }
-
       try {
-        const appBaseUrl = import.meta.env.VITE_APP_URL || window.location.origin
-        const callbackUrl = `${appBaseUrl.replace(/\/$/, '')}/donation-callback`
-        const returnUrl = `${appBaseUrl.replace(/\/$/, '')}/donate`
+        setSubmitMessage('Creating donation and preparing payment...')
 
-        setSubmitMessage('Redirecting to payment gateway...')
+        const { data, error } = await createDonation(payload)
+        if (error) {
+          console.error('Failed to create donation', error)
+          setSubmitMessage('Failed to create donation. Please try again.')
+          return
+        }
 
-        const { checkoutUrl } = await initiatePaychanguPayment({
-          amount: finalAmount,
-          currency: 'MWK',
-          email: form.email || 'noreply@mwayitrust.org',
-          tx_ref: reference,
-          first_name: form.donor_name ? form.donor_name.split(' ')[0] : 'Donor',
-          last_name: form.donor_name ? form.donor_name.split(' ').slice(1).join(' ') : '',
-          phone: form.phone || undefined,
-          callback_url: callbackUrl,
-          return_url: returnUrl,
-        })
+        if (!data?.checkout_url) {
+          setSubmitMessage('Payment link was not returned. Please try again.')
+          return
+        }
 
-        window.location.href = checkoutUrl
+        window.location.href = data.checkout_url
       } catch (err) {
-        console.error('Failed to initiate payment', err)
-        setSubmitMessage(`Error: ${err instanceof Error ? err.message : 'Failed to initiate payment. Please try again.'}`)
+        console.error('Failed to create donation session', err)
+        setSubmitMessage(`Error: ${err instanceof Error ? err.message : 'Failed to create donation session. Please try again.'}`)
       }
     })()
   }
