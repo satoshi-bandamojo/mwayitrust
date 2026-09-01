@@ -1,7 +1,6 @@
 import { ArrowRight, BadgeCheck, Banknote, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone, Sparkles } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { createDonation } from '../services/donations'
-import { initiatePaychanguPayment } from '../services/paychangu'
 
 type DonationTierType = 'learning_materials' | 'student_term' | 'student_year' | 'community_champion'
 type PaymentMethodId = 'airtel' | 'tnm' | 'bank' | 'paypal'
@@ -156,7 +155,6 @@ export default function Donate() {
       return
     }
 
-    const reference = `MT-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
     ;(async () => {
       setSubmitMessage('Saving donation...')
 
