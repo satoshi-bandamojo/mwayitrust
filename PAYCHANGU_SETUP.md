@@ -10,25 +10,24 @@ The original integration was trying to pass query parameters directly to the che
 2. **Receives a checkout URL** in the response
 3. **Redirects user to that URL** for secure payment processing
 
-### 1. **Environment Variables** (`.env`)
+### 1. **Supabase Edge Function Secrets**
 ```
-VITE_PAYCHANGU_PUBLIC_KEY=pub-test-sJIin0K5j0Upqw8gIG3DnzsZte2yGSVT
-VITE_PAYCHANGU_SECRET_KEY=sec-test-nga8ehPdx9Oc8I6YC0O3W6kcOB3M7A8W
+PAYCHANGU_SECRET_KEY=your-paychangu-secret-key
+PAYCHANGU_WEB_SECRET=your-paychangu-webhook-secret
+APP_URL=https://your-production-domain.example
 ```
+
+Configure these values as Supabase Edge Function secrets. Do not use a `VITE_` prefix or place them in the frontend `.env` file.
 
 ### 2. **New Files Created**
 
 #### `src/services/paychangu.ts`
-- `initiatePaychanguPayment()` - Creates payment session via API
-- Payment verification utilities
-- Webhook payload types
-- Currency formatting helpers
+- Parses the PayChangu return parameters for display only
 
 #### `src/pages/DonationCallback.tsx`
-- Handles post-payment redirect from Paychangu
-- Verifies payment status from `tx_ref` and `status` parameters
-- Updates donation status in Supabase
-- Shows success/error UI based on payment result
+- Handles the post-payment redirect from PayChangu
+- Reads the status written by the signed webhook
+- Never updates payment status from browser parameters
 
 ### 3. **Updated Files**
 
@@ -73,9 +72,8 @@ VITE_PAYCHANGU_SECRET_KEY=sec-test-nga8ehPdx9Oc8I6YC0O3W6kcOB3M7A8W
 5. **Payment Callback**
    - Paychangu redirects to `/donation-callback?tx_ref=...&status=success`
    - Callback page retrieves donation using `tx_ref`
-   - Verifies payment status
-   - Updates donation: `completed` or `failed`/`cancelled`
-   - Shows appropriate UI
+   - The signed webhook verifies and updates the donation
+   - The callback shows success only when the stored status is `completed`
 
 6. **Confirmation**
    - Success: Shows donation amount, reference, email confirmation
@@ -106,9 +104,7 @@ CREATE TABLE donations (
 ## 🧪 Testing the Integration
 
 ### Test Mode
-Paychangu credentials are in **test mode**. Use these for testing:
-- Public Key: `pub-test-sJIin0K5j0Upqw8gIG3DnzsZte2yGSVT`
-- Secret Key: `sec-test-nga8ehPdx9Oc8I6YC0O3W6kcOB3M7A8W`
+Use PayChangu test credentials only as Supabase Edge Function secrets. Do not commit credentials to this repository.
 
 ### Local Testing Steps
 
@@ -151,11 +147,43 @@ Paychangu credentials are in **test mode**. Use these for testing:
 
 ## 🚀 Going to Production
 
+### Supabase CLI Deployment
+
+Authenticate the CLI before linking or deploying:
+
+```powershell
+supabase login
+supabase link --project-ref ghbjhzkalqtdnizwoeyt
+```
+
+When prompted by `supabase login`, use a Supabase personal access token from the Supabase dashboard. Enter it directly in the terminal and do not commit it or share it in chat.
+
+Configure the server-only secrets:
+
+```powershell
+supabase secrets set PAYCHANGU_SECRET_KEY="your-paychangu-secret-key" PAYCHANGU_WEB_SECRET="your-paychangu-webhook-secret" APP_URL="https://mwayitrust.netlify.app"
+```
+
+Deploy both functions:
+
+```powershell
+supabase functions deploy create-donation
+supabase functions deploy paychangu-webhook --no-verify-jwt
+```
+
+The webhook uses `--no-verify-jwt` because PayChangu authenticates the request with its webhook signature, not a Supabase user JWT. Configure PayChangu to send webhooks to:
+
+```text
+https://ghbjhzkalqtdnizwoeyt.supabase.co/functions/v1/paychangu-webhook
+```
+
 When ready for production:
 
-1. **Update Environment Variables**
+1. **Update Supabase Edge Function secrets**
    ```env
-   VITE_PAYCHANGU_SECRET_KEY=your-production-secret-key
+   PAYCHANGU_SECRET_KEY=your-production-secret-key
+   PAYCHANGU_WEB_SECRET=your-production-webhook-secret
+   APP_URL=https://your-production-domain.example
    ```
 
 2. **Test in Production**
@@ -185,7 +213,7 @@ In Supabase, check `payment_metadata` column (JSONB):
 
 ### Issue: Still getting 422 error
 - **Solution**: Clear browser cache and retry
-- **Check**: Ensure secret key is correct in `.env`
+- **Check**: Ensure `PAYCHANGU_SECRET_KEY` is configured in Supabase Edge Functions
 - **Check**: Network tab shows POST to `https://api.paychangu.com/payment`
 
 ### Issue: Checkout page doesn't load after redirect
@@ -200,8 +228,8 @@ In Supabase, check `payment_metadata` column (JSONB):
 
 ### Issue: Payment status not updating in Supabase
 - **Check**: Are Supabase credentials valid?
-- **Check**: Does user have permission to update donations table?
-- **Solution**: Check Supabase RLS policies and anon key permissions
+- **Check**: Is the signed webhook reaching `paychangu-webhook`?
+- **Solution**: Check Supabase function logs and confirm `PAYCHANGU_WEB_SECRET` matches PayChangu
 
 ## 📞 Support
 

@@ -71,7 +71,6 @@ export default function Donate() {
   const [selectedTier, setSelectedTier] = useState<SelectedTierValue>('')
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodId | ''>('')
   const [customAmount, setCustomAmount] = useState('')
-  const [isAnonymous, setIsAnonymous] = useState(false)
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({
     amount: '',
@@ -125,15 +124,15 @@ export default function Donate() {
       }
     }
 
-    if (!isAnonymous && !form.email.trim()) {
+    if (!form.email.trim()) {
       nextErrors.email = 'Email address is required.'
       valid = false
-    } else if (!isAnonymous && !/^\S+@\S+\.\S+$/.test(form.email)) {
+    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
       nextErrors.email = 'Please enter a valid email address.'
       valid = false
     }
 
-    if (!isAnonymous && ['airtel', 'tnm'].includes(selectedMethod as PaymentMethodId) && !form.phone.trim()) {
+    if (['airtel', 'tnm'].includes(selectedMethod as PaymentMethodId) && !form.phone.trim()) {
       nextErrors.phone = 'Phone number is required for mobile money payments.'
       valid = false
     }
@@ -159,8 +158,8 @@ export default function Donate() {
       setSubmitMessage('Saving donation...')
 
       const payload = {
-        donor_name: isAnonymous ? null : form.donor_name || null,
-        email: isAnonymous ? '' : form.email,
+        donor_name: form.donor_name || null,
+        email: form.email,
         phone: form.phone || null,
         amount: finalAmount,
         currency: 'MWK',
@@ -245,11 +244,6 @@ export default function Donate() {
               ))}
             </div>
 
-            <label className="donate-anonymous-toggle">
-              <input checked={isAnonymous} onChange={() => setIsAnonymous((value) => !value)} type="checkbox" />
-              <span>Donate anonymously</span>
-            </label>
-
             <button
               type="button"
               className={`donate-toggle${selectedTier === 'custom' ? ' donate-toggle--active' : ''}`}
@@ -285,8 +279,7 @@ export default function Donate() {
             {errors.amount ? <p className="form-error-inline">{errors.amount}</p> : null}
           </section>
 
-          {!isAnonymous ? (
-            <section className="step-card">
+          <section className="step-card">
               <h2 className="step-title">
                 <span className="step-number">2</span>
                 Your details
@@ -329,8 +322,7 @@ export default function Donate() {
                   {errors.phone ? <small className="form-hint">{errors.phone}</small> : null}
                 </label>
               </div>
-            </section>
-          ) : null}
+          </section>
 
           <section className="step-card">
             <h2 className="step-title">

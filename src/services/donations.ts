@@ -42,15 +42,3 @@ export async function getDonationByReference(reference: string) {
   const { data, error } = await supabase.from('donations').select('*').eq('payment_reference', reference).maybeSingle()
   return { data, error }
 }
-
-export async function updateDonationStatus(reference: string, status: string, metadata?: Record<string, unknown>) {
-  const update: { status: string; payment_metadata?: Record<string, unknown> } = { status }
-  if (metadata) update.payment_metadata = metadata
-  const { data, error } = await supabase
-    .from('donations')
-    .update(update)
-    .eq('payment_reference', reference)
-    .select()
-    .single()
-  return { data, error }
-}

@@ -91,12 +91,21 @@ serve(async (req) => {
       )
     }
 
-    const { tx_ref, amount, currency, status: webhookStatus } = payload
+    const { tx_ref, amount, currency, status: rawWebhookStatus } = payload
+    const webhookStatus = typeof rawWebhookStatus === 'string' ? rawWebhookStatus.toLowerCase() : ''
 
     if (!tx_ref) {
       console.error('Missing tx_ref in payload')
       return new Response(
         JSON.stringify({ error: 'Missing transaction reference' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    if (!['success', 'failed', 'cancelled'].includes(webhookStatus)) {
+      console.error('Unsupported webhook status:', rawWebhookStatus)
+      return new Response(
+        JSON.stringify({ error: 'Unsupported payment status' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
@@ -123,7 +132,7 @@ serve(async (req) => {
     // -------------------------
     // 6. Verify amount and currency
     // -------------------------
-    if (donation.amount !== amount) {
+    if (Number(donation.amount) !== Number(amount)) {
       console.error('Amount mismatch:', { expected: donation.amount, received: amount })
       return new Response(
         JSON.stringify({ error: 'Amount mismatch' }),
@@ -142,14 +151,19 @@ serve(async (req) => {
     // -------------------------
     // 7. Map webhook status to donation status
     // -------------------------
-    let donationStatus = 'pending'
+    const donationStatus = webhookStatus === 'success' ? 'completed' : webhookStatus
 
-    if (webhookStatus === 'success') {
-      donationStatus = 'completed'
-    } else if (webhookStatus === 'failed') {
-      donationStatus = 'failed'
-    } else if (webhookStatus === 'cancelled') {
-      donationStatus = 'cancelled'
+    // A later provider retry must not undo a confirmed payment.
+    if (donation.status === 'completed' && donationStatus !== 'completed') {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Donation was already completed',
+          tx_ref,
+          status: donation.status,
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
     }
 
     // -------------------------

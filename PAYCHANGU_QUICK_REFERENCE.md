@@ -1,11 +1,7 @@
 # 🎯 Paychangu Integration - Quick Reference
 
-## Your Credentials
-```
-Public Key:    pub-test-sJIin0K5j0Upqw8gIG3DnzsZte2yGSVT
-Secret Key:    sec-test-nga8ehPdx9Oc8I6YC0O3W6kcOB3M7A8W
-Checkout URL:  https://checkout.paychangu.com/pay/
-```
+## Supabase Edge Function Secrets
+Configure `PAYCHANGU_SECRET_KEY`, `PAYCHANGU_WEB_SECRET`, and `APP_URL` in Supabase. Do not put PayChangu secrets in the frontend environment or commit them to this repository.
 
 ## File Structure
 ```
@@ -26,14 +22,10 @@ PAYCHANGU_SETUP.md           ← Full setup documentation (NEW)
 ## Key Functions
 
 ### `src/services/paychangu.ts`
-- `generateCheckoutUrl(params)` - Create Paychangu checkout link
-- `extractPaymentCallbackParams()` - Parse callback query params
-- `isPaymentSuccessful(status)` - Check if payment succeeded
-- `formatCurrency(amount, currency)` - Format money display
+- `extractPaymentCallbackParams()` - Parse callback query params for display only
 
 ### `src/services/donations.ts`
 - `createDonation(payload)` - Save donation to Supabase
-- `updateDonationStatus(reference, status, metadata)` - Update after payment
 - `getDonationByReference(reference)` - Fetch donation record
 
 ## Payment States
@@ -41,19 +33,10 @@ PAYCHANGU_SETUP.md           ← Full setup documentation (NEW)
 | State | Status | Action |
 |-------|--------|--------|
 | Pending | User fills form | Save to DB, redirect to Paychangu |
-| Processing | User completes payment | Verify callback, update status |
-| Success | Payment confirmed | Update to `completed`, show success page |
-| Failed | Payment declined | Update to `failed`, show error page |
-| Cancelled | User cancelled | Update to `cancelled`, show cancel page |
-
-## Environment Variables
-
-```env
-# Already configured in .env:
-VITE_PAYCHANGU_PUBLIC_KEY=pub-test-...
-VITE_PAYCHANGU_SECRET_KEY=sec-test-...
-VITE_PAYCHANGU_CHECKOUT_URL=https://checkout.paychangu.com/pay/
-```
+| Processing | User completes payment | Wait for signed webhook update |
+| Success | Webhook confirms payment | Show success page |
+| Failed | Webhook reports failure | Show error page |
+| Cancelled | Webhook reports cancellation | Show cancel page |
 
 ## Testing Checklist
 
@@ -69,12 +52,9 @@ VITE_PAYCHANGU_CHECKOUT_URL=https://checkout.paychangu.com/pay/
 
 ## Paychangu Admin Tasks
 
-✅ **Already Done:**
-- Generated API credentials (in .env)
-
 ⚠️ **Still Need To Do:**
 - [ ] Add IP address restrictions (optional) - go to API & Webhook > IP Restrictions
-- [ ] Set up webhook (optional for future) - API & Webhook > Setup Webhook
+- [ ] Set up webhook at `https://ghbjhzkalqtdnizwoeyt.supabase.co/functions/v1/paychangu-webhook`
 - [ ] Create "Connect" app if using advanced features
 
 ## Common Tasks

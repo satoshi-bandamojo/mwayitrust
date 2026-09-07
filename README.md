@@ -18,11 +18,10 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 2. Donation flow (`/donate`)
   - User chooses a donation tier or enters a custom amount, selects a payment method, and fills contact details.
   - The frontend creates a donation record via `src/services/donations.ts -> createDonation()`, which inserts into the `donations` table in Supabase and returns a `payment_reference`.
-  - If a `VITE_PAYCHANGU_CHECKOUT_URL` is configured, the frontend redirects the donor to the payment gateway with query params including `amount`, `currency`, and `reference`.
-  - If no gateway is configured, the donation reference is presented to the donor so the backend or admin can reconcile payment manually.
+  - The frontend invokes the Supabase `create-donation` Edge Function, which creates the PayChangu checkout session server-side and returns a checkout URL.
 
 3. Donation reconciliation and webhooks
-  - The backend (not included in this repo) should listen for payment provider webhooks and call `updateDonationStatus(reference, status, metadata)` in `src/services/donations.ts` (or update the Supabase `donations` table) to mark donations as completed, failed, or pending.
+  - The Supabase `paychangu-webhook` Edge Function is the only trusted payment status writer. The browser callback is read-only and displays the status recorded by the webhook.
 
 4. Admin interface
   - Admin pages live under `/admin/*` and are protected by `src/components/shared/ProtectedRoute.tsx` which verifies the Supabase session and admin profile via `getCurrentAdminProfile()`.
@@ -35,7 +34,7 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 - `src/router.tsx` — App routes and lazy-loaded pages (public + admin).
 - `src/pages/Donate.tsx` — Donation UI and client-side validation; uses `src/services/donations.ts` to save donations.
 - `src/services/supabase.ts` — Supabase client wrapper that uses `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; provides a no-op client when env vars are missing (safe local dev).
-- `src/services/donations.ts` — Helper functions: `createDonation`, `getDonationByReference`, `updateDonationStatus`.
+- `src/services/donations.ts` — Helper functions for creating donations and reading their server-written status.
 - `src/components/shared/ProtectedRoute.tsx` — Protects admin routes by checking Supabase auth and the current admin profile.
 - `src/data/programs.ts` — Local program data and image imports used by the Programs page.
 
@@ -52,7 +51,6 @@ npm install
 ```
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=public-anon-key
-VITE_PAYCHANGU_CHECKOUT_URL=https://paychangu.example/checkout
 ```
 
 3. Start the dev server:
@@ -80,14 +78,14 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 ## Donation integration details
 
 - The frontend constructs a unique reference `MT-<timestamp>-<rand>` for every donation and saves it via `createDonation()`.
-- If `VITE_PAYCHANGU_CHECKOUT_URL` is present, `Donate.tsx` redirects donors to the gateway with these query params: `amount`, `currency`, `reference`, `email`, `phone`, `name`, `callback`.
-- Implement a backend callback route (e.g., `/donation-callback`) to receive payment gateway verifications and update `donations.status` accordingly.
+- `create-donation` creates the gateway session using the server-only `PAYCHANGU_SECRET_KEY` secret.
+- `paychangu-webhook` validates signed gateway notifications using `PAYCHANGU_WEB_SECRET` and updates `donations.status`.
+- `/donation-callback` is a read-only result page; URL parameters never complete a donation.
 
 ## Environment variables
 
 - `VITE_SUPABASE_URL` — your Supabase project URL.
 - `VITE_SUPABASE_ANON_KEY` — public anon key for Supabase (used by the frontend).
-- `VITE_PAYCHANGU_CHECKOUT_URL` (optional) — external payment checkout base URL.
 
 ## Troubleshooting
 

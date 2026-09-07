@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BadgeCheck, AlertCircle, Loader, ArrowRight } from 'lucide-react'
-import { getDonationByReference, updateDonationStatus } from '../services/donations'
-import { extractPaymentCallbackParams, isPaymentSuccessful } from '../services/paychangu'
+import { getDonationByReference } from '../services/donations'
+import { extractPaymentCallbackParams } from '../services/paychangu'
 
 type CallbackState = 'loading' | 'success' | 'failed' | 'processing'
 
@@ -40,46 +40,18 @@ export default function DonationCallback() {
           email: donationData.email,
         })
 
-        // Check payment status from callback
-        if (isPaymentSuccessful(params.status)) {
-          setState('processing')
-
-          // Update donation status in database
-          const { error: updateError } = await updateDonationStatus(
-            params.tx_ref,
-            'completed',
-            {
-              paychangu_status: params.status,
-              paychangu_tx_ref: params.tx_ref,
-              verified_at: new Date().toISOString(),
-            }
-          )
-
-          if (updateError) {
-            console.error('Failed to update donation status:', updateError)
-            setError('Payment was successful, but we encountered an error recording it. Please contact support.')
-            setState('failed')
-            return
-          }
-
-          // Success!
+        // The browser redirect is not proof of payment. The webhook owns status changes.
+        if (donationData.status === 'completed') {
           setState('success')
-        } else {
-          // Payment was cancelled or failed
-          const newStatus = params.status === 'failed' ? 'failed' : 'cancelled'
-
-          // Update donation status
-          await updateDonationStatus(params.tx_ref, newStatus, {
-            paychangu_status: params.status,
-            processed_at: new Date().toISOString(),
-          })
-
+        } else if (donationData.status === 'failed' || donationData.status === 'cancelled') {
           setError(
-            newStatus === 'cancelled'
+            donationData.status === 'cancelled'
               ? 'Payment was cancelled. Your donation was not processed.'
               : 'Payment failed. Please try again.'
           )
           setState('failed')
+        } else {
+          setState('processing')
         }
       } catch (err) {
         console.error('Callback processing error:', err)

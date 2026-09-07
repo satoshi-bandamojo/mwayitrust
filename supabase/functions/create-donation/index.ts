@@ -154,7 +154,7 @@ serve(async (req) => {
     // 5. Call PayChangu
     // -------------------------
 
-    const appUrl = Deno.env.get('APP_URL')
+    const appUrl = Deno.env.get('APP_URL')?.replace(/\/+$/, '')
 
     if (!appUrl) {
       return new Response(
@@ -239,6 +239,17 @@ serve(async (req) => {
 
     if (!checkoutUrl) {
       console.error('No checkout URL:', paychanguData)
+
+      await supabaseAdmin
+        .from('donations')
+        .update({
+          status: 'failed',
+          payment_metadata: {
+            paychangu_error: 'Payment gateway did not return a checkout URL',
+            paychangu: paychanguData,
+          },
+        })
+        .eq('payment_reference', txRef)
 
       return new Response(
         JSON.stringify({
