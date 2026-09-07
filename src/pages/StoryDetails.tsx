@@ -6,7 +6,10 @@ import LoadingState from '../components/ui/LoadingState.tsx'
 
 const formatDate = (value: string) => {
   if (!value) return ''
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-US', {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(`${value}T00:00:00`) : new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -72,8 +75,8 @@ export default function StoryDetails() {
         <h1>{story.title}</h1>
         <p className="story-meta">
           {story.author && <span>By {story.author}</span>}
-          {story.published_at || story.created_at ? (
-            <span> — {formatDate(story.published_at || story.created_at || '')}</span>
+          {story.created_at || story.published_at ? (
+            <span> — {formatDate(story.created_at || story.published_at || '')}</span>
           ) : null}
         </p>
         {cover ? <img src={cover} alt={story.title} className="story-cover" /> : null}

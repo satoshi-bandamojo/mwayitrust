@@ -29,9 +29,9 @@ export default function Footer() {
         <div>
           <h4>Contact</h4>
           <ul className="contact-list">
-            <li><Mail size={16} /> sandy.mwayi@gmail.com</li>
-            <li><Phone size={16} /> +265 881 45 25 54</li>
-            <li><Send size={16} /> Mbvundula Village, Blantyre.</li>
+            <li><Mail size={16} /><a href="mailto:sandy.mwayi@gmail.com">sandy.mwayi@gmail.com</a></li>
+            <li><Phone size={16} /><a href="tel:+265881452554">+265 881 45 25 54</a></li>
+            <li className="footer-location"><Send size={16} /> Mbvundula Village, Chileka.</li>
           </ul>
         </div>
         <div>

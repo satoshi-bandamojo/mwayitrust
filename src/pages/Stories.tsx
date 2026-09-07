@@ -8,7 +8,10 @@ const initialStories: Story[] = []
 
 const formatDate = (value: string) => {
   if (!value) return ''
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-US', {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(`${value}T00:00:00`) : new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -58,7 +61,7 @@ export default function Stories() {
 
   const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
   const storyCategory = (story: Story) => story.category || 'Story'
-  const storyDate = (story: Story) => formatDate(story.published_at || story.created_at || '')
+  const storyDate = (story: Story) => formatDate(story.created_at || story.published_at || '')
 
   return (
     <div className="stories-shell">

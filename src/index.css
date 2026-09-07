@@ -1257,10 +1257,25 @@ a {
   gap: 0.45rem;
 }
 
+.footer-shell a,
+.footer-shell a:visited {
+  color: #034694;
+  transition: color 160ms ease;
+}
+
+.footer-shell a:hover,
+.footer-shell a:focus-visible {
+  color: #012d6b;
+}
+
 .contact-list li {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.footer-location {
+  color: #034694;
 }
 
 .social-links {
@@ -1277,7 +1292,7 @@ a {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(148, 163, 184, 0.3);
-  color: #38bdf8;
+  color: #034694;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
