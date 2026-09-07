@@ -9,7 +9,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
 }
 
 body {
@@ -17,16 +16,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #f8fafc;
-}
-
-section,
-.page-shell,
-.about-shell,
-.programs-shell,
-.contact-shell,
-.events-shell,
-.stories-shell {
-  scroll-snap-align: start;
 }
 
 * {
