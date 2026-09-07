@@ -8,7 +8,10 @@ type EventStatus = 'upcoming' | 'ongoing' | 'past'
 
 const formatDate = (date: string) => {
   if (!date) return ''
-  return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+  const parsedDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? new Date(`${date}T00:00:00`) : new Date(date)
+  if (Number.isNaN(parsedDate.getTime())) return ''
+
+  return parsedDate.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -16,7 +19,10 @@ const formatDate = (date: string) => {
 }
 
 const getStatus = (date: string): EventStatus => {
-  const target = new Date(`${date}T00:00:00`)
+  const target = /^\d{4}-\d{2}-\d{2}$/.test(date) ? new Date(`${date}T00:00:00`) : new Date(date)
+  if (Number.isNaN(target.getTime())) return 'upcoming'
+  target.setHours(0, 0, 0, 0)
+
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
