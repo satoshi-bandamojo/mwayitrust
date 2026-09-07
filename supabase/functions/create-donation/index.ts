@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+// @ts-ignore Deno resolves npm: imports; the frontend TypeScript service does not.
+import { createClient } from 'npm:@supabase/supabase-js@2.39.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,6 +11,16 @@ const supabaseAdmin = createClient(
   Deno.env.get('SUPABASE_URL')!,
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 )
+
+const getProviderMessage = (response: unknown): string => {
+  if (!response || typeof response !== 'object') return 'Unknown provider error'
+
+  const payload = response as Record<string, unknown>
+  const nestedData = payload.data && typeof payload.data === 'object' ? payload.data as Record<string, unknown> : null
+  const message = payload.message ?? payload.error ?? nestedData?.message ?? nestedData?.error
+
+  return typeof message === 'string' ? message : 'Unknown provider error'
+}
 
 serve(async (req) => {
   // Handle browser CORS preflight
@@ -224,6 +235,8 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({
           error: 'Unable to create payment session',
+          provider_status: paychanguResponse.status,
+          provider_message: getProviderMessage(paychanguData),
         }),
         {
           status: 502,
@@ -254,6 +267,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({
           error: 'Payment gateway did not return a checkout URL',
+          provider_message: getProviderMessage(paychanguData),
         }),
         {
           status: 502,

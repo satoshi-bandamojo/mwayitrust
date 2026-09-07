@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+// @ts-ignore Deno resolves npm: imports; the frontend TypeScript service does not.
+import { createClient } from 'npm:@supabase/supabase-js@2.39.3'
 
 const supabaseAdmin = createClient(
   Deno.env.get('SUPABASE_URL')!,
