@@ -16,6 +16,7 @@ const Donate = lazy(() => import('./pages/Donate.tsx'))
 const DonationCallback = lazy(() => import('./pages/DonationCallback.tsx'))
 const Contact = lazy(() => import('./pages/Contact.tsx'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.tsx'))
+const TermsOfUse = lazy(() => import('./pages/TermsOfUse.tsx'))
 
 const Login = lazy(() => import('./pages/admin/Login.tsx'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard.tsx'))
@@ -42,6 +43,7 @@ export const routes = [
       { path: '/donation-callback', element: <DonationCallback /> },
       { path: '/contact', element: <Contact /> },
       { path: '/privacy-policy', element: <PrivacyPolicy /> },
+      { path: '/terms-of-use', element: <TermsOfUse /> },
     ],
   },
   {

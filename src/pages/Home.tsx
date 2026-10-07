@@ -1,4 +1,4 @@
-import { ArrowRight, Eye, GraduationCap, HeartHandshake, PlayCircle, Sparkles, Target } from 'lucide-react'
+import { ArrowRight, BookOpen, Eye, GraduationCap, HeartHandshake, PackageOpen, PlayCircle, Sparkles, Target, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
@@ -176,6 +176,71 @@ export default function Home() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="section-divider content-section help-section" aria-labelledby="how-to-help-title">
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">How to help</p>
+            <h2 id="how-to-help-title">There is more than one way to stand with a child.</h2>
+          </div>
+          <p className="help-intro">
+            Whether you give, share useful supplies, or lend your time, your support helps make learning and opportunity
+            possible for children and families in our communities.
+          </p>
+        </div>
+
+        <div className="help-options-grid">
+          <article className="help-option-card">
+            <div className="help-option-icon">
+              <HeartHandshake size={22} />
+            </div>
+            <p className="help-option-number">01</p>
+            <h3>Make a donation</h3>
+            <p>
+              Your gift can help provide school fees, learning materials, mentorship, and practical support where it is
+              needed most.
+            </p>
+            <a href="/donate" className="help-option-link">
+              Give today <ArrowRight size={16} />
+            </a>
+          </article>
+
+          <article className="help-option-card">
+            <div className="help-option-icon">
+              <PackageOpen size={22} />
+            </div>
+            <p className="help-option-number">02</p>
+            <h3>Send school materials</h3>
+            <p>
+              Books, notebooks, pens, school bags, uniforms, and other useful supplies can make a real difference in a
+              student&apos;s school day.
+            </p>
+            <a href="/contact" className="help-option-link">
+              Arrange a donation <ArrowRight size={16} />
+            </a>
+          </article>
+
+          <article className="help-option-card">
+            <div className="help-option-icon">
+              <Users size={22} />
+            </div>
+            <p className="help-option-number">03</p>
+            <h3>Volunteer your time</h3>
+            <p>
+              Join an activity, share a skill, support a learning session, or help us create welcoming spaces where young
+              people can grow.
+            </p>
+            <a href="/contact" className="help-option-link">
+              Get in touch <ArrowRight size={16} />
+            </a>
+          </article>
+        </div>
+
+        <div className="help-note">
+          <BookOpen size={20} />
+          <p>Every contribution, large or small, helps keep the door to learning open.</p>
         </div>
       </section>
 

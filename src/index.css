@@ -79,6 +79,20 @@ a {
   max-width: 640px;
 }
 
+.hero-logo-wrap {
+  width: min(230px, 44vw);
+  margin-bottom: 1rem;
+}
+
+.hero-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.5), 0 16px 45px rgba(15, 23, 42, 0.3);
+  background: rgba(255,255,255,0.08);
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -278,8 +292,101 @@ a {
   justify-content: center;
 }
 
+.help-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 58%, #fff7ed 100%);
+}
+
+.help-section .section-heading {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.help-intro {
+  max-width: 680px;
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.help-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.help-option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.35rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #dbeafe;
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.help-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  background: #034694;
+  color: #ffffff;
+}
+
+.help-option-number {
+  margin: 0 0 0.35rem;
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.help-option-card h3 {
+  margin: 0 0 0.6rem;
+  color: #0f172a;
+  font-size: 1.15rem;
+}
+
+.help-option-card > p:not(.help-option-number) {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.help-option-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  color: #034694;
+  font-weight: 700;
+}
+
+.help-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding-top: 0.25rem;
+  color: #075985;
+}
+
+.help-note p {
+  margin: 0;
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .mission-snapshot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-options-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -1058,6 +1165,19 @@ a {
   display: grid;
   grid-template-columns: 1.3fr 1fr 1fr 1fr;
   gap: 1rem;
+}
+
+.footer-brand img {
+  display: block;
+  width: 140px;
+  height: 100px;
+  margin: -0.25rem 0 0.35rem;
+  object-fit: cover;
+  object-position: center;
+}
+
+.footer-brand p {
+  margin: 0;
 }
 
 .contact-shell {
@@ -3550,5 +3670,109 @@ a {
   .callback-actions .btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+.consent-dialog {
+  width: min(100% - 2rem, 34rem);
+  max-height: min(90dvh, 42rem);
+  overflow-y: auto;
+  margin: auto;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid #dbeafe;
+  border-radius: 1rem;
+  color: #0f172a;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.3);
+}
+
+.consent-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.consent-dialog h2 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: clamp(1.4rem, 5vw, 1.8rem);
+}
+
+.consent-dialog > p:not(.section-kicker) {
+  margin: 0 0 1.25rem;
+  color: #475569;
+  line-height: 1.65;
+}
+
+.consent-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.consent-checkbox input {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.2rem;
+  accent-color: #034694;
+}
+
+.consent-checkbox a,
+.legal-page a {
+  color: #034694;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.consent-checkbox a:focus-visible,
+.legal-page a:focus-visible {
+  outline: 2px solid #034694;
+  outline-offset: 3px;
+}
+
+.consent-submit {
+  margin-top: 1.25rem;
+  cursor: pointer;
+}
+
+.consent-error {
+  margin: 0.75rem 0 0;
+  color: #b91c1c;
+  font-size: 0.925rem;
+}
+
+.legal-page {
+  max-width: 900px;
+  margin: 0 auto;
+  color: #334155;
+  line-height: 1.75;
+}
+
+.legal-page h1 {
+  margin: 0 0 0.35rem;
+  color: #0f172a;
+}
+
+.legal-page h2 {
+  margin: 1.5rem 0 0.45rem;
+  color: #0f172a;
+  font-size: 1.15rem;
+}
+
+.legal-page p {
+  margin: 0 0 0.8rem;
+}
+
+.legal-updated {
+  margin-bottom: 1.5rem !important;
+  color: #64748b;
+}
+
+@media (max-width: 640px) {
+  .consent-dialog {
+    width: calc(100% - 1.5rem);
+    padding: 1.5rem;
   }
 }

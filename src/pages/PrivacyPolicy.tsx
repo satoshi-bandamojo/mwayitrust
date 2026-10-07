@@ -7,9 +7,24 @@ export default function PrivacyPolicy() {
           Mwayi Trust is committed to protecting the personal information of supporters, volunteers, partners, and individuals who engage with our work. This Privacy Policy explains how we collect, use, store, and protect information when you visit our website, contact us, donate, sign up for updates, or take part in our programs.
         </p>
 
+        <h2 style={{ fontSize: '1.15rem', marginTop: '1.5rem' }}>Website agreement preference</h2>
+        <p>
+          If you agree to our Terms of Use, we store the terms version and the time of your choice in your browser so
+          that we do not ask you again for that version. This preference stays on your device, is not linked to your
+          identity, and is not sent to us. Clearing your browser storage will remove it.
+        </p>
+
         <h2 style={{ fontSize: '1.15rem', marginTop: '1.5rem' }}>What information we collect</h2>
         <p>
-          We may collect information such as your name, email address, phone number, mailing address, donation details, and any message you send through our contact or support forms. We may also collect technical information such as your IP address and browsing details when you use our website.
+          You do not need an account to browse this website. We may collect information such as your name, email address,
+          phone number, mailing address, donation details, and any message you send through our contact or support
+          forms. We may also collect technical information such as your IP address and browsing details when you use our
+          website.
+        </p>
+        <p>
+          When you make a donation, the details you provide are used to create and process the donation through our
+          donation and payment service providers. Those providers may handle information under their own privacy
+          notices.
         </p>
 
         <h2 style={{ fontSize: '1.15rem', marginTop: '1.5rem' }}>How we use your information</h2>

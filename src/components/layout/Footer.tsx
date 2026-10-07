@@ -1,10 +1,13 @@
 import { Globe, Mail, MessageSquare, Phone, Send } from 'lucide-react'
+import logoBlue from '../../assets/logo_blue.png'
 
 const quickLinks = [
   { label: 'About', href: '/about' },
   { label: 'Programs', href: '/programs' },
   { label: 'Stories', href: '/stories' },
   { label: 'Events', href: '/events' },
+  { label: 'Terms of Use', href: '/terms-of-use' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
   { label: 'Administration', href: '/admin' },
 ]
 
@@ -12,8 +15,8 @@ export default function Footer() {
   return (
     <footer className="footer-shell">
       <div className="footer-grid">
-        <div>
-          <h3>Mwayi Trust</h3>
+        <div className="footer-brand">
+          <img src={logoBlue} alt="Mwayi Trust logo" />
           <p>Joining Hands Opening Doors.</p>
         </div>
         <div>
