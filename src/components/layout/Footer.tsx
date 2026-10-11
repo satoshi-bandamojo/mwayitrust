@@ -6,9 +6,12 @@ const quickLinks = [
   { label: 'Programs', href: '/programs' },
   { label: 'Stories', href: '/stories' },
   { label: 'Events', href: '/events' },
+  { label: 'Administration', href: '/admin' },
+]
+
+const legalLinks = [
   { label: 'Terms of Use', href: '/terms-of-use' },
   { label: 'Privacy Policy', href: '/privacy-policy' },
-  { label: 'Administration', href: '/admin' },
 ]
 
 export default function Footer() {
@@ -17,7 +20,7 @@ export default function Footer() {
       <div className="footer-grid">
         <div className="footer-brand">
           <img src={logoBlue} alt="Mwayi Trust logo" />
-          <p>Joining Hands Opening Doors.</p>
+          <p>Joining hands. Opening doors.</p>
         </div>
         <div>
           <h4>Quick links</h4>
@@ -45,6 +48,13 @@ export default function Footer() {
             <a href="#" aria-label="Email"><Mail size={18} /></a>
           </div>
         </div>
+      </div>
+      <div className="footer-legal-bar">
+        <nav aria-label="Legal links">
+          {legalLinks.map((link) => (
+            <a key={link.href} href={link.href}>{link.label}</a>
+          ))}
+        </nav>
       </div>
     </footer>
   )

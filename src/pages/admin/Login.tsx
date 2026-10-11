@@ -71,7 +71,6 @@ export default function Login() {
 
         <div className="admin-login-header">
           <h1>Welcome back</h1>
-          <p>Sign in to manage content, events, stories, and messages.</p>
         </div>
 
         {submitError ? (

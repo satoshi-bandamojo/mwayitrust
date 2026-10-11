@@ -79,10 +79,6 @@ export default function Events() {
             From workshops to mentorship launches, discover the opportunities that help learners grow, connect, and thrive.
           </p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#events-list">
-              <CalendarDays size={18} />
-              Browse events
-            </a>
             <a className="btn btn-secondary" href="/contact">
               <ArrowRight size={18} />
               Reach out

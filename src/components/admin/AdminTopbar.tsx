@@ -16,7 +16,7 @@ export default function AdminTopbar() {
   return (
     <header className="admin-topbar">
       <h2>Administration workspace</h2>
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <div className="admin-topbar-actions">
         <a href="/">Back to site</a>
         <button type="button" className="btn btn-secondary" onClick={() => void handleSignOut()}>
           Sign out

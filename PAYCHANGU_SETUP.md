@@ -1,6 +1,6 @@
 # Paychangu Integration Setup Guide
 
-## ✅ Completed Setup (Fixed)
+## ✅ Completed Setup
 
 You now have a complete Paychangu donation checkout flow using the **Standard Checkout API**. Here's what's been set up:
 

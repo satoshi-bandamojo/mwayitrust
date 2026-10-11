@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, Banknote, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone, Sparkles } from 'lucide-react'
+import { ArrowRight, BadgeCheck, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { createDonation } from '../services/donations'
 
@@ -198,7 +198,7 @@ export default function Donate() {
           <h1>Give today and help students thrive in Malawi.</h1>
           <p>
             Your support funds books, school essentials, mentorship, and community programs that turn opportunity into a
-            brighter future.
+            lasting opportunity.
           </p>
           <div className="hero-actions">
             <a className="btn btn-primary" href="#donation-form">
@@ -380,46 +380,6 @@ export default function Donate() {
           </div>
         </form>
 
-        <aside className="donate-side-card">
-          <div className="side-card__top">
-            <p className="section-kicker">Why give</p>
-            <h2>Every gift creates a ripple of opportunity.</h2>
-            <p>
-              Support from partners and donors helps us expand literacy, mentorship, and practical learning initiatives in
-              the communities we serve.
-            </p>
-          </div>
-
-          <div className="impact-list">
-            <div className="impact-item">
-              <div className="impact-item__icon">
-                <Sparkles size={18} />
-              </div>
-              <div>
-                <strong>Immediate support</strong>
-                <p>Fast-moving resources reach students and families where they need them most.</p>
-              </div>
-            </div>
-            <div className="impact-item">
-              <div className="impact-item__icon">
-                <Banknote size={18} />
-              </div>
-              <div>
-                <strong>Flexible giving</strong>
-                <p>Choose a preset amount or tailor your contribution to your budget.</p>
-              </div>
-            </div>
-            <div className="impact-item">
-              <div className="impact-item__icon">
-                <ShieldCheck size={18} />
-              </div>
-              <div>
-                <strong>Transparent impact</strong>
-                <p>We share stories and outcomes so you can see the change your gift makes.</p>
-              </div>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   )

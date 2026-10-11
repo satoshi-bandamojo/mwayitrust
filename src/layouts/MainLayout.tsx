@@ -2,12 +2,14 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.tsx'
 import Footer from '../components/layout/Footer.tsx'
+import { consentService, privacyVersion, termsVersion } from '../services/consent.ts'
 
 const consentStorageKey = 'mwayi-terms-consent'
-const termsVersion = '2026-10-07'
+const visitorStorageKey = 'mwayi-visitor-id'
 
 interface StoredConsent {
   termsVersion: string
+  privacyVersion: string
   acceptedAt: string
 }
 
@@ -17,7 +19,10 @@ function readConsent() {
     if (!storedConsent) return { required: true, error: '' }
 
     const consent = JSON.parse(storedConsent) as StoredConsent
-    return { required: consent.termsVersion !== termsVersion, error: '' }
+    return {
+      required: consent.termsVersion !== termsVersion || consent.privacyVersion !== privacyVersion,
+      error: '',
+    }
   } catch {
     return {
       required: true,
@@ -30,6 +35,7 @@ export default function MainLayout() {
   const location = useLocation()
   const [consent, setConsent] = useState(readConsent)
   const [isChecked, setIsChecked] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const isPolicyPage = ['/terms-of-use', '/privacy-policy'].includes(location.pathname)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -38,20 +44,37 @@ export default function MainLayout() {
     if (consent.required && !isPolicyPage && dialog && !dialog.open) dialog.showModal()
   }, [consent.required, isPolicyPage])
 
-  const acceptTerms = (event: FormEvent<HTMLFormElement>) => {
+  const acceptTerms = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setIsSaving(true)
 
     try {
+      let visitorId = localStorage.getItem(visitorStorageKey)
+      if (!visitorId || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(visitorId)) {
+        visitorId = crypto.randomUUID()
+        localStorage.setItem(visitorStorageKey, visitorId)
+      }
+
+      await consentService.recordWebsiteAcceptance(visitorId)
       localStorage.setItem(
         consentStorageKey,
-        JSON.stringify({ termsVersion, acceptedAt: new Date().toISOString() } satisfies StoredConsent),
+        JSON.stringify({
+          termsVersion,
+          privacyVersion,
+          acceptedAt: new Date().toISOString(),
+        } satisfies StoredConsent),
       )
       setConsent({ required: false, error: '' })
-    } catch {
+    } catch (error) {
       setConsent({
         required: true,
-        error: 'We could not save your agreement. Please enable site storage and try again.',
+        error:
+          error instanceof Error
+            ? `We could not record your agreement. ${error.message}`
+            : 'We could not record your agreement. Please try again.',
       })
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -81,6 +104,7 @@ export default function MainLayout() {
                 type="checkbox"
                 checked={isChecked}
                 onChange={(event) => setIsChecked(event.target.checked)}
+                disabled={isSaving}
                 required
               />
               <span>
@@ -93,8 +117,8 @@ export default function MainLayout() {
                 {consent.error}
               </p>
             ) : null}
-            <button className="btn btn-primary consent-submit" type="submit">
-              Agree and continue
+            <button className="btn btn-primary consent-submit" type="submit" disabled={isSaving}>
+              {isSaving ? 'Recording agreement…' : 'Agree and continue'}
             </button>
           </form>
         </dialog>

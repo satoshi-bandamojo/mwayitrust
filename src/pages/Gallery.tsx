@@ -1,4 +1,4 @@
-import { ArrowRight, Images, X } from 'lucide-react'
+import { ArrowRight, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { galleryService } from '../services/gallery.ts'
 import type { GalleryImage } from '../types/index.ts'
@@ -109,10 +109,6 @@ export default function Gallery() {
             Browse visual stories from our programs, events, and the people who make this work possible.
           </p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#gallery-grid">
-              <Images size={18} />
-              View gallery
-            </a>
             <a className="btn btn-secondary" href="/contact">
               <ArrowRight size={18} />
               Share your support

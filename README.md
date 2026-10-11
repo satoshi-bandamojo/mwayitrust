@@ -4,10 +4,10 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 
 ## Overview
 
-- **Landing pages:** Home, About, Programs, Stories, Gallery, Contact.
-- **Donation flow:** A donation form that records a donation record to Supabase and optionally redirects to a configured PayChangu checkout URL.
-- **Admin area:** Protected routes for administrators to manage donations, events, gallery, stories, subscribers, and contact messages.
-- **Data backend:** Uses Supabase for auth and database operations. Environment variables in `.env` configure the client.
+- Landing pages: Home, About, Programs, Stories, Gallery, Contact.
+- Donation flow: A donation form that records a donation record to Supabase and redirects to a configured PayChangu checkout URL.
+- Admin area: Protected routes for administrators to manage donations, events, gallery, stories, subscribers, and contact messages.
+- Data backend: Uses Supabase for auth and database operations. Environment variables in `.env` configure the client.
 
 ## How the app works (user flows)
 
@@ -46,12 +46,12 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 npm install
 ```
 
-2. Create a `.env` file in the project root with these keys (example):
+2. Create a `.env` file in the project root with these keys:
 
-```
+
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=public-anon-key
-```
+
 
 3. Start the dev server:
 
@@ -82,6 +82,14 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 - `paychangu-webhook` validates signed gateway notifications using `PAYCHANGU_WEB_SECRET` and updates `donations.status`.
 - `/donation-callback` is a read-only result page; URL parameters never complete a donation.
 
+## Website agreement and consent ledger
+
+- Site-wide agreement acceptance is written by the `record-consent` Edge Function to `public.consent_events`; the browser UUID is pseudonymous and is not a subscriber profile.
+- The Terms of Use and Privacy Policy pages render from `supabase/functions/_shared/legalPolicies.ts`. The Edge Function hashes each versioned document object and records the hash with the visitor's action.
+- Apply `supabase/migrations/202610120001_consent_ledger.sql` if the consent table/index and service-role-only access were not already configured manually.
+- In the integrated terminal, run `supabase login`, `supabase link --project-ref <your-project-ref>`, then `supabase functions deploy record-consent`. The function uses the standard `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` Edge Function secrets. Do not expose the service-role key to the frontend.
+- When legal wording changes, update the shared document and its version together; returning visitors are prompted again when either version changes.
+
 ## Environment variables
 
 - `VITE_SUPABASE_URL` — your Supabase project URL.
@@ -89,7 +97,7 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 
 ## Troubleshooting
 
-- If images or content do not appear, verify the asset file names in `src/assets` (some images were recently converted to `.webp`).
+- If images or content do not appear, verify the asset file names in `src/assets`.
 - If Supabase operations return empty values locally, confirm your `.env` variables and that the Supabase project has the expected tables: `donations`, `stories`, `gallery`, `events`, `subscribers`, `contact_messages`, `admins`.
 
 ## Contributing
@@ -100,7 +108,6 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 
 ## Contact
 
-For backend/webhook setup or database schema questions, reach out to the maintainer or the team managing the Supabase project.
+For backend/webhook setup or database schema questions, reach out to the team managing the Supabase project (Nick Chingaipe).
 
 ---
-

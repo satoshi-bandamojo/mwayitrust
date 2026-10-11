@@ -1,6 +1,6 @@
 export default function AdminSidebar() {
   return (
-    <aside className="admin-sidebar">
+    <nav className="admin-sidebar" aria-label="Admin navigation">
       <h2>Admin</h2>
       <ul>
         <li><a href="/admin">Dashboard</a></li>
@@ -11,6 +11,6 @@ export default function AdminSidebar() {
         <li><a href="/admin/subscribers">Subscribers</a></li>
         <li><a href="/admin/contacts">Messages</a></li>
       </ul>
-    </aside>
+    </nav>
   )
 }

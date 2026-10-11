@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Eye, GraduationCap, HeartHandshake, PackageOpen, PlayCircle, Sparkles, Target, Users } from 'lucide-react'
+import { ArrowRight, BookOpen, Eye, GraduationCap, HeartHandshake, PackageOpen, PlayCircle, Target, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
@@ -97,11 +97,7 @@ export default function Home() {
       <section className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-overlay" />
         <div className="hero-content">
-          <div className="hero-badge">
-            <Sparkles size={16} />
-            Joining Hands. Opening Doors.
-          </div>
-          <h1>Building brighter futures through learning and care.</h1>
+          <h1>Joining Hands. Opening Doors.</h1>
           <p>
             Mwayi Trust supports classrooms, mentors, and community-led programs that help children thrive.
           </p>
