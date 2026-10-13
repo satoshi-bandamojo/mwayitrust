@@ -21,7 +21,7 @@ export type DonationRecord = {
   email: string
   amount: number
   date: string
-  status: 'Pending' | 'Verified'
+  status: 'Pending' | 'Completed' | 'Failed' | 'Cancelled' | 'Unknown'
 }
 
 const isMissingTableError = (error: { code?: string; message?: string }) => {
@@ -36,14 +36,28 @@ const normalizeContactMessage = (record: Record<string, unknown>): ContactMessag
   created_at: String(record.created_at ?? record.createdAt ?? new Date().toISOString()),
 })
 
-const normalizeDonation = (record: Record<string, unknown>): DonationRecord => ({
-  id: Number(record.id ?? 0) || String(record.id ?? 'unknown'),
-  name: String(record.name ?? record.donor_name ?? 'Anonymous donor'),
-  email: String(record.email ?? ''),
-  amount: Number(record.amount ?? record.total ?? 0),
-  date: String(record.date ?? record.created_at ?? new Date().toISOString()),
-  status: String(record.status ?? '').toLowerCase() === 'verified' ? 'Verified' : 'Pending',
-})
+const normalizeDonation = (record: Record<string, unknown>): DonationRecord => {
+  const rawStatus = String(record.status ?? '').toLowerCase()
+  const status =
+    rawStatus === 'completed' || rawStatus === 'success' || rawStatus === 'verified'
+      ? 'Completed'
+      : rawStatus === 'pending'
+        ? 'Pending'
+        : rawStatus === 'failed'
+          ? 'Failed'
+          : rawStatus === 'cancelled' || rawStatus === 'canceled'
+            ? 'Cancelled'
+            : 'Unknown'
+
+  return {
+    id: Number(record.id ?? 0) || String(record.id ?? 'unknown'),
+    name: String(record.name ?? record.donor_name ?? 'Anonymous donor'),
+    email: String(record.email ?? ''),
+    amount: Number(record.amount ?? record.total ?? 0),
+    date: String(record.date ?? record.created_at ?? new Date().toISOString()),
+    status,
+  }
+}
 
 export async function getCurrentAdminProfile(): Promise<AdminProfile | null> {
   const {
@@ -147,18 +161,6 @@ export async function getDonations(): Promise<DonationRecord[]> {
   }
 
   return (data ?? []).map((record) => normalizeDonation(record as Record<string, unknown>))
-}
-
-export async function updateDonationStatus(id: number | string, status: 'Verified' | 'Pending') {
-  const { error } = await supabase.from('donations').update({ status }).eq('id', id)
-
-  if (error) {
-    if (isMissingTableError(error)) {
-      return
-    }
-
-    throw error
-  }
 }
 
 export async function deleteDonation(id: number | string) {

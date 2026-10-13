@@ -67,10 +67,12 @@ a {
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.2));
 }
 
-.hero-section {
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hero-content {
@@ -110,6 +112,23 @@ a {
   line-height: 1.1;
   margin: 0 0 1rem;
   color: white;
+}
+
+
+.hero-slogan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.22em;
+}
+
+.hero-slogan span:nth-child(4n + 1),
+.hero-slogan span:nth-child(4n + 3) {
+  transform: translateY(-0.08em);
+}
+
+.hero-slogan span:nth-child(4n + 2) {
+  transform: translateY(0.08em);
 }
 
 .hero-content p {
@@ -578,7 +597,7 @@ a {
 
 .footer-legal-bar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 1.25rem;
   padding-top: 0.75rem;
   border-top: 1px solid #e2e8f0;
@@ -1458,6 +1477,10 @@ a {
   gap: 0.6rem;
   font-weight: 700;
   color: #0f172a;
+}
+
+.brand-name {
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .nav-links {
@@ -3033,7 +3056,8 @@ a {
   font-weight: 700;
 }
 
-.admin-status-badge--verified {
+.admin-status-badge--verified,
+.admin-status-badge--completed {
   color: #047857;
   background: #ecfdf5;
 }
@@ -3041,6 +3065,17 @@ a {
 .admin-status-badge--pending {
   color: #b45309;
   background: #ffedd5;
+}
+
+.admin-status-badge--failed,
+.admin-status-badge--cancelled {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.admin-status-badge--unknown {
+  color: #475569;
+  background: #f1f5f9;
 }
 
 .admin-table-actions {

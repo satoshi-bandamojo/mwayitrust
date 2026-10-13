@@ -71,9 +71,10 @@ Configure these values as Supabase Edge Function secrets. Do not use a `VITE_` p
 
 5. **Payment Callback**
    - Paychangu redirects to `/donation-callback?tx_ref=...&status=success`
-   - Callback page retrieves donation using `tx_ref`
-   - The signed webhook verifies and updates the donation
-   - The callback shows success only when the stored status is `completed`
+   - Callback page ignores the URL status and reads the donation by `tx_ref`
+   - The webhook validates the HMAC signature and re-verifies the transaction with PayChangu before updating status
+   - The callback polls the stored status briefly and shows success only when it is `completed`
+   - Admins cannot manually mark a donation as paid; the verified webhook is the payment-status writer
 
 6. **Confirmation**
    - Success: Shows donation amount, reference, email confirmation
@@ -171,7 +172,7 @@ supabase functions deploy create-donation
 supabase functions deploy paychangu-webhook --no-verify-jwt
 ```
 
-The webhook uses `--no-verify-jwt` because PayChangu authenticates the request with its webhook signature, not a Supabase user JWT. Configure PayChangu to send webhooks to:
+The webhook uses `--no-verify-jwt` because PayChangu authenticates the request with its webhook signature, not a Supabase user JWT. It also verifies the transaction against PayChangu's verification API before changing the donation record. Configure PayChangu to send webhooks to:
 
 ```text
 https://ghbjhzkalqtdnizwoeyt.supabase.co/functions/v1/paychangu-webhook
@@ -196,16 +197,17 @@ When ready for production:
 1. Go to Supabase dashboard
 2. Open `donations` table
 3. Look for `payment_reference` like `MT-1723900000000-ABC1`
-4. Check `status` column: `pending`, `completed`, `failed`, or `cancelled`
+4. Check `status` column: `pending`, `completed`, `failed`, or `cancelled`. Only the webhook should set these payment states.
 
 ### View Payment Metadata
 In Supabase, check `payment_metadata` column (JSONB):
 ```json
 {
-  "paychangu_status": "success",
-  "paychangu_tx_ref": "ae041eae-6abd-4602-a949-56fbd65c29fe",
-  "paychangu_transaction_id": "TXN123456",
-  "verified_at": "2024-08-17T10:30:00.000Z"
+  "webhook_status": "success",
+  "verified_status": "success",
+  "webhook_received_at": "2026-10-12T00:00:00.000Z",
+  "verified_at": "2026-10-12T00:00:00.000Z",
+  "provider_reference": "provider-reference"
 }
 ```
 

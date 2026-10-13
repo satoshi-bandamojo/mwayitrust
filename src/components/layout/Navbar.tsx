@@ -21,7 +21,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         <Link className="brand" to="/" onClick={closeMenu}>
           <HeartHandshake size={20} />
-          <span>Mwayi Trust</span>
+          <span className="brand-name">Mwayi Trust</span>
         </Link>
 
         <nav className={`nav-links ${menuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">

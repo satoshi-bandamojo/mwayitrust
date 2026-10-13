@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { programs } from '../data/programs.ts'
-import { storiesService } from '../services/stories.ts'
-import { subscribersService } from '../services/subscribers.ts'
 import type { Story } from '../types/index.ts'
 import heroImage from '../assets/hero.webp'
 import LoadingState from '../components/ui/LoadingState.tsx'
@@ -48,6 +46,7 @@ export default function Home() {
     async function loadFeaturedStories() {
       setStoriesLoading(true)
       try {
+        const { storiesService } = await import('../services/stories.ts')
         const stories = await storiesService.getFeatured()
         if (active) {
           setFeaturedStories(stories.slice(0, 2))
@@ -82,6 +81,7 @@ export default function Home() {
     setSubscriberStatus('saving')
 
     try {
+      const { subscribersService } = await import('../services/subscribers.ts')
       await subscribersService.subscribe(subscriberEmail.trim().toLowerCase())
       setSubscriberStatus('success')
       setSubscriberMessage('Subscribed! You will receive updates soon.')
@@ -94,10 +94,16 @@ export default function Home() {
 
   return (
     <div className="homepage-shell">
-      <section className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section className="hero-section">
+        <img className="hero-image" src={heroImage} alt="" fetchPriority="high" />
         <div className="hero-overlay" />
         <div className="hero-content">
-          <h1>Joining Hands. Opening Doors.</h1>
+          <h1 className="hero-slogan">
+            <span>Joining</span>
+            <span>Hands.</span>
+            <span>Opening</span>
+            <span>Doors.</span>
+          </h1>
           <p>
             Mwayi Trust supports classrooms, mentors, and community-led programs that help children thrive.
           </p>
@@ -161,7 +167,7 @@ export default function Home() {
         <div className="home-programs-grid">
           {featuredPrograms.map((program) => (
             <Link key={program.slug} to={`/programs/${program.slug}`} className="home-program-card">
-              <img src={program.image} alt={program.title} />
+              <img src={program.image} alt={program.title} loading="lazy" decoding="async" />
               <div className="home-program-body">
                 <h3>{program.title}</h3>
                 <p>{program.summary}</p>
@@ -257,7 +263,7 @@ export default function Home() {
               <article key={story.id} className="info-card story-card">
                 {coverImage(story) ? (
                   <div className="story-card__image-wrap">
-                    <img src={coverImage(story)} alt={story.title} />
+                    <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
                   </div>
                 ) : null}
                 <div className="story-card__body">

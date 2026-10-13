@@ -1,15 +1,23 @@
-import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from '@supabase/supabase-js'
 import type { ConsentEventInsert, Database } from '../_shared/database.types.ts'
 import { privacyNotice, termsOfUse } from '../_shared/legalPolicies.ts'
+
+type DenoRuntime = {
+  env: {
+    get(name: string): string | undefined
+  }
+  serve(handler: (req: Request) => Response | Promise<Response>): void
+}
+
+const deno = (globalThis as typeof globalThis & { Deno: DenoRuntime }).Deno
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const supabaseUrl = Deno.env.get('SUPABASE_URL')
-const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+const supabaseUrl = deno.env.get('SUPABASE_URL')
+const serviceRoleKey = deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 
 if (!supabaseUrl || !serviceRoleKey) {
   throw new Error('Supabase function environment is missing required credentials.')
@@ -35,7 +43,7 @@ async function sha256(value: unknown): Promise<string> {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
-serve(async (req) => {
+deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }

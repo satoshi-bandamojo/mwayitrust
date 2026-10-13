@@ -1,8 +1,6 @@
 import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout.tsx'
-import AdminLayout from './layouts/AdminLayout.tsx'
-import ProtectedRoute from './components/shared/ProtectedRoute.tsx'
 
 const Home = lazy(() => import('./pages/Home.tsx'))
 const About = lazy(() => import('./pages/About.tsx'))
@@ -26,6 +24,8 @@ const ManageGallery = lazy(() => import('./pages/admin/ManageGallery.tsx'))
 const ManageDonations = lazy(() => import('./pages/admin/ManageDonations.tsx'))
 const ManageSubscribers = lazy(() => import('./pages/admin/ManageSubscribers.tsx'))
 const ManageContacts = lazy(() => import('./pages/admin/ManageContactMessages.tsx'))
+const AdminLayout = lazy(() => import('./layouts/AdminLayout.tsx'))
+const ProtectedRoute = lazy(() => import('./components/shared/ProtectedRoute.tsx'))
 
 export const routes = [
   {

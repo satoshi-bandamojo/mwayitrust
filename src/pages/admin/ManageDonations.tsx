@@ -1,6 +1,6 @@
-import { CheckCircle2, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { deleteDonation, getDonations, updateDonationStatus, type DonationRecord } from '../../services/admin.ts'
+import { deleteDonation, getDonations, type DonationRecord } from '../../services/admin.ts'
 
 export default function ManageDonations() {
   const [donations, setDonations] = useState<DonationRecord[]>([])
@@ -25,18 +25,6 @@ export default function ManageDonations() {
     void refreshDonations()
   }, [])
 
-  const markVerified = async (id: number | string) => {
-    try {
-      await updateDonationStatus(id, 'Verified')
-      setDonations((current) => current.map((item) => (item.id === id ? { ...item, status: 'Verified' } : item)))
-      setStatusType('success')
-      setStatusMessage('Donation marked as verified.')
-    } catch {
-      setStatusType('error')
-      setStatusMessage('Unable to update donation status.')
-    }
-  }
-
   const handleDelete = async (id: number | string) => {
     const confirmed = window.confirm('Delete this donation record?')
     if (!confirmed) return
@@ -57,7 +45,7 @@ export default function ManageDonations() {
       <section className="admin-page-header">
         <div>
           <h1 className="admin-page-title">Donations</h1>
-          <p className="admin-page-subtitle">View, verify, and remove donation records.</p>
+          <p className="admin-page-subtitle">View donation records and payment confirmation status.</p>
         </div>
       </section>
 
@@ -100,12 +88,6 @@ export default function ManageDonations() {
                       </span>
                     </td>
                     <td className="admin-table-actions">
-                      {donation.status === 'Pending' ? (
-                        <button type="button" className="admin-action-button" onClick={() => void markVerified(donation.id)}>
-                          <CheckCircle2 size={16} />
-                          Verify
-                        </button>
-                      ) : null}
                       <button type="button" className="admin-action-button admin-action-button--danger" onClick={() => void handleDelete(donation.id)}>
                         <Trash2 size={16} />
                         Delete

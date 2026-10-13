@@ -13,19 +13,23 @@ export default function DonationCallback() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const processCallback = async () => {
+    let active = true
+    let attempts = 0
+    let timeout: number | undefined
+    const params = extractPaymentCallbackParams()
+
+    const txRef = params.tx_ref
+    if (!txRef) {
+      setError('No payment reference found. Please contact support.')
+      setState('failed')
+      return
+    }
+
+    const checkDonationStatus = async () => {
+      if (!active) return
+
       try {
-        // Extract payment data from URL
-        const params = extractPaymentCallbackParams()
-
-        if (!params.tx_ref) {
-          setError('No payment reference found. Please contact support.')
-          setState('failed')
-          return
-        }
-
-        // Fetch donation from database
-        const { data: donationData, error: dbError } = await getDonationByReference(params.tx_ref)
+        const { data: donationData, error: dbError } = await getDonationByReference(txRef)
 
         if (dbError || !donationData) {
           console.error('Failed to fetch donation:', dbError)
@@ -40,27 +44,36 @@ export default function DonationCallback() {
           email: donationData.email,
         })
 
-        // The browser redirect is not proof of payment. The webhook owns status changes.
-        if (donationData.status === 'completed') {
+        const status = String(donationData.status).toLowerCase()
+        if (status === 'completed') {
           setState('success')
-        } else if (donationData.status === 'failed' || donationData.status === 'cancelled') {
+        } else if (status === 'failed' || status === 'cancelled' || status === 'canceled') {
           setError(
-            donationData.status === 'cancelled'
+            status === 'cancelled' || status === 'canceled'
               ? 'Payment was cancelled. Your donation was not processed.'
-              : 'Payment failed. Please try again.'
+              : 'Payment failed. Please try again.',
           )
           setState('failed')
         } else {
           setState('processing')
+          if (attempts < 19) {
+            attempts += 1
+            timeout = window.setTimeout(() => void checkDonationStatus(), 3000)
+          }
         }
       } catch (err) {
         console.error('Callback processing error:', err)
-        setError('An unexpected error occurred. Please contact support.')
+        setError('We could not check your payment status. Please contact support with your reference.')
         setState('failed')
       }
     }
 
-    processCallback()
+    void checkDonationStatus()
+
+    return () => {
+      active = false
+      if (timeout !== undefined) window.clearTimeout(timeout)
+    }
   }, [])
 
   if (state === 'loading') {
@@ -98,11 +111,40 @@ export default function DonationCallback() {
               </div>
             </div>
           )}
-          <p className="callback-message">A confirmation email has been sent to your inbox.</p>
+          <p className="callback-message">Your donation has been recorded.</p>
           <div className="callback-actions">
             <button className="btn btn-primary" onClick={() => navigate('/')}>
               <ArrowRight size={18} />
               Return home
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (state === 'processing') {
+    return (
+      <div className="callback-container">
+        <div className="callback-card callback-card--loading">
+          <Loader className="callback-spinner" size={48} />
+          <h1>Payment confirmation is still processing</h1>
+          <p>
+            Your payment provider has returned you to Mwayi Trust, but confirmation is not yet recorded. We’ll check
+            again automatically for about one minute. If it is still processing, contact support with your reference
+            before trying another payment.
+          </p>
+          {donation ? (
+            <div className="callback-details">
+              <div className="detail-row">
+                <span className="detail-label">Reference:</span>
+                <span className="detail-value">{donation.reference}</span>
+              </div>
+            </div>
+          ) : null}
+          <div className="callback-actions">
+            <button className="btn btn-secondary" onClick={() => navigate('/contact')}>
+              Contact support
             </button>
           </div>
         </div>

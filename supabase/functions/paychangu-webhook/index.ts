@@ -1,215 +1,261 @@
-import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 // @ts-ignore Deno resolves npm: imports; the frontend TypeScript service does not.
 import { createClient } from 'npm:@supabase/supabase-js@2.39.3'
 
-const supabaseAdmin = createClient(
-  Deno.env.get('SUPABASE_URL')!,
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-)
+const supabaseUrl = Deno.env.get('SUPABASE_URL')
+const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 
-/**
- * PayChangu Webhook Handler
- * 
- * Receives payment notifications from PayChangu and verifies them using HMAC-SHA256.
- * Only updates donation status if signature is valid and payment details match.
- */
-serve(async (req) => {
-  // Only accept POST
+if (!supabaseUrl || !serviceRoleKey) {
+  throw new Error('Supabase function environment is missing required credentials.')
+}
+
+const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey)
+const jsonHeaders = { 'Content-Type': 'application/json' }
+const maximumBodyBytes = 16 * 1024
+
+type PaymentStatus = 'pending' | 'completed' | 'failed' | 'cancelled'
+
+function jsonResponse(body: Record<string, unknown>, status: number) {
+  return new Response(JSON.stringify(body), { status, headers: jsonHeaders })
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function signaturesMatch(expected: string, received: string): boolean {
+  if (!/^[0-9a-f]{64}$/i.test(received)) return false
+
+  let difference = 0
+  for (let index = 0; index < expected.length; index += 1) {
+    difference |= expected.charCodeAt(index) ^ received.toLowerCase().charCodeAt(index)
+  }
+  return difference === 0
+}
+
+function mapPaymentStatus(value: unknown): PaymentStatus | null {
+  if (typeof value !== 'string') return null
+
+  switch (value.toLowerCase()) {
+    case 'success':
+    case 'completed':
+      return 'completed'
+    case 'failed':
+      return 'failed'
+    case 'cancelled':
+    case 'canceled':
+      return 'cancelled'
+    case 'pending':
+    case 'processing':
+      return 'pending'
+    default:
+      return null
+  }
+}
+
+async function verifySignature(rawBody: string, signature: string, secret: string): Promise<boolean> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  )
+  const digest = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(rawBody))
+  const expected = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')
+  return signaturesMatch(expected, signature.trim())
+}
+
+async function readBody(req: Request): Promise<string | null> {
+  const contentLength = Number(req.headers.get('content-length') ?? 0)
+  if (contentLength > maximumBodyBytes) return null
+
+  const rawBody = await req.text()
+  if (new TextEncoder().encode(rawBody).length > maximumBodyBytes) return null
+  return rawBody
+}
+
+async function verifyTransaction(txRef: string, secret: string): Promise<Record<string, unknown>> {
+  const response = await fetch(`https://api.paychangu.com/verify-payment/${encodeURIComponent(txRef)}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${secret}`,
+    },
+    signal: AbortSignal.timeout(10_000),
+  })
+
+  let payload: unknown
+  try {
+    payload = await response.json()
+  } catch {
+    throw new Error('PayChangu returned an invalid verification response.')
+  }
+
+  if (!response.ok) {
+    console.error('PayChangu transaction verification failed with HTTP status:', response.status)
+    throw new Error('PayChangu could not verify the transaction.')
+  }
+
+  if (!isRecord(payload) || !isRecord(payload.data)) {
+    throw new Error('PayChangu returned an incomplete verification response.')
+  }
+
+  return payload.data
+}
+
+Deno.serve(async (req) => {
   if (req.method !== 'POST') {
-    return new Response(
-      JSON.stringify({ error: 'Method not allowed' }),
-      { status: 405, headers: { 'Content-Type': 'application/json' } }
-    )
+    return jsonResponse({ error: 'Method not allowed' }, 405)
+  }
+
+  const signature = req.headers.get('Signature') ?? req.headers.get('X-Paychangu-Signature')
+  const webSecret = Deno.env.get('PAYCHANGU_WEB_SECRET')
+  const paychanguSecret = Deno.env.get('PAYCHANGU_SECRET_KEY')
+
+  if (!webSecret || !paychanguSecret) {
+    console.error('PayChangu webhook or API secret is not configured.')
+    return jsonResponse({ error: 'Webhook is not configured' }, 500)
+  }
+
+  if (!signature) {
+    return jsonResponse({ error: 'Missing signature header' }, 401)
   }
 
   try {
-    // -------------------------
-    // 1. Get signature from header
-    // -------------------------
-    const signature = req.headers.get('Signature') || req.headers.get('X-Paychangu-Signature')
-
-    if (!signature) {
-      console.error('Missing Signature header')
-      return new Response(
-        JSON.stringify({ error: 'Missing signature header' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      )
+    const rawBody = await readBody(req)
+    if (rawBody === null) {
+      return jsonResponse({ error: 'Request body is too large' }, 413)
     }
 
-    // -------------------------
-    // 2. Get raw body for verification
-    // -------------------------
-    const rawBody = await req.text()
-
-    // -------------------------
-    // 3. Verify HMAC signature
-    // -------------------------
-    const webSecret = Deno.env.get('PAYCHANGU_WEB_SECRET')
-
-    if (!webSecret) {
-      console.error('PAYCHANGU_WEB_SECRET not configured')
-      return new Response(
-        JSON.stringify({ error: 'Webhook not configured' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
-      )
+    if (!(await verifySignature(rawBody, signature, webSecret))) {
+      return jsonResponse({ error: 'Invalid signature' }, 401)
     }
 
-    // Verify HMAC-SHA256
-    const encoder = new TextEncoder()
-    const key = await crypto.subtle.importKey(
-      'raw',
-      encoder.encode(webSecret),
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
-    )
-
-    const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody))
-    const computedSignature = Array.from(new Uint8Array(signatureBuffer))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('')
-
-    // Compare signatures (case-insensitive for hex comparison)
-    if (computedSignature.toLowerCase() !== signature.toLowerCase()) {
-      console.error('Invalid signature:', { received: signature, computed: computedSignature })
-      return new Response(
-        JSON.stringify({ error: 'Invalid signature' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      )
-    }
-
-    // -------------------------
-    // 4. Parse payload
-    // -------------------------
-    let payload
+    let payload: unknown
     try {
       payload = JSON.parse(rawBody)
-    } catch (e) {
-      console.error('Invalid JSON payload:', e)
-      return new Response(
-        JSON.stringify({ error: 'Invalid payload' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+    } catch {
+      return jsonResponse({ error: 'Invalid JSON payload' }, 400)
     }
 
-    const { tx_ref, amount, currency, status: rawWebhookStatus } = payload
-    const webhookStatus = typeof rawWebhookStatus === 'string' ? rawWebhookStatus.toLowerCase() : ''
-
-    if (!tx_ref) {
-      console.error('Missing tx_ref in payload')
-      return new Response(
-        JSON.stringify({ error: 'Missing transaction reference' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+    if (!isRecord(payload) || typeof payload.tx_ref !== 'string' || payload.tx_ref.length > 100) {
+      return jsonResponse({ error: 'Invalid transaction reference' }, 400)
     }
 
-    if (!['success', 'failed', 'cancelled'].includes(webhookStatus)) {
-      console.error('Unsupported webhook status:', rawWebhookStatus)
-      return new Response(
-        JSON.stringify({ error: 'Unsupported payment status' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+    const webhookStatus = mapPaymentStatus(payload.status)
+    if (!webhookStatus) {
+      return jsonResponse({ error: 'Unsupported payment status' }, 400)
     }
 
-    console.log('Webhook received for tx_ref:', tx_ref, 'status:', webhookStatus)
-
-    // -------------------------
-    // 5. Find donation by tx_ref
-    // -------------------------
     const { data: donation, error: fetchError } = await supabaseAdmin
       .from('donations')
-      .select('*')
-      .eq('payment_reference', tx_ref)
-      .single()
+      .select('id, amount, currency, status, payment_metadata')
+      .eq('payment_reference', payload.tx_ref)
+      .maybeSingle()
 
-    if (fetchError || !donation) {
-      console.error('Donation not found for tx_ref:', tx_ref, fetchError)
-      return new Response(
-        JSON.stringify({ error: 'Donation not found' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
-      )
+    if (fetchError) {
+      console.error('Unable to load donation for verified webhook:', fetchError.message)
+      return jsonResponse({ error: 'Unable to load donation' }, 500)
     }
 
-    // -------------------------
-    // 6. Verify amount and currency
-    // -------------------------
-    if (Number(donation.amount) !== Number(amount)) {
-      console.error('Amount mismatch:', { expected: donation.amount, received: amount })
-      return new Response(
-        JSON.stringify({ error: 'Amount mismatch' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+    if (!donation) {
+      return jsonResponse({ error: 'Donation not found' }, 404)
     }
 
-    if (donation.currency !== currency) {
-      console.error('Currency mismatch:', { expected: donation.currency, received: currency })
-      return new Response(
-        JSON.stringify({ error: 'Currency mismatch' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+    const verifiedTransaction = await verifyTransaction(payload.tx_ref, paychanguSecret)
+    if (verifiedTransaction.tx_ref !== payload.tx_ref) {
+      console.error('PayChangu verification reference did not match the webhook reference.')
+      return jsonResponse({ error: 'Transaction reference mismatch' }, 400)
     }
 
-    // -------------------------
-    // 7. Map webhook status to donation status
-    // -------------------------
-    const donationStatus = webhookStatus === 'success' ? 'completed' : webhookStatus
-
-    // A later provider retry must not undo a confirmed payment.
-    if (donation.status === 'completed' && donationStatus !== 'completed') {
-      return new Response(
-        JSON.stringify({
-          success: true,
-          message: 'Donation was already completed',
-          tx_ref,
-          status: donation.status,
-        }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } }
-      )
+    const verifiedStatus = mapPaymentStatus(verifiedTransaction.status)
+    if (!verifiedStatus) {
+      console.error('PayChangu verification returned an unsupported transaction status.')
+      return jsonResponse({ error: 'Unsupported verified payment status' }, 502)
     }
 
-    // -------------------------
-    // 8. Update donation status
-    // -------------------------
-    const { error: updateError } = await supabaseAdmin
+    const verifiedAmount = Number(verifiedTransaction.amount)
+    const expectedAmount = Number(donation.amount)
+    const verifiedCurrency =
+      typeof verifiedTransaction.currency === 'string' ? verifiedTransaction.currency.toUpperCase() : ''
+    const expectedCurrency = typeof donation.currency === 'string' ? donation.currency.toUpperCase() : ''
+
+    if (!Number.isFinite(verifiedAmount) || verifiedAmount !== expectedAmount || verifiedCurrency !== expectedCurrency) {
+      console.error('PayChangu verification amount or currency did not match the donation record.')
+      return jsonResponse({ error: 'Payment amount or currency mismatch' }, 400)
+    }
+
+    const nextStatus = verifiedStatus
+    if (webhookStatus !== verifiedStatus) {
+      console.warn('Webhook status differed from the verified PayChangu transaction status; using verified status.')
+    }
+
+    const oldMetadata = isRecord(donation.payment_metadata) ? donation.payment_metadata : {}
+    const paymentMetadata = {
+      ...oldMetadata,
+      webhook_status: payload.status,
+      verified_status: verifiedTransaction.status,
+      webhook_received_at: new Date().toISOString(),
+      verified_at: new Date().toISOString(),
+      provider_reference: typeof verifiedTransaction.reference === 'string' ? verifiedTransaction.reference : null,
+    }
+
+    let updateQuery = supabaseAdmin
       .from('donations')
-      .update({
-        status: donationStatus,
-        payment_metadata: {
-          ...donation.payment_metadata,
-          webhook_status: webhookStatus,
-          webhook_received_at: new Date().toISOString(),
-          verified: true,
-        },
-      })
-      .eq('payment_reference', tx_ref)
+      .update({ status: nextStatus, payment_metadata: paymentMetadata })
+      .eq('payment_reference', payload.tx_ref)
+
+    if (nextStatus === 'completed') {
+      updateQuery = updateQuery.in('status', ['pending', 'failed', 'cancelled'])
+    } else {
+      updateQuery = updateQuery.eq('status', 'pending')
+    }
+
+    const { data: updatedDonation, error: updateError } = await updateQuery
+      .select('id, status')
+      .maybeSingle()
 
     if (updateError) {
-      console.error('Failed to update donation:', updateError)
-      return new Response(
-        JSON.stringify({ error: 'Failed to update donation' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
-      )
+      console.error('Failed to update donation status:', updateError.message)
+      return jsonResponse({ error: 'Failed to update donation status' }, 500)
     }
 
-    console.log('Donation updated:', tx_ref, '→', donationStatus)
+    if (!updatedDonation) {
+      const { data: currentDonation, error: currentError } = await supabaseAdmin
+        .from('donations')
+        .select('status')
+        .eq('payment_reference', payload.tx_ref)
+        .maybeSingle()
 
-    // -------------------------
-    // 9. Return success response
-    // -------------------------
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Webhook processed successfully',
-        tx_ref,
-        status: donationStatus,
-      }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    )
+      if (currentError) {
+        console.error('Unable to confirm current donation status:', currentError.message)
+        return jsonResponse({ error: 'Unable to confirm donation status' }, 500)
+      }
+
+      if (!currentDonation) {
+        return jsonResponse({ error: 'Donation not found' }, 404)
+      }
+
+      if (String(currentDonation.status).toLowerCase() !== 'pending') {
+        return jsonResponse({
+          success: true,
+          message: 'Donation already has a terminal status',
+          tx_ref: payload.tx_ref,
+          status: currentDonation.status,
+        }, 200)
+      }
+
+      return jsonResponse({ error: 'Donation status was not updated' }, 500)
+    }
+
+    return jsonResponse({
+      success: true,
+      message: 'Webhook processed successfully',
+      tx_ref: payload.tx_ref,
+      status: nextStatus,
+    }, 200)
   } catch (error) {
-    console.error('Webhook error:', error)
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    )
+    console.error('Webhook processing failed:', error instanceof Error ? error.message : 'Unknown error')
+    return jsonResponse({ error: 'Unable to process webhook' }, 500)
   }
 })
