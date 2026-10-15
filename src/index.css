@@ -1,3 +1,6 @@
+@import '@fontsource/comic-neue/400.css';
+@import '@fontsource/comic-neue/700.css';
+
 html {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.5;
@@ -1480,7 +1483,7 @@ a {
 }
 
 .brand-name {
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+  font-family: 'Comic Neue', 'Comic Sans MS', cursive;
 }
 
 .nav-links {
@@ -2809,6 +2812,11 @@ a {
   gap: 0.7rem;
 }
 
+.payment-methods-note {
+  margin: 0 0 0.7rem;
+  color: #64748b;
+}
+
 .payment-option {
   display: flex;
   align-items: center;
@@ -2818,12 +2826,6 @@ a {
   border: 1px solid #e2e8f0;
   background: white;
   text-align: left;
-  cursor: pointer;
-}
-
-.payment-option--active {
-  border-color: #38bdf8;
-  background: #eff6ff;
 }
 
 .payment-option__icon {
@@ -2851,10 +2853,6 @@ a {
 .payment-option__desc {
   color: #64748b;
   font-size: 0.9rem;
-}
-
-.payment-option__check {
-  color: #16a34a;
 }
 
 .summary-card {
@@ -4056,6 +4054,7 @@ a {
   }
 
   button {
+    font: inherit;
     min-height: 2.75rem;
   }
 }

@@ -1,9 +1,8 @@
-import { ArrowRight, BadgeCheck, CreditCard, HeartHandshake, Landmark, ShieldCheck, Smartphone } from 'lucide-react'
+import { ArrowRight, HeartHandshake, Landmark, ShieldCheck, Smartphone } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { createDonation } from '../services/donations'
 
 type DonationTierType = 'learning_materials' | 'student_term' | 'student_year' | 'community_champion'
-type PaymentMethodId = 'airtel' | 'tnm' | 'bank' | 'paypal'
 type SelectedTierValue = DonationTierType | 'custom' | ''
 
 interface DonationTier {
@@ -15,10 +14,9 @@ interface DonationTier {
 }
 
 interface PaymentMethodOption {
-  id: PaymentMethodId
   name: string
   description: string
-  icon: string
+  icon: 'smartphone' | 'landmark'
 }
 
 const donationTiers: DonationTier[] = [
@@ -53,10 +51,9 @@ const donationTiers: DonationTier[] = [
 ]
 
 const paymentMethods: PaymentMethodOption[] = [
-  { id: 'airtel', name: 'Airtel Money', description: 'Fast mobile payments', icon: 'smartphone' },
-  { id: 'tnm', name: 'TNM Mpamba', description: 'Mobile money for Malawi', icon: 'smartphone' },
-  { id: 'bank', name: 'Bank transfer', description: 'Direct transfer for larger gifts', icon: 'landmark' },
-  { id: 'paypal', name: 'PayPal', description: 'International support', icon: 'credit-card' },
+  { name: 'Airtel Money', description: 'Mobile money', icon: 'smartphone' },
+  { name: 'TNM Mpamba', description: 'Mobile money', icon: 'smartphone' },
+  { name: 'Bank transfer', description: 'Bank payment', icon: 'landmark' },
 ]
 
 const minCustomAmount = 500
@@ -69,7 +66,6 @@ const initialForm = {
 
 export default function Donate() {
   const [selectedTier, setSelectedTier] = useState<SelectedTierValue>('')
-  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodId | ''>('')
   const [customAmount, setCustomAmount] = useState('')
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({
@@ -77,7 +73,6 @@ export default function Donate() {
     donor_name: '',
     email: '',
     phone: '',
-    method: '',
   })
   const [submitMessage, setSubmitMessage] = useState('')
 
@@ -91,13 +86,8 @@ export default function Donate() {
     return tier?.amount ?? 0
   }, [customAmount, selectedTier])
 
-  const methodLabel = useMemo(() => {
-    const method = paymentMethods.find((option) => option.id === selectedMethod)
-    return method?.name ?? ''
-  }, [selectedMethod])
-
   const clearErrors = () => {
-    setErrors({ amount: '', donor_name: '', email: '', phone: '', method: '' })
+    setErrors({ amount: '', donor_name: '', email: '', phone: '' })
   }
 
   const validate = () => {
@@ -106,7 +96,6 @@ export default function Donate() {
       donor_name: '',
       email: '',
       phone: '',
-      method: '',
     }
 
     let valid = true
@@ -129,16 +118,6 @@ export default function Donate() {
       valid = false
     } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
       nextErrors.email = 'Please enter a valid email address.'
-      valid = false
-    }
-
-    if (['airtel', 'tnm'].includes(selectedMethod as PaymentMethodId) && !form.phone.trim()) {
-      nextErrors.phone = 'Phone number is required for mobile money payments.'
-      valid = false
-    }
-
-    if (!selectedMethod) {
-      nextErrors.method = 'Please select a payment method.'
       valid = false
     }
 
@@ -309,8 +288,7 @@ export default function Donate() {
                 </label>
                 <label className="form-field form-field--full">
                   <span className="form-label">
-                    Phone number
-                    <span className="form-hint">required for Airtel / TNM</span>
+                    Phone number <span className="form-hint">optional; PayChangu may request it for mobile money</span>
                   </span>
                   <input
                     className={`form-input ${errors.phone ? 'form-input--error' : ''}`}
@@ -327,43 +305,29 @@ export default function Donate() {
           <section className="step-card">
             <h2 className="step-title">
               <span className="step-number">3</span>
-              Payment method
+              Payment methods
             </h2>
-            <div className="payment-methods">
+            <p className="payment-methods-note">Choose your payment method securely on the PayChangu checkout page.</p>
+            <div className="payment-methods" aria-label="Payment methods available at checkout">
               {paymentMethods.map((method) => (
-                <button
-                  key={method.id}
-                  type="button"
-                  className={`payment-option${selectedMethod === method.id ? ' payment-option--active' : ''}`}
-                  onClick={() => {
-                    setSelectedMethod(method.id)
-                    setErrors((current) => ({ ...current, method: '' }))
-                  }}
-                >
+                <div key={method.name} className="payment-option">
                   <div className="payment-option__icon">
                     {method.icon === 'smartphone' ? <Smartphone size={18} /> : null}
                     {method.icon === 'landmark' ? <Landmark size={18} /> : null}
-                    {method.icon === 'credit-card' ? <CreditCard size={18} /> : null}
                   </div>
                   <div className="payment-option__body">
                     <span className="payment-option__name">{method.name}</span>
                     <span className="payment-option__desc">{method.description}</span>
                   </div>
-                  {selectedMethod === method.id ? <BadgeCheck className="payment-option__check" size={20} /> : null}
-                </button>
+                </div>
               ))}
             </div>
-            {errors.method ? <p className="form-error-inline">{errors.method}</p> : null}
           </section>
 
           <div className="summary-card">
             <div className="summary-row">
               <span className="summary-label">Donation amount</span>
               <strong className="summary-value">MK {finalAmount.toLocaleString()}</strong>
-            </div>
-            <div className="summary-row">
-              <span className="summary-label">Payment method</span>
-              <strong className="summary-value">{methodLabel || 'Select payment method'}</strong>
             </div>
           </div>
 
