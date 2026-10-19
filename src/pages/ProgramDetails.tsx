@@ -5,7 +5,7 @@ import { programs } from '../data/programs.ts'
 import carpentryImage from '../assets/carpentry.webp'
 import cookeryImage from '../assets/cookery2.webp'
 import houseKeepingImage from '../assets/house-keeping.webp'
-import tailoringImage from '../assets/program-vocational2.webp'
+import tailoringImage from '../assets/converted_image (16).webp'
 
 const vocationalCourses = [
   {
@@ -74,7 +74,7 @@ export default function ProgramDetails() {
         <section className="vocational-spotlight">
           <div className="vocational-spotlight-copy">
             <p className="section-kicker">Training pathways</p>
-            <h2>Four practical courses designed to build real skills and pathways to work.</h2>
+            <h2>Four practical courses designed to build skills and pathways to work.</h2>
             <p>
               The Mwayi Trust Vocational Training Centre equips young people with hands-on experience in the trades and
               service skills most needed in everyday work and enterprise.

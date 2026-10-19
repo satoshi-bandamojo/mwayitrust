@@ -68,39 +68,10 @@ const values = [
 export default function About() {
   return (
     <div className="about-shell">
-      <section className="about-hero">
-        <div className="about-hero-content">
-          <p className="section-kicker">About Mwayi Trust</p>
-          <h1>From a vision to a movement of change.</h1>
-          <p>
-            Mwayi Trust was born from a simple belief: every student in Malawi deserves access to education, mentorship,
-            and opportunity regardless of background.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary" href="/donate">
-              <HeartHandshake size={18} />
-              Support the mission
-            </a>
-            <a className="btn btn-secondary" href="/stories">
-              Read our stories
-              <ArrowRight size={18} />
-            </a>
-          </div>
-        </div>
-      </section>
-
       <section className="about-story">
-        <div className="about-story-media">
-          <img src={aboutImage} alt="Mwayi Trust community in action" />
-          <div className="story-badge">
-            <strong>2009</strong>
-            <span>Est.</span>
-          </div>
-        </div>
-
-        <div className="about-story-content">
+        <div className="about-story-content welcome-hero">
           <p className="section-kicker">Our story</p>
-          <h2>What began as a small community initiative is now a trusted force for change.</h2>
+          <h1>What began as a small community initiative is now a trusted force for change.</h1>
           <p>
             Founded in 2009, Mwayi Trust started as a small community response to support students who lacked the resources
             to continue their education. Today, the organization walks alongside students, families, and communities through
@@ -111,14 +82,33 @@ export default function About() {
             Malawi.
           </p>
 
-          <div className="milestone-list">
-            {milestones.map((milestone) => (
-              <div key={milestone.year} className="milestone-item">
-                <span className="milestone-year">{milestone.year}</span>
-                <p>{milestone.text}</p>
-              </div>
-            ))}
+          <div className="hero-actions about-story-actions">
+            <a className="btn btn-primary" href="/donate">
+              <HeartHandshake size={18} />
+              Support the mission
+            </a>
+            <a className="btn btn-secondary" href="/stories">
+              Read our stories
+              <ArrowRight size={18} />
+            </a>
           </div>
+        </div>
+
+        <div className="about-story-media">
+          <img src={aboutImage} alt="Mwayi Trust community in action" />
+          <div className="story-badge">
+            <strong>2009</strong>
+            <span>Est.</span>
+          </div>
+        </div>
+
+        <div className="milestone-list">
+          {milestones.map((milestone) => (
+            <div key={milestone.year} className="milestone-item">
+              <span className="milestone-year">{milestone.year}</span>
+              <p>{milestone.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 

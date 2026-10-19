@@ -101,8 +101,8 @@ export default function Gallery() {
 
   return (
     <div className="gallery-shell">
-      <section className="gallery-hero">
-        <div className="gallery-hero__content">
+      <section className="gallery-hero welcome-hero">
+        <div className="gallery-hero__content welcome-hero__content">
           <p className="section-kicker">Our gallery</p>
           <h1>Moments of learning, care, and community.</h1>
           <p>

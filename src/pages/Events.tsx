@@ -71,8 +71,8 @@ export default function Events() {
 
   return (
     <div className="events-shell">
-      <section className="events-hero">
-        <div className="events-hero__content">
+      <section className="events-hero welcome-hero">
+        <div className="events-hero__content welcome-hero__content">
           <p className="section-kicker">Upcoming programs</p>
           <h1>Explore the events and learning experiences shaping our community.</h1>
           <p>

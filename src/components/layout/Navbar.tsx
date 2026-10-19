@@ -1,4 +1,4 @@
-import { Menu, X, HeartHandshake } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
@@ -20,7 +20,6 @@ export default function Navbar() {
     <header className="navbar-shell">
       <div className="navbar-inner">
         <Link className="brand" to="/" onClick={closeMenu}>
-          <HeartHandshake size={20} />
           <span className="brand-name">Mwayi Trust</span>
         </Link>
 

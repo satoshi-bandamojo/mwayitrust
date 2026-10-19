@@ -133,8 +133,8 @@ export default function Contact() {
 
   return (
     <div className="contact-shell">
-      <section className="contact-hero">
-        <div>
+      <section className="contact-hero welcome-hero">
+        <div className="welcome-hero__content">
           <p className="section-kicker">Contact us</p>
           <h1>We’d love to hear from you.</h1>
           <p>Reach out for partnerships, volunteering, donations, or a simple hello.</p>

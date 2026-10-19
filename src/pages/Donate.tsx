@@ -171,8 +171,8 @@ export default function Donate() {
 
   return (
     <div className="donate-shell">
-      <section className="donate-hero">
-        <div className="donate-hero-content">
+      <section className="donate-hero welcome-hero">
+        <div className="donate-hero-content welcome-hero__content">
           <p className="section-kicker">Make a lasting impact</p>
           <h1>Give today and help students thrive in Malawi.</h1>
           <p>

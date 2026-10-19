@@ -5,8 +5,8 @@ import { programs } from '../data/programs.ts'
 export default function Programs() {
   return (
     <div className="programs-shell">
-      <section className="programs-hero">
-        <div>
+      <section className="programs-hero welcome-hero">
+        <div className="welcome-hero__content">
           <p className="section-kicker">What we do</p>
           <h1>Our programs</h1>
           <p>
