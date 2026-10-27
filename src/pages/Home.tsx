@@ -10,7 +10,7 @@ import LoadingState from '../components/ui/LoadingState.tsx'
 const stats = [
   { value: '3,000+', label: 'students supported' },
   { value: '6', label: 'learning hubs' },
-  { value: '96%', label: 'community retention' },
+  { value: '96%', label: 'program retention' },
 ]
 
 const missionSnapshot = [
@@ -18,22 +18,21 @@ const missionSnapshot = [
     title: 'Our Mission',
     icon: Target,
     description:
-      'To enable young people and communities to access vocational training, educational support, employment opportunities, and positive, sustainable lifestyles.',
+      'To enable young people and communities in Malawi to access vocational training, educational support, employment opportunities, and self-reliant livelihoods.',
   },
   {
     title: 'Our Vision',
     icon: Eye,
     description:
-      'A thriving, self-reliant community where education and skills open pathways to dignified livelihoods and lasting social change.',
+      'A thriving, self-reliant community where practical skills and quality education open permanent pathways to dignity and economic freedom.',
   },
 ]
 
-const featuredStoriesDefault: Story[] = []
 const featuredPrograms = programs.slice(0, 3)
 const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
 
 export default function Home() {
-  const [featuredStories, setFeaturedStories] = useState<Story[]>(featuredStoriesDefault)
+  const [featuredStories, setFeaturedStories] = useState<Story[]>([])
   const [storiesLoading, setStoriesLoading] = useState(true)
   const [storiesError, setStoriesError] = useState('')
   const [subscriberEmail, setSubscriberEmail] = useState('')
@@ -53,7 +52,7 @@ export default function Home() {
         }
       } catch (error) {
         if (active) {
-          setStoriesError((error as Error)?.message || 'Unable to load stories from Supabase.')
+          setStoriesError((error as Error)?.message || 'Unable to load stories.')
         }
       } finally {
         if (active) {
@@ -84,7 +83,7 @@ export default function Home() {
       const { subscribersService } = await import('../services/subscribers.ts')
       await subscribersService.subscribe(subscriberEmail.trim().toLowerCase())
       setSubscriberStatus('success')
-      setSubscriberMessage('Subscribed! You will receive updates soon.')
+      setSubscriberMessage('Zikomo! Subscribed to Mwayi Trust updates.')
       setSubscriberEmail('')
     } catch (error) {
       setSubscriberStatus('error')
@@ -94,28 +93,35 @@ export default function Home() {
 
   return (
     <div className="homepage-shell">
+      {/* Mobile-First Hero Section */}
       <section className="hero-section">
-        <img className="hero-image" src={heroImage} alt="" fetchPriority="high" />
+        <img className="hero-image" src={heroImage} alt="Mwayi Trust Students and Community" fetchPriority="high" />
         <div className="hero-overlay" />
         <div className="hero-content">
+          <div className="hero-badge">
+            <span>🇲🇼</span>
+            <span>Chileka, Blantyre, Malawi</span>
+          </div>
+
           <h1 className="hero-slogan">
             <span>Joining</span>
             <span>Hands.</span>
             <span>Opening</span>
             <span>Doors.</span>
           </h1>
-          <p>
-            Mwayi Trust supports classrooms, mentors, and community-led programs that help children thrive.
+          <p className="hero-lead-text">
+            Mwayi Trust equips young Malawians with education, vocational trade certificates, and community mentorship.
           </p>
+
           <div className="hero-actions">
-            <a className="btn btn-primary" href="/donate">
-              <HeartHandshake size={18} />
-              Donate now
-            </a>
-            <a className="btn btn-secondary" href="/about">
-              <PlayCircle size={18} />
-              Learn more
-            </a>
+            <Link className="btn btn-primary min-h-[48px]" to="/donate">
+              <HeartHandshake size={20} />
+              <span>Donate (MWK)</span>
+            </Link>
+            <Link className="btn btn-secondary min-h-[48px]" to="/programs">
+              <PlayCircle size={20} />
+              <span>Explore Programs</span>
+            </Link>
           </div>
 
           <div className="hero-stats" aria-label="Impact statistics">
@@ -129,15 +135,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Mission & Vision Snapshot */}
       <section className="section-divider mission-snapshot-section" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
-            <p className="section-kicker">Who we are</p>
-            <h2>Mwayi Trust is a community-rooted NGO built to open doors through education and opportunity.</h2>
+            <p className="section-kicker">Rooted in Malawi</p>
+            <h2>Community-led empowerment built to open doors through skills and education.</h2>
           </div>
         </div>
         <p className="mission-snapshot-lead">
-          Founded in 2009 and rooted in Mbvundula Village, TA Kunthembwe in Chileka, Blantyre, we work with young people and families to build lasting livelihoods through learning, training, and support.
+          Founded in 2009 in Mbvundula Village, TA Kunthembwe in Chileka, Blantyre, Mwayi Trust creates sustainable livelihoods for youth and families through vocational training, after-school learning, and agricultural scholarships.
         </p>
         <div className="mission-snapshot-grid">
           {missionSnapshot.map((item) => {
@@ -155,24 +162,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Core Programs Preview */}
       <section className="section-divider content-section programs-home-section">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Programs available</p>
-            <h2>Support the opportunities families need most.</h2>
+            <p className="section-kicker">Key initiatives</p>
+            <h2>Hands-on programs creating lasting opportunity.</h2>
           </div>
-          <a href="/programs">View all programs</a>
+          <Link to="/programs" className="font-semibold text-[#034694] hover:underline flex items-center gap-1">
+            <span>View all 4 programs</span>
+            <ArrowRight size={16} />
+          </Link>
         </div>
 
         <div className="home-programs-grid">
           {featuredPrograms.map((program) => (
             <Link key={program.slug} to={`/programs/${program.slug}`} className="home-program-card">
-              <img src={program.image} alt={program.title} loading="lazy" decoding="async" />
+              <div className="home-program-image-wrap">
+                <img src={program.image} alt={program.title} loading="lazy" decoding="async" />
+              </div>
               <div className="home-program-body">
                 <h3>{program.title}</h3>
                 <p>{program.summary}</p>
-                <span>
-                  Learn more
+                <span className="home-program-link">
+                  <span>Learn more</span>
                   <ArrowRight size={16} />
                 </span>
               </div>
@@ -181,15 +194,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How to Help */}
       <section className="section-divider content-section help-section" aria-labelledby="how-to-help-title">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">How to help</p>
-            <h2 id="how-to-help-title">There is more than one way to stand with a child.</h2>
+            <p className="section-kicker">How to participate</p>
+            <h2 id="how-to-help-title">Multiple ways to stand with a young learner.</h2>
           </div>
           <p className="help-intro">
-            Whether you give, share useful supplies, or lend your time, your support helps make learning and opportunity
-            possible for children and families in our communities.
+            Whether you donate via Airtel Money/Mpamba, provide learning materials, or volunteer your expertise, your support keeps classroom doors open.
           </p>
         </div>
 
@@ -201,12 +214,11 @@ export default function Home() {
             <p className="help-option-number">01</p>
             <h3>Make a donation</h3>
             <p>
-              Your gift can help provide school fees, learning materials, mentorship, and practical support where it is
-              needed most.
+              Directly sponsor school fees, trade uniforms, exam fees, and daily student meals.
             </p>
-            <a href="/donate" className="help-option-link">
-              Give today <ArrowRight size={16} />
-            </a>
+            <Link to="/donate" className="help-option-link">
+              Give today (MWK) <ArrowRight size={16} />
+            </Link>
           </article>
 
           <article className="help-option-card">
@@ -214,14 +226,13 @@ export default function Home() {
               <PackageOpen size={22} />
             </div>
             <p className="help-option-number">02</p>
-            <h3>Send school materials</h3>
+            <h3>Donate learning supplies</h3>
             <p>
-              Books, notebooks, pens, school bags, uniforms, and other useful supplies can make a real difference in a
-              student&apos;s school day.
+              Exercise books, pens, secondary textbooks, geometry sets, and sewing or carpentry tools.
             </p>
-            <a href="/contact" className="help-option-link">
-              Arrange a donation <ArrowRight size={16} />
-            </a>
+            <Link to="/contact" className="help-option-link">
+              Coordinate drop-off <ArrowRight size={16} />
+            </Link>
           </article>
 
           <article className="help-option-card">
@@ -229,28 +240,28 @@ export default function Home() {
               <Users size={22} />
             </div>
             <p className="help-option-number">03</p>
-            <h3>Volunteer your time</h3>
+            <h3>Volunteer & mentor</h3>
             <p>
-              Join an activity, share a skill, support a learning session, or help us create welcoming spaces where young
-              people can grow.
+              Join our homework tutoring circles, lead trade masterclasses, or mentor secondary school girls.
             </p>
-            <a href="/contact" className="help-option-link">
-              Get in touch <ArrowRight size={16} />
-            </a>
+            <Link to="/contact" className="help-option-link">
+              Join as a mentor <ArrowRight size={16} />
+            </Link>
           </article>
         </div>
 
         <div className="help-note">
           <BookOpen size={20} />
-          <p>Every contribution, large or small, helps keep the door to learning open.</p>
+          <p>Every contribution, big or small, impacts a real family in Chileka.</p>
         </div>
       </section>
 
+      {/* Featured Stories */}
       <section className="section-divider content-section">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Featured stories</p>
-            <h2>See how support turns into lasting change.</h2>
+            <p className="section-kicker">Real impact</p>
+            <h2>Stories from our students and community.</h2>
           </div>
         </div>
         <div className="card-grid">
@@ -272,35 +283,42 @@ export default function Home() {
                   </div>
                   <h3>{story.title}</h3>
                   <p>{story.excerpt}</p>
+                  <Link to={`/stories/${story.slug}`} className="mt-3 text-sm font-bold text-[#034694] inline-flex items-center gap-1">
+                    <span>Read story</span>
+                    <ArrowRight size={14} />
+                  </Link>
                 </div>
               </article>
             ))
           )}
         </div>
         <div className="section-cta">
-          <a className="btn btn-primary" href="/stories">
-            Read Stories
-          </a>
+          <Link className="btn btn-primary min-h-[48px]" to="/stories">
+            Read All Stories
+          </Link>
         </div>
       </section>
 
+      {/* Mobile-Friendly Newsletter */}
       <section className="newsletter-section">
-        <div>
-          <p className="section-kicker">Stay connected</p>
-          <h2>Receive updates from Mwayi Trust.</h2>
-          <p>Get stories, events, and opportunities straight to your inbox.</p>
+        <div className="newsletter-copy">
+          <p className="section-kicker">Stay updated</p>
+          <h2>Connect with Mwayi Trust</h2>
+          <p>Receive periodic updates on student graduations, community garden yields, and events.</p>
         </div>
-        <form className="newsletter-form" onSubmit={handleSubscribe}>
+        <form className="newsletter-form" onSubmit={handleSubscribe} noValidate>
           <input
             type="email"
-            placeholder="Enter your email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="Enter your email address"
             aria-label="Email address"
             value={subscriberEmail}
             onChange={(event) => setSubscriberEmail(event.target.value)}
             required
           />
-          <button type="submit" disabled={subscriberStatus === 'saving'}>
-            Subscribe
+          <button type="submit" className="min-h-[48px]" disabled={subscriberStatus === 'saving'}>
+            {subscriberStatus === 'saving' ? 'Subscribing…' : 'Subscribe'}
           </button>
         </form>
         {subscriberMessage ? (

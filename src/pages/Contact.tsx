@@ -1,62 +1,64 @@
-import { Briefcase, Globe2, Mail, MessageCircle, MessageSquare, Phone, PlayCircle, HeartHandshake } from 'lucide-react'
+import { Briefcase, Globe2, HeartHandshake, Mail, MessageCircle, MessageSquare, Phone, PlayCircle, Send } from 'lucide-react'
 import { useState } from 'react'
 import { createContactMessage } from '../services/contactMessages'
 
 const locations = [
   {
-    name: 'Vocational College Campus',
-    address: 'Mbvundula Village, Blantyre, Malawi.',
-    hours: ['Monday - Friday: 8:00 AM - 5:00 PM', 'Saturday: 10:00 AM - 2:00 PM', 'Sunday: Closed'],
+    name: 'Mwayi Trust Centre & Campus',
+    address: 'Mbvundula Village, TA Kunthembwe, Chileka, Blantyre, Malawi.',
+    hours: ['Monday - Friday: 8:00 AM - 5:00 PM', 'Saturday: 9:00 AM - 1:00 PM', 'Sunday: Closed'],
   },
 ]
 
 const contactMethods = [
   {
-    icon: <Phone size={18} />,
-    label: 'Contact',
+    icon: <Phone size={20} />,
+    label: 'Call Us (Malawi)',
     value: 'Sandra Trevethan',
-    detail: '+265 (0) 881452554',
-    note: 'Available 9 AM - 5 PM (Weekdays)',
-    href: 'tel:+2650881452554',
+    detail: '+265 881 45 25 54',
+    note: 'Available 8 AM - 5 PM (Mon - Fri)',
+    href: 'tel:+265881452554',
+    primary: true,
   },
   {
-    icon: <Mail size={18} />,
-    label: 'Email',
+    icon: <MessageCircle size={20} />,
+    label: 'WhatsApp',
+    value: 'Quick Chat',
+    detail: '+265 881 45 25 54',
+    note: 'Fastest response on mobile',
+    href: 'https://wa.me/265881452554?text=Hello%20Mwayi%20Trust,%20I%20would%20like%20to%20learn%20more%20about%20your%20programs.',
+    highlight: true,
+  },
+  {
+    icon: <Mail size={20} />,
+    label: 'Email Inquiries',
     value: 'sandy.mwayi@gmail.com',
     detail: 'sandy.mwayi@gmail.com',
-    note: 'Response within 24-48 hours',
+    note: 'Replies within 24-48 hours',
     href: 'mailto:sandy.mwayi@gmail.com',
   },
   {
-    icon: <MessageCircle size={18} />,
-    label: 'WhatsApp',
-    value: '+265 1 234 56789',
-    detail: '+265 1 234 56789',
-    note: 'Quick messages welcome',
-    href: 'https://wa.me/265123456789',
-  },
-  {
-    icon: <HeartHandshake size={18} />,
-    label: 'Partnerships',
-    value: 'sandy.mwayi@gmail.com',
+    icon: <HeartHandshake size={20} />,
+    label: 'Partnerships & Volunteering',
+    value: 'Community Desk',
     detail: 'sandy.mwayi@gmail.com',
-    note: 'Corporate & sponsorship inquiries',
-    href: 'sandy.mwayi@gmail.com',
+    note: 'Corporate, church & diaspora sponsorships',
+    href: 'mailto:sandy.mwayi@gmail.com?subject=Partnership%20Inquiry%20-%20Mwayi%20Trust',
   },
 ]
 
 const socialLinks = [
   { label: 'Facebook', href: 'https://facebook.com/mwayitrust', icon: <Globe2 size={20} /> },
-  { label: 'Twitter', href: 'https://twitter.com/mwayitrust', icon: <MessageSquare size={20} /> },
+  { label: 'Twitter / X', href: 'https://twitter.com/mwayitrust', icon: <MessageSquare size={20} /> },
   { label: 'LinkedIn', href: 'https://linkedin.com/company/mwayitrust', icon: <Briefcase size={20} /> },
   { label: 'YouTube', href: 'https://youtube.com/@mwayitrust', icon: <PlayCircle size={20} /> },
 ]
 
 const responseTimes = [
-  { type: 'General inquiries', duration: '24-48 hours' },
-  { type: 'Partnership requests', duration: '2-5 business days' },
-  { type: 'Phone calls', duration: 'Same day (during hours)' },
-  { type: 'Emergency / urgent', duration: 'Within 4 hours' },
+  { type: 'Phone calls (Malawi)', duration: 'Instant during hours' },
+  { type: 'WhatsApp messages', duration: 'Under 2 hours' },
+  { type: 'General inquiries', duration: 'Within 24 hours' },
+  { type: 'Partnership proposals', duration: '1-3 business days' },
 ]
 
 export default function Contact() {
@@ -82,7 +84,7 @@ export default function Contact() {
       nextErrors.email = 'Email is required'
       valid = false
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      nextErrors.email = 'Please enter a valid email'
+      nextErrors.email = 'Please enter a valid email address'
       valid = false
     }
 
@@ -105,7 +107,7 @@ export default function Contact() {
     event.preventDefault()
     if (!validate()) {
       setStatus('error')
-      setErrorMessage('Please correct the highlighted fields.')
+      setErrorMessage('Please check the form fields above.')
       return
     }
 
@@ -122,10 +124,10 @@ export default function Contact() {
       if (error) throw error
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
-      setTimeout(() => setStatus('idle'), 3000)
+      setTimeout(() => setStatus('idle'), 5000)
     } catch {
       setStatus('error')
-      setErrorMessage('Failed to send message. Please try again.')
+      setErrorMessage('Failed to send message. Please try calling or WhatsApping us directly.')
     } finally {
       setIsSubmitting(false)
     }
@@ -135,105 +137,162 @@ export default function Contact() {
     <div className="contact-shell">
       <section className="contact-hero welcome-hero">
         <div className="welcome-hero__content">
-          <p className="section-kicker">Contact us</p>
-          <h1>We’d love to hear from you.</h1>
-          <p>Reach out for partnerships, volunteering, donations, or a simple hello.</p>
+          <p className="section-kicker">Get in touch</p>
+          <h1>We’d love to connect with you.</h1>
+          <p>
+            Whether you want to sponsor a student, volunteer, or enroll in our vocational training centre in Chileka, our doors and lines are open.
+          </p>
         </div>
+      </section>
+
+      {/* Quick Mobile Action Bar */}
+      <section className="mobile-quick-actions-bar" aria-label="Direct mobile contact options">
+        <a href="tel:+265881452554" className="mobile-action-pill mobile-action-pill--call">
+          <Phone size={18} />
+          <span>Call Us Now</span>
+        </a>
+        <a
+          href="https://wa.me/265881452554?text=Hello%20Mwayi%20Trust,%20I%20would%20like%20to%20learn%20more%20about%20your%20programs."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-action-pill mobile-action-pill--whatsapp"
+        >
+          <MessageCircle size={18} />
+          <span>WhatsApp Chat</span>
+        </a>
       </section>
 
       <section className="contact-grid">
         <div className="contact-card">
-          <h2>Our locations</h2>
-          <div className="location-list">
-            {locations.map((location) => (
-              <div key={location.name} className="location-card">
-                <h3>{location.name}</h3>
-                <p>{location.address}</p>
-                <ul>
-                  {location.hours.map((hour) => (
-                    <li key={hour}>{hour}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="contact-card">
-          <h2>Contact details</h2>
+          <h2>Direct contact channels</h2>
           <div className="detail-grid">
             {contactMethods.map((method) => (
-              <a key={method.label} href={method.href} className="detail-item">
-                <div className="detail-icon">{method.icon}</div>
-                <div>
-                  <strong>{method.label}</strong>
-                  <p>{method.value}</p>
-                  <span>{method.note}</span>
+              <a
+                key={method.label}
+                href={method.href}
+                className={`detail-item ${method.highlight ? 'detail-item--highlight' : ''}`}
+              >
+                <div className={`detail-icon ${method.highlight ? 'detail-icon--wa' : ''}`}>
+                  {method.icon}
+                </div>
+                <div className="detail-item-content">
+                  <div className="flex items-center justify-between">
+                    <strong>{method.label}</strong>
+                    {method.highlight && <span className="mobile-fast-badge">Popular</span>}
+                  </div>
+                  <p className="detail-value-line">{method.detail}</p>
+                  <span className="detail-note-line">{method.note}</span>
                 </div>
               </a>
             ))}
           </div>
         </div>
-      </section>
-
-      <section className="contact-grid">
-        <div className="contact-card">
-          <h2>Follow us</h2>
-          <div className="social-grid">
-            {socialLinks.map((link) => (
-              <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="social-link">
-                {link.icon}
-                <span>{link.label}</span>
-              </a>
-            ))}
-          </div>
-        </div>
 
         <div className="contact-card">
-          <h2>Response times</h2>
-          <div className="response-list">
-            {responseTimes.map((item) => (
-              <div key={item.type} className="response-item">
-                <span>{item.type}</span>
-                <strong>{item.duration}</strong>
+          <h2>Our campus & location</h2>
+          <div className="location-list">
+            {locations.map((location) => (
+              <div key={location.name} className="location-card">
+                <h3>{location.name}</h3>
+                <p className="location-address">{location.address}</p>
+                <div className="location-hours-box">
+                  <span className="location-hours-title">Working Hours</span>
+                  <ul>
+                    {location.hours.map((hour) => (
+                      <li key={hour}>{hour}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-4">
+            <h3 className="text-base font-semibold text-slate-800 mb-2">Response times</h3>
+            <div className="response-list">
+              {responseTimes.map((item) => (
+                <div key={item.type} className="response-item">
+                  <span>{item.type}</span>
+                  <strong>{item.duration}</strong>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       <section className="contact-form-card">
         <div className="contact-form-header">
-          <p className="section-kicker">Contact form</p>
-          <h2>Send us a message</h2>
-          <p>We usually reply within 24-48 hours.</p>
+          <p className="section-kicker">Send an online message</p>
+          <h2>Leave us a note</h2>
+          <p>Fill out this short form and our team in Blantyre will respond promptly.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="contact-form">
+        <form onSubmit={handleSubmit} className="contact-form" noValidate>
           <label>
-            <span>Name</span>
-            <input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+            <span>Your Name</span>
+            <input
+              type="text"
+              autoComplete="name"
+              placeholder="e.g. Chimwemwe Banda"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
             {errors.name ? <small>{errors.name}</small> : null}
           </label>
 
           <label>
-            <span>Email</span>
-            <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+            <span>Email Address</span>
+            <input
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              placeholder="e.g. chimwemwe@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
             {errors.email ? <small>{errors.email}</small> : null}
           </label>
 
           <label>
-            <span>Message</span>
-            <textarea rows={7} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} required />
-            <div className="char-counter">{formData.message.length} / 1000</div>
+            <span>Your Message</span>
+            <textarea
+              rows={5}
+              placeholder="How can we assist you or collaborate?"
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              required
+            />
+            <div className="char-counter">{formData.message.length} / 1000 characters</div>
             {errors.message ? <small>{errors.message}</small> : null}
           </label>
 
-          {status === 'success' ? <div className="form-success">Message sent. We will get back to you soon.</div> : null}
+          {status === 'success' ? (
+            <div className="form-success">
+              Zikomo! Your message was sent successfully. We will get back to you soon.
+            </div>
+          ) : null}
           {status === 'error' ? <div className="form-error">{errorMessage}</div> : null}
 
-          <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'Send message'}</button>
+          <button type="submit" className="btn btn-primary w-full justify-center min-h-[48px]" disabled={isSubmitting}>
+            <Send size={18} />
+            <span>{isSubmitting ? 'Sending your message…' : 'Send Message'}</span>
+          </button>
         </form>
+      </section>
+
+      <section className="contact-social-section">
+        <h3 className="text-center font-semibold text-slate-800 mb-3">Connect on social media</h3>
+        <div className="social-grid">
+          {socialLinks.map((link) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="social-link">
+              {link.icon}
+              <span>{link.label}</span>
+            </a>
+          ))}
+        </div>
       </section>
     </div>
   )

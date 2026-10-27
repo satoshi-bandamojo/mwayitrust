@@ -1,0 +1,7 @@
+{
+  "name": "Mwayi Trust",
+  "description": "Community support and youth empowerment platform providing education, vocational training, and donation channels in Malawi.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.tsx'
 import Footer from '../components/layout/Footer.tsx'
+import BottomTabBar from '../components/layout/BottomTabBar.tsx'
+import ScrollToTop from '../components/layout/ScrollToTop.tsx'
 import { consentService, privacyVersion, termsVersion } from '../services/consent.ts'
 
 const consentStorageKey = 'mwayi-terms-consent'
@@ -41,7 +43,9 @@ export default function MainLayout() {
 
   useEffect(() => {
     const dialog = dialogRef.current
-    if (consent.required && !isPolicyPage && dialog && !dialog.open) dialog.showModal()
+    if (consent.required && !isPolicyPage && dialog && !dialog.open) {
+      dialog.showModal()
+    }
   }, [consent.required, isPolicyPage])
 
   const acceptTerms = async (event: FormEvent<HTMLFormElement>) => {
@@ -79,12 +83,17 @@ export default function MainLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-brand-text dark:bg-slate-950 dark:text-slate-100">
+    <div className="app-layout-shell">
+      <ScrollToTop />
       <Navbar />
-      <main>
-        <Outlet />
+      <main className="main-content-flow pb-20 md:pb-6" id="main-content">
+        <div key={location.pathname} className="page-transition">
+          <Outlet />
+        </div>
       </main>
       <Footer />
+      <BottomTabBar />
+
       {consent.required && !isPolicyPage ? (
         <dialog
           ref={dialogRef}
@@ -92,11 +101,10 @@ export default function MainLayout() {
           aria-labelledby="consent-title"
           onCancel={(event) => event.preventDefault()}
         >
-          <p className="section-kicker">Before you continue</p>
+          <p className="section-kicker">Welcome to Malawi</p>
           <h2 id="consent-title">Welcome to Mwayi Trust</h2>
           <p>
-            Please review our website terms and privacy notice. You can open either document now and return here to
-            continue.
+            Please review our website terms and privacy notice before browsing. We are dedicated to youth education and community development in Chileka, Blantyre.
           </p>
           <form onSubmit={acceptTerms}>
             <label className="consent-checkbox">

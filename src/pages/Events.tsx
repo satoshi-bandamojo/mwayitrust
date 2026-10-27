@@ -1,5 +1,6 @@
 import { ArrowRight, CalendarDays, MapPin, TimerReset } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { eventsService } from '../services/events.ts'
 import type { EventItem } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
@@ -79,10 +80,10 @@ export default function Events() {
             From workshops to mentorship launches, discover the opportunities that help learners grow, connect, and thrive.
           </p>
           <div className="hero-actions">
-            <a className="btn btn-secondary" href="/contact">
+            <Link className="btn btn-secondary min-h-[48px]" to="/contact">
               <ArrowRight size={18} />
-              Reach out
-            </a>
+              Inquire About Events
+            </Link>
           </div>
         </div>
       </section>
@@ -131,10 +132,10 @@ export default function Events() {
                           <span>{event.location}</span>
                         </div>
                       </div>
-                      <a className="event-card__cta" href="/contact">
-                        Learn more
+                      <Link className="event-card__cta min-h-[44px]" to="/contact">
+                        <span>Contact to Register</span>
                         <ArrowRight size={16} />
-                      </a>
+                      </Link>
                     </div>
                   </article>
                 )

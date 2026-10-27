@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { storiesService } from '../services/stories.ts'
 import type { Story } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
@@ -73,14 +74,14 @@ export default function Stories() {
             From quiet victories to community-wide transformation, these stories show how support becomes opportunity.
           </p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#story-grid">
+            <a className="btn btn-primary min-h-[48px]" href="#story-grid">
               <BookOpen size={18} />
-              Explore stories
+              Explore Stories
             </a>
-            <a className="btn btn-secondary" href="/donate">
+            <Link className="btn btn-secondary min-h-[48px]" to="/donate">
               <ArrowRight size={18} />
-              Support the mission
-            </a>
+              Support the Mission
+            </Link>
           </div>
         </div>
       </section>
@@ -93,14 +94,14 @@ export default function Stories() {
         ) : featuredStories.length ? (
           featuredStories.map((story) => (
             <article key={story.id} className="story-feature-card">
-              <a href={`/stories/${story.slug}`} className="story-feature-card__link">
-                <img src={coverImage(story)} alt={story.title} />
+              <Link to={`/stories/${story.slug}`} className="story-feature-card__link">
+                <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
                 <div className="story-feature-card__content">
                   <span className="story-feature-card__tag">Featured</span>
                   <h3>{story.title}</h3>
                   <p>{story.excerpt}</p>
                 </div>
-              </a>
+              </Link>
             </article>
           ))
         ) : (
@@ -116,9 +117,9 @@ export default function Stories() {
         ) : regularStories.length ? (
           regularStories.map((story) => (
             <article key={story.id} className="story-card">
-              <a href={`/stories/${story.slug}`} className="story-card__link">
+              <Link to={`/stories/${story.slug}`} className="story-card__link">
                 <div className="story-card__image-wrap">
-                  <img src={coverImage(story)} alt={story.title} />
+                  <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
                 </div>
                 <div className="story-card__body">
                   <span className="story-card__tag">{storyCategory(story)}</span>
@@ -126,11 +127,11 @@ export default function Stories() {
                   <p>{story.excerpt}</p>
                   <p className="story-card__meta">{storyDate(story)}</p>
                 </div>
-              </a>
+              </Link>
             </article>
           ))
         ) : (
-          <p>No stories available yet.</p>
+          <p className="text-center py-6 text-slate-500">No stories available yet.</p>
         )}
       </section>
 
@@ -140,10 +141,10 @@ export default function Stories() {
           <h2>Every story is a reminder that change is possible.</h2>
           <p>When you support Mwayi Trust, you help turn these stories into more opportunities for young people.</p>
         </div>
-        <a className="btn btn-primary" href="/donate">
+        <Link className="btn btn-primary min-h-[48px]" to="/donate">
           <Sparkles size={18} />
-          Donate today
-        </a>
+          <span>Donate Today (MWK)</span>
+        </Link>
       </section>
     </div>
   )

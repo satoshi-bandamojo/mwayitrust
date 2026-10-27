@@ -1,4 +1,4 @@
-import { ArrowRight, X } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { galleryService } from '../services/gallery.ts'
 import type { GalleryImage } from '../types/index.ts'
@@ -37,7 +37,7 @@ export default function Gallery() {
         }
       } catch (err) {
         if (active) {
-          setError((err as Error)?.message || 'Unable to load gallery items from Supabase.')
+          setError((err as Error)?.message || 'Unable to load gallery items.')
         }
       } finally {
         if (active) {
@@ -53,7 +53,7 @@ export default function Gallery() {
   }, [])
 
   const categories = useMemo(
-    () => ['All', ...Array.from(new Set(galleryItems.map((item) => item.category || 'Uncategorized'))).sort()],
+    () => ['All', ...Array.from(new Set(galleryItems.map((item) => item.category || 'Community'))).sort()],
     [galleryItems],
   )
 
@@ -103,80 +103,120 @@ export default function Gallery() {
     <div className="gallery-shell">
       <section className="gallery-hero welcome-hero">
         <div className="gallery-hero__content welcome-hero__content">
-          <p className="section-kicker">Our gallery</p>
-          <h1>Moments of learning, care, and community.</h1>
+          <p className="section-kicker">Visual moments</p>
+          <h1>Life at Mwayi Trust</h1>
           <p>
-            Browse visual stories from our programs, events, and the people who make this work possible.
+            Moments of vocational achievement, classroom curiosity, and community agriculture in Chileka, Blantyre.
           </p>
           <div className="hero-actions">
             <a className="btn btn-secondary" href="/contact">
               <ArrowRight size={18} />
-              Share your support
+              Visit Our Centre
             </a>
           </div>
         </div>
       </section>
 
-      <div className="gallery-filters" aria-label="Gallery filters">
-        {categories.map((category) => (
-          <button
-            key={category}
-            type="button"
-            className={`filter-chip${activeCategory === category || (!activeCategory && category === 'All') ? ' filter-chip--active' : ''}`}
-            onClick={() => {
-              setActiveCategory(category === 'All' ? null : category)
-              setDisplayCount(6)
-            }}
-          >
-            {category}
-          </button>
-        ))}
+      {/* Touch-Friendly Horizontal Category Scroll */}
+      <div className="gallery-filters-container">
+        <div className="gallery-filters" aria-label="Gallery category filters">
+          {categories.map((category) => {
+            const isActive = activeCategory === category || (!activeCategory && category === 'All')
+            return (
+              <button
+                key={category}
+                type="button"
+                className={`filter-chip ${isActive ? 'filter-chip--active' : ''}`}
+                onClick={() => {
+                  setActiveCategory(category === 'All' ? null : category)
+                  setDisplayCount(6)
+                }}
+              >
+                {category}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <div id="gallery-grid" className="gallery-grid">
         {displayedItems.map((item) => (
-          <article key={item.id} className="gallery-card" onClick={() => openLightbox(item)}>
+          <article
+            key={item.id}
+            className="gallery-card"
+            onClick={() => openLightbox(item)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') openLightbox(item)
+            }}
+          >
             <div className="gallery-card__image-wrap">
-              <img src={thumbnailFor(item)} alt={item.title} loading="lazy" />
+              <img
+                src={thumbnailFor(item)}
+                alt={item.title}
+                loading="lazy"
+                decoding="async"
+              />
               <div className="gallery-card__overlay">
-                <span className="gallery-card__icon">🔎</span>
+                <span className="gallery-card__icon">Tap to view</span>
               </div>
             </div>
             <div className="gallery-card__content">
-              <span className="gallery-card__category">{item.category}</span>
+              <span className="gallery-card__category">{item.category || 'Community'}</span>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              <span className="gallery-card__date">{displayDate(item)}</span>
+              {displayDate(item) && <span className="gallery-card__date">{displayDate(item)}</span>}
             </div>
           </article>
         ))}
       </div>
 
-      {loading ? <p>Loading gallery…</p> : null}
-      {error ? <p className="error-message">{error}</p> : null}
+      {loading ? <p className="text-center py-8 text-slate-500">Loading gallery photos…</p> : null}
+      {error ? <p className="error-message text-center">{error}</p> : null}
 
       {hasMore ? (
         <div className="gallery-pagination">
-          <button type="button" className="gallery-load-more" onClick={() => setDisplayCount((count) => count + 6)}>
-            Load more
+          <button
+            type="button"
+            className="gallery-load-more min-h-[48px] px-6 text-sm font-bold"
+            onClick={() => setDisplayCount((count) => count + 6)}
+          >
+            Load More Photos ({filteredItems.length - displayCount} remaining)
           </button>
         </div>
       ) : null}
 
+      {/* Mobile-Friendly Lightbox Modal */}
       {selectedItem ? (
         <div className="lightbox" role="dialog" aria-modal="true" onClick={closeLightbox}>
           <div className="lightbox__container" onClick={(event) => event.stopPropagation()}>
-            <button type="button" className="lightbox__close" onClick={closeLightbox} aria-label="Close gallery preview">
-              <X size={20} />
+            <button
+              type="button"
+              className="lightbox__close"
+              onClick={closeLightbox}
+              aria-label="Close photo preview"
+            >
+              <X size={22} />
             </button>
 
             <div className="lightbox__media">
               <img src={imageFor(selectedItem)} alt={selectedItem.title} />
-              <button type="button" className="lightbox__nav lightbox__nav--prev" onClick={showPrevious} aria-label="Previous image">
-                ←
+              <button
+                type="button"
+                className="lightbox__nav lightbox__nav--prev"
+                onClick={showPrevious}
+                aria-label="Previous photo"
+              >
+                <ChevronLeft size={24} />
               </button>
-              <button type="button" className="lightbox__nav lightbox__nav--next" onClick={showNext} aria-label="Next image">
-                →
+              <button
+                type="button"
+                className="lightbox__nav lightbox__nav--next"
+                onClick={showNext}
+                aria-label="Next photo"
+              >
+                <ChevronRight size={24} />
               </button>
               <div className="lightbox__counter">
                 {filteredItems.findIndex((item) => item.id === selectedItem.id) + 1} / {filteredItems.length}
@@ -189,7 +229,7 @@ export default function Gallery() {
               <p>{selectedItem.description}</p>
               <div className="lightbox__meta">
                 <span>{displayDate(selectedItem)}</span>
-                {selectedItem.author ? <span>{selectedItem.author}</span> : null}
+                {selectedItem.author ? <span>Taken by {selectedItem.author}</span> : null}
               </div>
             </div>
           </div>

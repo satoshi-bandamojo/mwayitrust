@@ -1,4 +1,5 @@
 import { ArrowRight, HeartHandshake } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import aboutImage from '../assets/about.webp'
 import teamMember1 from '../assets/team-member1.webp'
 import teamMember2 from '../assets/team-member2.webp'
@@ -6,23 +7,23 @@ import teamMember2 from '../assets/team-member2.webp'
 const milestones = [
   {
     year: '2009',
-    text: 'Established in TA Kunthembwe to support learners and youth development.',
+    text: 'Established in TA Kunthembwe, Chileka to support learners and youth development.',
   },
   {
     year: '2010',
-    text: 'Launched the Homework Centre program for vulnerable learners.',
+    text: 'Launched the Homework Centre program for vulnerable primary school learners.',
   },
   {
     year: '2015',
-    text: 'Started the Girls Secondary School Sponsorship program.',
+    text: 'Started the Girls Secondary School Sponsorship and mentorship initiative.',
   },
   {
     year: '2018',
-    text: 'Introduced vocational training and community garden initiatives.',
+    text: 'Opened vocational trade courses in carpentry, cookery, and tailoring alongside our community garden.',
   },
   {
-    year: '2023',
-    text: 'Expanded support to 1,000+ learners through weekly programs and scholarships.',
+    year: '2023+',
+    text: 'Expanded direct impact to 3,000+ youth through weekly learning hubs, certifications, and trade toolkits.',
   },
 ]
 
@@ -30,37 +31,37 @@ const values = [
   {
     title: 'Community First',
     description:
-      'Every decision starts with the community. We listen, learn, and act alongside the people in our community.',
+      'Every program begins with listening to the village leadership, families, and young people in Mbvundula.',
     icon: '🤝',
   },
   {
     title: 'Education as Liberation',
     description:
-      'We believe education is the most powerful tool for breaking cycles of poverty and opening doors to opportunity.',
+      'We believe learning and certified vocational trades break generational poverty and open real doors.',
     icon: '📚',
   },
   {
-    title: 'Integrity',
+    title: 'Integrity & Stewardship',
     description:
-      'We operate with transparency, accountability, and honesty in how we use resources and report impact.',
+      'Every Kwacha and foreign donation is managed with transparency and accountability to our donors and community.',
     icon: '🛡️',
   },
   {
-    title: 'Empowerment',
+    title: 'Self-Reliance',
     description:
-      'We build skills, confidence, and agency so individuals and communities can lead their own futures.',
+      'We build practical skills, work discipline, and enterprise confidence so graduates build independent livelihoods.',
     icon: '🌱',
   },
   {
-    title: 'Compassion',
+    title: 'Dignity & Care',
     description:
-      'We approach every student, family, and community with dignity, care, and respect.',
+      'Every student, child, and family member is treated with deep respect, compassion, and encouragement.',
     icon: '💛',
   },
   {
-    title: 'Sustainability',
+    title: 'Sustainable Impact',
     description:
-      'Our programs are designed to create lasting change that communities can carry forward independently.',
+      'Our initiatives are designed for long-term community continuity that Malawian youth carry forward.',
     icon: '🌍',
   },
 ]
@@ -70,39 +71,36 @@ export default function About() {
     <div className="about-shell">
       <section className="about-story">
         <div className="about-story-content welcome-hero">
-          <p className="section-kicker">Our story</p>
-          <h1>What began as a small community initiative is now a trusted force for change.</h1>
+          <p className="section-kicker">Our roots in Malawi</p>
+          <h1>What began as a grassroots community effort is now a trusted beacon for change.</h1>
           <p>
-            Founded in 2009, Mwayi Trust started as a small community response to support students who lacked the resources
-            to continue their education. Today, the organization walks alongside students, families, and communities through
-            mentorship, digital learning, school support, and community workshops.
+            Founded in 2009, Mwayi Trust started as a response to local students in Chileka who lacked school fees, books, and uniforms. Today, our campus in Mbvundula Village provides daily primary homework tutoring, secondary girl sponsorships, practical vocational trades, and agricultural scholarships.
           </p>
           <p>
-            We continue to document impact, celebrate achievements, and open doors that were once closed for young people in
-            Malawi.
+            We celebrate each graduate, track each student&apos;s progress, and work side-by-side with village headmen and schools across TA Kunthembwe.
           </p>
 
-          <div className="hero-actions about-story-actions">
-            <a className="btn btn-primary" href="/donate">
+          <div className="hero-actions about-story-actions flex-col sm:flex-row gap-3">
+            <Link className="btn btn-primary min-h-[48px] w-full sm:w-auto justify-center" to="/donate">
               <HeartHandshake size={18} />
-              Support the mission
-            </a>
-            <a className="btn btn-secondary" href="/stories">
-              Read our stories
+              <span>Support Our Mission (MWK)</span>
+            </Link>
+            <Link className="btn btn-secondary min-h-[48px] w-full sm:w-auto justify-center" to="/stories">
+              <span>Read Impact Stories</span>
               <ArrowRight size={18} />
-            </a>
+            </Link>
           </div>
         </div>
 
         <div className="about-story-media">
-          <img src={aboutImage} alt="Mwayi Trust community in action" />
+          <img src={aboutImage} alt="Mwayi Trust community in Chileka, Malawi" loading="lazy" decoding="async" />
           <div className="story-badge">
             <strong>2009</strong>
-            <span>Est.</span>
+            <span>Est. Malawi</span>
           </div>
         </div>
 
-        <div className="milestone-list">
+        <div className="milestone-list" aria-label="Key milestones">
           {milestones.map((milestone) => (
             <div key={milestone.year} className="milestone-item">
               <span className="milestone-year">{milestone.year}</span>
@@ -133,23 +131,23 @@ export default function About() {
 
       <section className="about-team">
         <div className="section-heading">
-          <p className="section-kicker">Meet the team</p>
-          <h2>Leaders with heart, purpose, and a deep commitment to the communities we serve.</h2>
+          <p className="section-kicker">Leadership</p>
+          <h2>Dedicated community leaders committed to youth advancement in Malawi.</h2>
         </div>
 
         <div className="team-grid">
           <article className="team-card">
-            <img src={teamMember2} alt="Sandra Trevorthan" />
+            <img src={teamMember2} alt="Sandra Trevethan" loading="lazy" decoding="async" />
             <div>
-              <h3>Sandra Trevorthan</h3>
-              <p>Executive Director</p>
+              <h3>Sandra Trevethan</h3>
+              <p className="text-slate-500 font-semibold text-sm">Executive Director</p>
             </div>
           </article>
           <article className="team-card">
-            <img src={teamMember1} alt="Linda Banda" />
+            <img src={teamMember1} alt="Linda Banda" loading="lazy" decoding="async" />
             <div>
               <h3>Linda Banda</h3>
-              <p>General Manager</p>
+              <p className="text-slate-500 font-semibold text-sm">General Manager</p>
             </div>
           </article>
         </div>
