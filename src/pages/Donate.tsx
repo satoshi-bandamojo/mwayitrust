@@ -174,10 +174,9 @@ export default function Donate() {
       <section className="donate-hero welcome-hero">
         <div className="donate-hero-content welcome-hero__content">
           <p className="section-kicker">Make a lasting impact</p>
-          <h1>Give today and help students thrive in Malawi.</h1>
+          <h1>Give today and help students thrive.</h1>
           <p>
-            Your support funds books, school essentials, mentorship, and community programs that turn opportunity into a
-            lasting opportunity.
+            Your support funds books, school essentials, mentorship, and community programs that offer lasting opportunity.
           </p>
           <div className="hero-actions">
             <a className="btn btn-primary" href="#donation-form">

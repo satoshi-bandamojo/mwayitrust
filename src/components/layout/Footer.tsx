@@ -1,4 +1,4 @@
-import { Globe, Mail, MessageSquare, Phone, Send } from 'lucide-react'
+import { Globe, Mail, MapPin, MessageSquare, Phone } from 'lucide-react'
 import logoBlue from '../../assets/logo_blue.png'
 
 const quickLinks = [
@@ -37,7 +37,7 @@ export default function Footer() {
           <ul className="contact-list">
             <li><Mail size={16} /><a href="mailto:sandy.mwayi@gmail.com">sandy.mwayi@gmail.com</a></li>
             <li><Phone size={16} /><a href="tel:+265881452554">+265 881 45 25 54</a></li>
-            <li className="footer-location"><Send size={16} /> Mbvundula Village, Chileka.</li>
+            <li className="footer-location"><MapPin size={16} /> Mbvundula Village, Chileka.</li>
           </ul>
         </div>
         <div>

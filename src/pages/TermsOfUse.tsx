@@ -5,7 +5,9 @@ export default function TermsOfUse() {
     <div className="page-shell">
       <article className="legal-page">
         <h1>{termsOfUse.title}</h1>
-        <p className="legal-updated">Last updated: {termsOfUse.updatedAt}</p>
+        <p className="legal-updated">
+          Effective date: {termsOfUse.effectiveDate} | Last updated: {termsOfUse.updatedAt}
+        </p>
         {termsOfUse.sections.map((section, sectionIndex) => (
           <section key={section.heading ?? `introduction-${sectionIndex}`}>
             {section.heading ? <h2>{section.heading}</h2> : null}
@@ -21,6 +23,23 @@ export default function TermsOfUse() {
                 ))}
               </p>
             ))}
+            {'listItems' in section ? (
+              <ul>
+                {section.listItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : null}
+            {'subsections' in section
+              ? section.subsections.map((subsection) => (
+                  <section key={subsection.heading}>
+                    <h3>{subsection.heading}</h3>
+                    {subsection.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </section>
+                ))
+              : null}
           </section>
         ))}
       </article>

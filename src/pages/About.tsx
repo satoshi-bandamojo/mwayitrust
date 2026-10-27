@@ -30,7 +30,7 @@ const values = [
   {
     title: 'Community First',
     description:
-      'Every decision starts with the community. We listen, learn, and act alongside the people we serve.',
+      'Every decision starts with the community. We listen, learn, and act alongside the people in our community.',
     icon: '🤝',
   },
   {
