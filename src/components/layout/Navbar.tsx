@@ -53,11 +53,6 @@ export default function Navbar() {
 
           {/* Right Action Zone */}
           <div className="navbar-actions">
-            <Link to="/donate" className="navbar-donate-btn">
-              <HeartHandshake size={16} />
-              <span>Donate</span>
-            </Link>
-
             {/* Mobile Menu Trigger Button */}
             <button
               className="mobile-menu-trigger md:hidden"
@@ -86,6 +81,7 @@ export default function Navbar() {
         className={`mobile-nav-drawer ${menuOpen ? 'is-open' : ''}`}
         aria-label="Mobile navigation drawer"
         aria-hidden={!menuOpen}
+        inert={!menuOpen}
       >
         <div className="mobile-drawer-header">
           <div className="mobile-drawer-brand">

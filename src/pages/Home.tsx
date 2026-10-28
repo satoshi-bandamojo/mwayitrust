@@ -98,11 +98,6 @@ export default function Home() {
         <img className="hero-image" src={heroImage} alt="Mwayi Trust Students and Community" fetchPriority="high" />
         <div className="hero-overlay" />
         <div className="hero-content">
-          <div className="hero-badge">
-            <span>🇲🇼</span>
-            <span>Chileka, Blantyre, Malawi</span>
-          </div>
-
           <h1 className="hero-slogan">
             <span>Joining</span>
             <span>Hands.</span>

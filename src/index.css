@@ -4016,12 +4016,6 @@ a {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@media (min-width: 768px) {
-  .mobile-bottom-tab-bar {
-    display: none;
-  }
-}
-
 .mobile-bottom-tab-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -4310,30 +4304,6 @@ a {
   gap: 0.75rem;
 }
 
-.navbar-donate-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.85rem;
-  background: #f59e0b;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.85rem;
-  border-radius: 999px;
-  text-decoration: none;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-  transition: transform 140ms ease, background-color 140ms ease;
-  min-height: 38px;
-}
-
-.navbar-donate-btn:hover {
-  background: #d97706;
-}
-
-.navbar-donate-btn:active {
-  transform: scale(0.96);
-}
-
 .mobile-menu-trigger {
   display: inline-flex;
   align-items: center;
@@ -4362,6 +4332,13 @@ a {
 }
 
 @media (min-width: 768px) {
+  .mobile-bottom-tab-bar,
+  .mobile-drawer-backdrop,
+  .mobile-nav-drawer,
+  .mobile-menu-trigger {
+    display: none;
+  }
+
   .desktop-nav-links {
     display: flex;
   }
@@ -4506,4 +4483,3 @@ a {
 button, a, input, select, textarea {
   touch-action: manipulation;
 }
-
