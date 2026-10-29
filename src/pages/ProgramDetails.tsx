@@ -9,26 +9,26 @@ import tailoringImage from '../assets/converted_image (16).webp'
 
 const vocationalCourses = [
   {
-    title: 'Cookery & Catering',
-    description: 'Hands-on practical training in food preparation, nutrition, kitchen hygiene, and hospitality service.',
+    title: 'Professional Cookery',
+    description: 'Build practical cookery skills through hands-on kitchen training.',
     image: cookeryImage,
     tag: 'Culinary arts',
   },
   {
-    title: 'Tailoring & Design',
-    description: 'Skills in garment construction, sewing machine operation, pattern reading, fitting, and school uniform production.',
+    title: 'Tailoring',
+    description: 'Develop practical sewing and garment-making skills.',
     image: tailoringImage,
     tag: 'Fashion & design',
   },
   {
-    title: 'House Keeping & Hospitality',
-    description: 'Training in professional cleanliness, room care, laundry, hospitality standards, and hygiene management.',
+    title: 'Housekeeping',
+    description: 'A practical course for girls with learning difficulties and women who did not complete or attend secondary school, taught in a model hotel room with an ensuite.',
     image: houseKeepingImage,
     tag: 'Hospitality services',
   },
   {
-    title: 'Carpentry & Joinery',
-    description: 'Practical woodworking skills including measurement, cutting, joinery, and durable local furniture construction.',
+    title: 'Carpentry',
+    description: 'Gain hands-on carpentry and joinery skills for practical work and self-employment.',
     image: carpentryImage,
     tag: 'Skilled trades',
   },
@@ -127,7 +127,7 @@ export default function ProgramDetails() {
       <section className="program-detail-section program-enrollment">
         <div className="program-detail-heading">
           <p className="section-kicker">Getting started</p>
-          <h2>How to enroll</h2>
+          <h2>{program.slug === 'vocational-training' || program.slug === 'speak-english-chileka' ? 'How to enroll' : 'How to get involved'}</h2>
         </div>
         <ol className="program-enrollment-steps">
           {program.enrollSteps.map((step, index) => (
@@ -142,7 +142,13 @@ export default function ProgramDetails() {
       <section className="program-detail-actions" aria-label="Program actions">
         <Link className="btn btn-primary min-h-[48px] justify-center" to="/contact">
           <PhoneCall size={18} />
-          <span>Contact Us to Enroll</span>
+          <span>
+            {program.slug === 'speak-english-chileka'
+              ? 'Ask About 2027 Restart'
+              : program.slug === 'vocational-training'
+                ? 'Enquire About Enrollment'
+                : 'Contact Us to Get Involved'}
+          </span>
           <ArrowRight size={16} />
         </Link>
         <Link className="btn btn-secondary min-h-[48px] justify-center" to="/donate">

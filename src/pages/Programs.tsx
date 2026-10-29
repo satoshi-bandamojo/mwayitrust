@@ -6,7 +6,7 @@ export default function Programs() {
   return (
     <div className="programs-shell">
       <section className="programs-intro" aria-labelledby="programs-title">
-        <p className="section-kicker">What we do in Malawi</p>
+        <p className="section-kicker">What we do</p>
         <h1 id="programs-title">Programs that open doors.</h1>
         <p>
           We support young people and families through education, practical skills, and opportunities rooted in the community.

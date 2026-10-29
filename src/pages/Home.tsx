@@ -18,13 +18,13 @@ const missionSnapshot = [
     title: 'Our Mission',
     icon: Target,
     description:
-      'To enable young people and communities in Malawi to access vocational training, educational support, employment opportunities, and self-reliant livelihoods.',
+      'To enable young people and the community to access vocational training and educational support programs which increase potential for gaining employment and developing positive lifestyles.',
   },
   {
     title: 'Our Vision',
     icon: Eye,
     description:
-      'A thriving, self-reliant community where practical skills and quality education open permanent pathways to dignity and economic freedom.',
+      'To build the capacity of the community and enhance quality of life by working together to promote: educational support programs and vocational training, and -  cultural and socio-economic activities',
   },
 ]
 
@@ -134,12 +134,11 @@ export default function Home() {
       <section className="section-divider mission-snapshot-section" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
-            <p className="section-kicker">Rooted in Malawi</p>
             <h2>Community-led empowerment built to open doors through skills and education.</h2>
           </div>
         </div>
         <p className="mission-snapshot-lead">
-          Founded in 2009 in Mbvundula Village, TA Kunthembwe in Chileka, Blantyre, Mwayi Trust creates sustainable livelihoods for youth and families through vocational training, after-school learning, and agricultural scholarships.
+          Founded in 2009 in Mbvundula Village, TA Kunthembwe in Chileka, Blantyre. Mwayi Trust creates sustainable livelihoods for youth and families through vocational training, after-school learning and donations.
         </p>
         <div className="mission-snapshot-grid">
           {missionSnapshot.map((item) => {
@@ -162,10 +161,10 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="section-kicker">Key initiatives</p>
-            <h2>Hands-on programs creating lasting opportunity.</h2>
+            <h2>Hands-on programs</h2>
           </div>
           <Link to="/programs" className="font-semibold text-[#034694] hover:underline flex items-center gap-1">
-            <span>View all 4 programs</span>
+            <span>View all programs</span>
             <ArrowRight size={16} />
           </Link>
         </div>
@@ -223,10 +222,10 @@ export default function Home() {
             <p className="help-option-number">02</p>
             <h3>Donate learning supplies</h3>
             <p>
-              Exercise books, pens, secondary textbooks, geometry sets, and sewing or carpentry tools.
+              Exercise books, pens, textbooks, geometry sets, sewing or carpentry tools.
             </p>
             <Link to="/contact" className="help-option-link">
-              Coordinate drop-off <ArrowRight size={16} />
+              Coordinate drop-off or pick-up <ArrowRight size={16} />
             </Link>
           </article>
 
@@ -237,7 +236,7 @@ export default function Home() {
             <p className="help-option-number">03</p>
             <h3>Volunteer & mentor</h3>
             <p>
-              Join our homework tutoring circles, lead trade masterclasses, or mentor secondary school girls.
+              Join our homework tutoring circles or mentor secondary school girls.
             </p>
             <Link to="/contact" className="help-option-link">
               Join as a mentor <ArrowRight size={16} />
