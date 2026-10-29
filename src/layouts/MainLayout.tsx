@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.tsx'
 import Footer from '../components/layout/Footer.tsx'
-import BottomTabBar from '../components/layout/BottomTabBar.tsx'
 import ScrollToTop from '../components/layout/ScrollToTop.tsx'
 import { consentService, privacyVersion, termsVersion } from '../services/consent.ts'
 
@@ -86,13 +85,12 @@ export default function MainLayout() {
     <div className="app-layout-shell">
       <ScrollToTop />
       <Navbar />
-      <main className="main-content-flow pb-20 md:pb-6" id="main-content">
+      <main className="main-content-flow pb-6" id="main-content">
         <div key={location.pathname} className="page-transition">
           <Outlet />
         </div>
       </main>
       <Footer />
-      <BottomTabBar />
 
       {consent.required && !isPolicyPage ? (
         <dialog

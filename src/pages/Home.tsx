@@ -111,7 +111,7 @@ export default function Home() {
           <div className="hero-actions">
             <Link className="btn btn-primary min-h-[48px]" to="/donate">
               <HeartHandshake size={20} />
-              <span>Donate (MWK)</span>
+              <span>Donate</span>
             </Link>
             <Link className="btn btn-secondary min-h-[48px]" to="/programs">
               <PlayCircle size={20} />
@@ -212,7 +212,7 @@ export default function Home() {
               Directly sponsor school fees, trade uniforms, exam fees, and daily student meals.
             </p>
             <Link to="/donate" className="help-option-link">
-              Give today (MWK) <ArrowRight size={16} />
+              Give today <ArrowRight size={16} />
             </Link>
           </article>
 

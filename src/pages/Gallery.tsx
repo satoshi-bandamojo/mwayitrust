@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { galleryService } from '../services/gallery.ts'
 import type { GalleryImage } from '../types/index.ts'
@@ -61,7 +61,7 @@ export default function Gallery() {
     if (!activeCategory || activeCategory === 'All') {
       return galleryItems
     }
-    return galleryItems.filter((item) => item.category === activeCategory)
+    return galleryItems.filter((item) => (item.category || 'Community') === activeCategory)
   }, [activeCategory, galleryItems])
 
   const thumbnailFor = (item: GalleryImage) => item.thumbnail_url || item.image_url || ''
@@ -101,79 +101,86 @@ export default function Gallery() {
 
   return (
     <div className="gallery-shell">
-      <section className="gallery-hero welcome-hero">
-        <div className="gallery-hero__content welcome-hero__content">
-          <p className="section-kicker">Visual moments</p>
-          <h1>Life at Mwayi Trust</h1>
-          <p>
-            Moments of vocational achievement, classroom curiosity, and community agriculture in Chileka, Blantyre.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-secondary" href="/contact">
-              <ArrowRight size={18} />
-              Visit Our Centre
-            </a>
-          </div>
-        </div>
+      <section className="gallery-intro" aria-labelledby="gallery-title">
+        <p className="section-kicker">A glimpse of life here</p>
+        <h1 id="gallery-title">Moments from our community.</h1>
+        <p>
+          A few moments of learning, making, and growing together in Chileka.
+        </p>
       </section>
 
-      {/* Touch-Friendly Horizontal Category Scroll */}
-      <div className="gallery-filters-container">
-        <div className="gallery-filters" aria-label="Gallery category filters">
-          {categories.map((category) => {
-            const isActive = activeCategory === category || (!activeCategory && category === 'All')
-            return (
-              <button
-                key={category}
-                type="button"
-                className={`filter-chip ${isActive ? 'filter-chip--active' : ''}`}
-                onClick={() => {
-                  setActiveCategory(category === 'All' ? null : category)
-                  setDisplayCount(6)
+      {!loading && !error && galleryItems.length > 0 ? (
+        <div className="gallery-filters-container">
+          <div className="gallery-filters" aria-label="Gallery category filters">
+            {categories.map((category) => {
+              const isActive = activeCategory === category || (!activeCategory && category === 'All')
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  className={`filter-chip ${isActive ? 'filter-chip--active' : ''}`}
+                  onClick={() => {
+                    setActiveCategory(category === 'All' ? null : category)
+                    setDisplayCount(6)
+                  }}
+                >
+                  {category}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      ) : null}
+
+      <section id="gallery-grid" aria-label="Gallery photos">
+        {loading ? (
+          <p className="gallery-message" role="status">Loading photos…</p>
+        ) : error ? (
+          <p className="error-message" role="alert">{error}</p>
+        ) : displayedItems.length ? (
+          <div className="gallery-grid">
+            {displayedItems.map((item) => (
+              <article
+                key={item.id}
+                className="gallery-card"
+                onClick={() => openLightbox(item)}
+                role="button"
+                aria-label={`View photo: ${item.title}`}
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    openLightbox(item)
+                  }
                 }}
               >
-                {category}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      <div id="gallery-grid" className="gallery-grid">
-        {displayedItems.map((item) => (
-          <article
-            key={item.id}
-            className="gallery-card"
-            onClick={() => openLightbox(item)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') openLightbox(item)
-            }}
-          >
-            <div className="gallery-card__image-wrap">
-              <img
-                src={thumbnailFor(item)}
-                alt={item.title}
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="gallery-card__overlay">
-                <span className="gallery-card__icon">Tap to view</span>
-              </div>
-            </div>
-            <div className="gallery-card__content">
-              <span className="gallery-card__category">{item.category || 'Community'}</span>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              {displayDate(item) && <span className="gallery-card__date">{displayDate(item)}</span>}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {loading ? <p className="text-center py-8 text-slate-500">Loading gallery photos…</p> : null}
-      {error ? <p className="error-message text-center">{error}</p> : null}
+                <div className="gallery-card__image-wrap">
+                  <img
+                    src={thumbnailFor(item)}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="gallery-card__overlay">
+                    <span className="gallery-card__icon">View photo</span>
+                  </div>
+                </div>
+                <div className="gallery-card__content">
+                  <span className="gallery-card__category">{item.category || 'Community'}</span>
+                  <h3>{item.title}</h3>
+                  {item.description ? <p>{item.description}</p> : null}
+                  {displayDate(item) && <span className="gallery-card__date">{displayDate(item)}</span>}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="gallery-empty-state">
+            <h2>More moments coming soon</h2>
+            <p>We’re gathering photos from our programs and community. Check back soon.</p>
+          </div>
+        )}
+      </section>
 
       {hasMore ? (
         <div className="gallery-pagination">

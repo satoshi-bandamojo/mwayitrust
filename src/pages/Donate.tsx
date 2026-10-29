@@ -40,7 +40,7 @@ const donationTiers: DonationTier[] = [
     amount: 500000,
     label: 'Vocational Trainee Sponsor',
     description: 'Full course kit & trade tuition in carpentry, tailoring, or cookery.',
-    emoji: '🌍',
+    emoji: '🧵',
   },
 ]
 
@@ -49,21 +49,17 @@ const paymentMethods = [
     name: 'Airtel Money',
     description: 'Instant mobile money via Airtel Malawi',
     badge: 'Popular in Malawi',
-    color: 'text-red-600 bg-red-50 border-red-200',
     icon: 'smartphone',
   },
   {
     name: 'TNM Mpamba',
     description: 'Instant mobile payment via TNM Malawi',
     badge: 'Popular in Malawi',
-    color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
     icon: 'smartphone',
   },
   {
-    name: 'Bank Transfer / Card',
-    description: 'National Bank, Standard Bank, Visa / Mastercard',
-    badge: 'National & Diaspora',
-    color: 'text-blue-700 bg-blue-50 border-blue-200',
+    name: 'Bank transfer',
+    description: 'Visa and Mastercard cards accepted',
     icon: 'landmark',
   },
 ]
@@ -147,7 +143,7 @@ export default function Donate() {
     }
 
     setIsSubmitting(true)
-    setSubmitMessage('Preparing secure PayChangu checkout...')
+    setSubmitMessage('Preparing secure checkout...')
 
     const payload = {
       donor_name: form.donor_name || null,
@@ -185,33 +181,23 @@ export default function Donate() {
 
   return (
     <div className="donate-shell">
-      <section className="donate-hero welcome-hero">
-        <div className="donate-hero-content welcome-hero__content">
-          <p className="section-kicker">Giving from Malawi & Abroad</p>
-          <h1>Every Kwacha opens a classroom door.</h1>
-          <p>
-            Your contribution directly funds tuition, vocational training kits, and daily meals for children and youth in Mbvundula Village, Chileka.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary" href="#donation-form">
-              <HeartHandshake size={18} />
-              Choose Giving Level
-            </a>
-            <a className="btn btn-secondary" href="/programs">
-              <ArrowRight size={18} />
-              See Our Programs
-            </a>
-          </div>
-        </div>
+      <section className="donate-intro" aria-labelledby="donate-title">
+        <p className="section-kicker">Give with purpose</p>
+        <h1 id="donate-title">Every gift opens a door.</h1>
+        <p>
+          Your donation supports learning, practical skills, and new opportunities for young people in Chileka.
+        </p>
+        <a className="donate-intro-link" href="#donation-form">
+          Choose a gift <ArrowRight size={16} />
+        </a>
       </section>
 
       <div className="donate-grid">
         <form id="donation-form" className="donate-form-card" onSubmit={handleSubmit} noValidate>
-          {/* Step 1: Tier Selection */}
           <section className="step-card">
             <h2 className="step-title">
               <span className="step-number">1</span>
-              <span>Select your gift (Malawi Kwacha)</span>
+              <span>Select your gift</span>
             </h2>
 
             <div className="impact-grid">
@@ -229,16 +215,14 @@ export default function Donate() {
                     }}
                   >
                     <div className="impact-card-top-row">
-                      <span className="impact-card__emoji">{tier.emoji}</span>
-                      {isSelected ? (
-                        <span className="impact-card-check">
-                          <CheckCircle2 size={18} />
-                        </span>
-                      ) : null}
+                      <span className="impact-card__title">
+                        <span className="impact-card__emoji" aria-hidden="true">{tier.emoji}</span>
+                        <span className="impact-card__label">{tier.label}</span>
+                      </span>
+                      {isSelected ? <CheckCircle2 className="impact-card-check" size={18} /> : null}
                     </div>
                     <div className="impact-card__body">
                       <span className="impact-card__amount">MK {tier.amount.toLocaleString()}</span>
-                      <span className="impact-card__label">{tier.label}</span>
                       <span className="impact-card__description">{tier.description}</span>
                     </div>
                   </button>
@@ -255,8 +239,8 @@ export default function Donate() {
                 clearErrors()
               }}
             >
-              <span className="donate-toggle__emoji">✍️</span>
-              <span className="font-semibold">Enter a custom amount in MWK</span>
+              <span className="donate-toggle__emoji" aria-hidden="true">✍️</span>
+              <span className="font-semibold">Enter a custom amount</span>
             </button>
 
             {selectedTier === 'custom' ? (
@@ -298,7 +282,6 @@ export default function Donate() {
             {errors.amount ? <p className="form-error-inline">{errors.amount}</p> : null}
           </section>
 
-          {/* Step 2: Donor Info */}
           <section className="step-card">
             <h2 className="step-title">
               <span className="step-number">2</span>
@@ -345,19 +328,18 @@ export default function Donate() {
                   value={form.phone}
                   onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
                 />
-                <small className="form-hint">Used by PayChangu to trigger your mobile money prompt.</small>
+                <small className="form-hint">Used to complete your mobile money payment.</small>
               </label>
             </div>
           </section>
 
-          {/* Step 3: Payment Methods available in Malawi */}
           <section className="step-card">
             <h2 className="step-title">
               <span className="step-number">3</span>
               <span>Supported payment methods</span>
             </h2>
             <p className="payment-methods-note text-sm text-slate-600 mb-3">
-              You will select your preferred method on the secure PayChangu checkout:
+              Choose your preferred payment method at checkout.
             </p>
             <div className="payment-methods" aria-label="Payment methods available at checkout">
               {paymentMethods.map((method) => (
@@ -366,11 +348,9 @@ export default function Donate() {
                     {method.icon === 'smartphone' ? <Smartphone size={20} /> : <Landmark size={20} />}
                   </div>
                   <div className="payment-option__body">
-                    <div className="flex items-center justify-between">
+                    <div className="payment-option__heading">
                       <span className="payment-option__name">{method.name}</span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
-                        {method.badge}
-                      </span>
+                      {method.badge ? <span className="payment-option__badge">{method.badge}</span> : null}
                     </div>
                     <span className="payment-option__desc">{method.description}</span>
                   </div>
@@ -379,7 +359,6 @@ export default function Donate() {
             </div>
           </section>
 
-          {/* Total Summary */}
           <div className="summary-card">
             <div className="summary-row">
               <span className="summary-label">Total to Give:</span>
@@ -401,43 +380,15 @@ export default function Donate() {
             disabled={isSubmitting || finalAmount < minCustomAmount}
           >
             <HeartHandshake size={20} />
-            <span>{isSubmitting ? 'Preparing Payment…' : `Donate MK ${finalAmount.toLocaleString()} Now`}</span>
+            <span>{isSubmitting ? 'Preparing Payment…' : `Donate ${finalAmount.toLocaleString()} Now`}</span>
           </button>
 
           <div className="donation-note">
             <ShieldCheck size={18} className="text-emerald-600 shrink-0" />
-            <span>Encrypted and secured by PayChangu. Supports Airtel Money, TNM Mpamba, and cards.</span>
+            <span>Encrypted and secured.</span>
           </div>
         </form>
 
-        {/* Side Trust & Impact Card */}
-        <aside className="donate-side-card hidden lg:block">
-          <h3 className="text-lg font-bold text-slate-900 mb-3">How Your Gift Is Spent</h3>
-          <ul className="space-y-3 text-sm text-slate-600">
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-600 font-bold">✓</span>
-              <span><strong>85%</strong> goes directly to student school fees, learning materials, and vocational workshops.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-600 font-bold">✓</span>
-              <span><strong>10%</strong> supports community garden operations and daily student nutrition.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-600 font-bold">✓</span>
-              <span><strong>5%</strong> for local administrative coordination in Mbvundula Village.</span>
-            </li>
-          </ul>
-
-          <div className="mt-6 pt-5 border-t border-slate-100">
-            <h4 className="font-semibold text-slate-800 text-sm mb-2">Need assistance with payment?</h4>
-            <p className="text-xs text-slate-500 mb-3">
-              If you encounter any mobile network delay with Airtel or TNM, contact our office directly:
-            </p>
-            <a href="tel:+265881452554" className="text-xs font-bold text-[#034694] hover:underline flex items-center gap-1">
-              Call +265 881 45 25 54
-            </a>
-          </div>
-        </aside>
       </div>
     </div>
   )

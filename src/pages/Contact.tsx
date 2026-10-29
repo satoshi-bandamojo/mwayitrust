@@ -1,4 +1,4 @@
-import { Briefcase, Globe2, HeartHandshake, Mail, MessageCircle, MessageSquare, Phone, PlayCircle, Send } from 'lucide-react'
+import { HeartHandshake, Mail, MapPin, MessageCircle, Phone, Send } from 'lucide-react'
 import { useState } from 'react'
 import { createContactMessage } from '../services/contactMessages'
 
@@ -45,20 +45,6 @@ const contactMethods = [
     note: 'Corporate, church & diaspora sponsorships',
     href: 'mailto:sandy.mwayi@gmail.com?subject=Partnership%20Inquiry%20-%20Mwayi%20Trust',
   },
-]
-
-const socialLinks = [
-  { label: 'Facebook', href: 'https://facebook.com/mwayitrust', icon: <Globe2 size={20} /> },
-  { label: 'Twitter / X', href: 'https://twitter.com/mwayitrust', icon: <MessageSquare size={20} /> },
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/mwayitrust', icon: <Briefcase size={20} /> },
-  { label: 'YouTube', href: 'https://youtube.com/@mwayitrust', icon: <PlayCircle size={20} /> },
-]
-
-const responseTimes = [
-  { type: 'Phone calls (Malawi)', duration: 'Instant during hours' },
-  { type: 'WhatsApp messages', duration: 'Under 2 hours' },
-  { type: 'General inquiries', duration: 'Within 24 hours' },
-  { type: 'Partnership proposals', duration: '1-3 business days' },
 ]
 
 export default function Contact() {
@@ -135,164 +121,108 @@ export default function Contact() {
 
   return (
     <div className="contact-shell">
-      <section className="contact-hero welcome-hero">
-        <div className="welcome-hero__content">
-          <p className="section-kicker">Get in touch</p>
-          <h1>We’d love to connect with you.</h1>
-          <p>
-            Whether you want to sponsor a student, volunteer, or enroll in our vocational training centre in Chileka, our doors and lines are open.
-          </p>
-        </div>
-      </section>
-
-      {/* Quick Mobile Action Bar */}
-      <section className="mobile-quick-actions-bar" aria-label="Direct mobile contact options">
-        <a href="tel:+265881452554" className="mobile-action-pill mobile-action-pill--call">
-          <Phone size={18} />
-          <span>Call Us Now</span>
-        </a>
-        <a
-          href="https://wa.me/265881452554?text=Hello%20Mwayi%20Trust,%20I%20would%20like%20to%20learn%20more%20about%20your%20programs."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mobile-action-pill mobile-action-pill--whatsapp"
-        >
-          <MessageCircle size={18} />
-          <span>WhatsApp Chat</span>
-        </a>
+      <section className="contact-intro" aria-labelledby="contact-title">
+        <p className="section-kicker">Get in touch</p>
+        <h1 id="contact-title">Let’s talk.</h1>
       </section>
 
       <section className="contact-grid">
         <div className="contact-card">
-          <h2>Direct contact channels</h2>
+          <h2>Reach us directly</h2>
           <div className="detail-grid">
             {contactMethods.map((method) => (
               <a
                 key={method.label}
                 href={method.href}
-                className={`detail-item ${method.highlight ? 'detail-item--highlight' : ''}`}
+                target={method.highlight ? '_blank' : undefined}
+                rel={method.highlight ? 'noopener noreferrer' : undefined}
+                className={`detail-item ${method.primary ? 'detail-item--primary' : ''} ${method.highlight ? 'detail-item--highlight' : ''}`}
               >
                 <div className={`detail-icon ${method.highlight ? 'detail-icon--wa' : ''}`}>
                   {method.icon}
                 </div>
                 <div className="detail-item-content">
-                  <div className="flex items-center justify-between">
-                    <strong>{method.label}</strong>
-                    {method.highlight && <span className="mobile-fast-badge">Popular</span>}
-                  </div>
+                  <strong>{method.label}</strong>
                   <p className="detail-value-line">{method.detail}</p>
                   <span className="detail-note-line">{method.note}</span>
                 </div>
               </a>
             ))}
           </div>
-        </div>
 
-        <div className="contact-card">
-          <h2>Our campus & location</h2>
-          <div className="location-list">
-            {locations.map((location) => (
-              <div key={location.name} className="location-card">
+          {locations.map((location) => (
+            <div key={location.name} className="contact-location">
+              <MapPin size={18} aria-hidden="true" />
+              <div>
                 <h3>{location.name}</h3>
-                <p className="location-address">{location.address}</p>
-                <div className="location-hours-box">
-                  <span className="location-hours-title">Working Hours</span>
-                  <ul>
-                    {location.hours.map((hour) => (
-                      <li key={hour}>{hour}</li>
-                    ))}
-                  </ul>
-                </div>
+                <p>{location.address}</p>
+                <span>{location.hours.join(' · ')}</span>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-4">
-            <h3 className="text-base font-semibold text-slate-800 mb-2">Response times</h3>
-            <div className="response-list">
-              {responseTimes.map((item) => (
-                <div key={item.type} className="response-item">
-                  <span>{item.type}</span>
-                  <strong>{item.duration}</strong>
-                </div>
-              ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="contact-form-card">
-        <div className="contact-form-header">
-          <p className="section-kicker">Send an online message</p>
-          <h2>Leave us a note</h2>
-          <p>Fill out this short form and our team in Blantyre will respond promptly.</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="contact-form" noValidate>
-          <label>
-            <span>Your Name</span>
-            <input
-              type="text"
-              autoComplete="name"
-              placeholder="e.g. Chimwemwe Banda"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-            {errors.name ? <small>{errors.name}</small> : null}
-          </label>
-
-          <label>
-            <span>Email Address</span>
-            <input
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              placeholder="e.g. chimwemwe@example.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-            {errors.email ? <small>{errors.email}</small> : null}
-          </label>
-
-          <label>
-            <span>Your Message</span>
-            <textarea
-              rows={5}
-              placeholder="How can we assist you or collaborate?"
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-            />
-            <div className="char-counter">{formData.message.length} / 1000 characters</div>
-            {errors.message ? <small>{errors.message}</small> : null}
-          </label>
-
-          {status === 'success' ? (
-            <div className="form-success">
-              Zikomo! Your message was sent successfully. We will get back to you soon.
-            </div>
-          ) : null}
-          {status === 'error' ? <div className="form-error">{errorMessage}</div> : null}
-
-          <button type="submit" className="btn btn-primary w-full justify-center min-h-[48px]" disabled={isSubmitting}>
-            <Send size={18} />
-            <span>{isSubmitting ? 'Sending your message…' : 'Send Message'}</span>
-          </button>
-        </form>
-      </section>
-
-      <section className="contact-social-section">
-        <h3 className="text-center font-semibold text-slate-800 mb-3">Connect on social media</h3>
-        <div className="social-grid">
-          {socialLinks.map((link) => (
-            <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="social-link">
-              {link.icon}
-              <span>{link.label}</span>
-            </a>
           ))}
         </div>
+
+        <section className="contact-form-card" aria-labelledby="contact-form-title">
+          <div className="contact-form-header">
+            <p className="section-kicker">Or send a message</p>
+            <h2 id="contact-form-title">Leave us a note</h2>
+            <p>Share a little about what you need and our team will get back to you.</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="contact-form" noValidate>
+            <label>
+              <span>Your Name</span>
+              <input
+                type="text"
+                autoComplete="name"
+                placeholder="e.g. Chimwemwe Banda"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              {errors.name ? <small>{errors.name}</small> : null}
+            </label>
+
+            <label>
+              <span>Email Address</span>
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="e.g. chimwemwe@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+              {errors.email ? <small>{errors.email}</small> : null}
+            </label>
+
+            <label>
+              <span>Your Message</span>
+              <textarea
+                rows={5}
+                placeholder="How can we assist you or collaborate?"
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                required
+              />
+              <div className="char-counter">{formData.message.length} / 1000 characters</div>
+              {errors.message ? <small>{errors.message}</small> : null}
+            </label>
+
+            {status === 'success' ? (
+              <div className="form-success" role="status">
+                Zikomo! Your message was sent successfully. We will get back to you soon.
+              </div>
+            ) : null}
+            {status === 'error' ? <div className="form-error" role="alert">{errorMessage}</div> : null}
+
+            <button type="submit" className="btn btn-primary w-full justify-center min-h-[48px]" disabled={isSubmitting}>
+              <Send size={18} />
+              <span>{isSubmitting ? 'Sending your message…' : 'Send Message'}</span>
+            </button>
+          </form>
+        </section>
       </section>
     </div>
   )

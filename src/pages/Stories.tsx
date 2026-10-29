@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { storiesService } from '../services/stories.ts'
@@ -51,12 +51,8 @@ export default function Stories() {
     }
   }, [])
 
-  const featuredStories = useMemo(
-    () => stories.filter((story) => story.featured && story.published !== false).slice(0, 2),
-    [stories],
-  )
-  const regularStories = useMemo(
-    () => stories.filter((story) => !story.featured && story.published !== false),
+  const publishedStories = useMemo(
+    () => stories.filter((story) => story.published !== false),
     [stories],
   )
 
@@ -66,86 +62,53 @@ export default function Stories() {
 
   return (
     <div className="stories-shell">
-      <section className="stories-hero welcome-hero">
-        <div className="stories-hero__content welcome-hero__content">
-          <p className="section-kicker">Stories of impact</p>
-          <h1>Read the stories behind the change.</h1>
-          <p>
-            From quiet victories to community-wide transformation, these stories show how support becomes opportunity.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary min-h-[48px]" href="#story-grid">
-              <BookOpen size={18} />
-              Explore Stories
-            </a>
-            <Link className="btn btn-secondary min-h-[48px]" to="/donate">
-              <ArrowRight size={18} />
-              Support the Mission
+      <section className="stories-intro" aria-labelledby="stories-title">
+        <p className="section-kicker">Stories of impact</p>
+        <h1 id="stories-title">Small steps. Lasting change.</h1>
+        <p>
+          Updates and stories from the young people and communities growing with Mwayi Trust.
+        </p>
+      </section>
+
+      <section id="story-grid" className="story-list-section" aria-label="Stories">
+        {loading ? (
+          <div className="story-loading"><LoadingState label="Loading stories" /></div>
+        ) : error ? (
+          <p className="error-message" role="alert">{error}</p>
+        ) : publishedStories.length ? (
+          <div className="story-grid">
+            {publishedStories.map((story) => (
+              <article key={story.id} className="story-card">
+                <Link to={`/stories/${story.slug}`} className="story-card__link">
+                  {coverImage(story) ? (
+                    <div className="story-card__image-wrap">
+                      <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
+                    </div>
+                  ) : null}
+                  <div className="story-card__body">
+                    <div className="story-card__meta-line">
+                      <span className="story-card__tag">{storyCategory(story)}</span>
+                      <span className="story-card__meta">{storyDate(story)}</span>
+                    </div>
+                    <h3>{story.title}</h3>
+                    <p>{story.excerpt}</p>
+                    <span className="story-card__read-more">Read story <ArrowRight size={15} /></span>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="stories-empty-state">
+            <h2>Stories are coming soon</h2>
+            <p>We’re preparing updates from our programs and the communities we work alongside. Please check back soon.</p>
+            <Link to="/programs" className="stories-empty-link">
+              Explore our programs <ArrowRight size={16} />
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="story-featured-grid" aria-label="Featured stories">
-        {loading ? (
-          <LoadingState label="Loading featured stories" />
-        ) : error ? (
-          <p className="error-message">{error}</p>
-        ) : featuredStories.length ? (
-          featuredStories.map((story) => (
-            <article key={story.id} className="story-feature-card">
-              <Link to={`/stories/${story.slug}`} className="story-feature-card__link">
-                <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
-                <div className="story-feature-card__content">
-                  <span className="story-feature-card__tag">Featured</span>
-                  <h3>{story.title}</h3>
-                  <p>{story.excerpt}</p>
-                </div>
-              </Link>
-            </article>
-          ))
-        ) : (
-          <p></p>
         )}
       </section>
 
-      <section id="story-grid" className="story-grid" aria-label="Stories">
-        {loading ? (
-          <LoadingState label="Loading stories" />
-        ) : error ? (
-          <p className="error-message">{error}</p>
-        ) : regularStories.length ? (
-          regularStories.map((story) => (
-            <article key={story.id} className="story-card">
-              <Link to={`/stories/${story.slug}`} className="story-card__link">
-                <div className="story-card__image-wrap">
-                  <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />
-                </div>
-                <div className="story-card__body">
-                  <span className="story-card__tag">{storyCategory(story)}</span>
-                  <h3>{story.title}</h3>
-                  <p>{story.excerpt}</p>
-                  <p className="story-card__meta">{storyDate(story)}</p>
-                </div>
-              </Link>
-            </article>
-          ))
-        ) : (
-          <p className="text-center py-6 text-slate-500">No stories available yet.</p>
-        )}
-      </section>
-
-      <section className="story-cta-card">
-        <div>
-          <p className="section-kicker">Keep the momentum going</p>
-          <h2>Every story is a reminder that change is possible.</h2>
-          <p>When you support Mwayi Trust, you help turn these stories into more opportunities for young people.</p>
-        </div>
-        <Link className="btn btn-primary min-h-[48px]" to="/donate">
-          <Sparkles size={18} />
-          <span>Donate Today (MWK)</span>
-        </Link>
-      </section>
     </div>
   )
 }

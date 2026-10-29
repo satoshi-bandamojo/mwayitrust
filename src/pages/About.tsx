@@ -1,6 +1,5 @@
 import { ArrowRight, HeartHandshake } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import aboutImage from '../assets/about.webp'
 import teamMember1 from '../assets/team-member1.webp'
 import teamMember2 from '../assets/team-member2.webp'
 
@@ -69,37 +68,32 @@ const values = [
 export default function About() {
   return (
     <div className="about-shell">
-      <section className="about-story">
-        <div className="about-story-content welcome-hero">
-          <p className="section-kicker">Our roots in Malawi</p>
-          <h1>What began as a grassroots community effort is now a trusted beacon for change.</h1>
-          <p>
-            Founded in 2009, Mwayi Trust started as a response to local students in Chileka who lacked school fees, books, and uniforms. Today, our campus in Mbvundula Village provides daily primary homework tutoring, secondary girl sponsorships, practical vocational trades, and agricultural scholarships.
-          </p>
-          <p>
-            We celebrate each graduate, track each student&apos;s progress, and work side-by-side with village headmen and schools across TA Kunthembwe.
-          </p>
-
-          <div className="hero-actions about-story-actions flex-col sm:flex-row gap-3">
-            <Link className="btn btn-primary min-h-[48px] w-full sm:w-auto justify-center" to="/donate">
-              <HeartHandshake size={18} />
-              <span>Support Our Mission (MWK)</span>
-            </Link>
-            <Link className="btn btn-secondary min-h-[48px] w-full sm:w-auto justify-center" to="/stories">
-              <span>Read Impact Stories</span>
-              <ArrowRight size={18} />
-            </Link>
-          </div>
+      <section className="about-intro" aria-labelledby="about-title">
+        <p className="section-kicker">About Mwayi Trust</p>
+        <h1 id="about-title">Opening doors through education and community support.</h1>
+        <p>
+          Founded in 2009, Mwayi Trust began in Chileka to support students who lacked school fees, books, and uniforms. Today, we provide homework tutoring, secondary school sponsorships, vocational training, and agricultural education in Mbvundula Village.
+        </p>
+        <p>
+          We work alongside families, schools, and village leaders so young people can build skills, confidence, and a brighter future.
+        </p>
+        <div className="hero-actions about-story-actions">
+          <Link className="btn btn-primary min-h-[48px] justify-center" to="/donate">
+            <HeartHandshake size={18} />
+            <span>Support Our Mission</span>
+          </Link>
+          <Link className="btn btn-secondary min-h-[48px] justify-center" to="/stories">
+            <span>Read Impact Stories</span>
+            <ArrowRight size={18} />
+          </Link>
         </div>
+      </section>
 
-        <div className="about-story-media">
-          <img src={aboutImage} alt="Mwayi Trust community in Chileka, Malawi" loading="lazy" decoding="async" />
-          <div className="story-badge">
-            <strong>2009</strong>
-            <span>Est. Malawi</span>
-          </div>
+      <section className="about-history" aria-labelledby="about-history-title">
+        <div className="about-section-heading">
+          <p className="section-kicker">Our journey</p>
+          <h2 id="about-history-title">Growing with our community</h2>
         </div>
-
         <div className="milestone-list" aria-label="Key milestones">
           {milestones.map((milestone) => (
             <div key={milestone.year} className="milestone-item">
@@ -111,11 +105,9 @@ export default function About() {
       </section>
 
       <section className="about-values">
-        <div className="section-heading">
-          <div>
-            <p className="section-kicker">What drives us</p>
-            <h2>Our core values</h2>
-          </div>
+        <div className="about-section-heading">
+          <p className="section-kicker">What drives us</p>
+          <h2>Our core values</h2>
         </div>
 
         <div className="about-values-grid">
@@ -130,9 +122,9 @@ export default function About() {
       </section>
 
       <section className="about-team">
-        <div className="section-heading">
+        <div className="about-section-heading">
           <p className="section-kicker">Leadership</p>
-          <h2>Dedicated community leaders committed to youth advancement in Malawi.</h2>
+          <h2>Meet the people leading this work.</h2>
         </div>
 
         <div className="team-grid">

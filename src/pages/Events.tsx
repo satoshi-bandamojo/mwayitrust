@@ -72,26 +72,20 @@ export default function Events() {
 
   return (
     <div className="events-shell">
-      <section className="events-hero welcome-hero">
-        <div className="events-hero__content welcome-hero__content">
-          <p className="section-kicker">Upcoming programs</p>
-          <h1>Explore the events and learning experiences shaping our community.</h1>
-          <p>
-            From workshops to mentorship launches, discover the opportunities that help learners grow, connect, and thrive.
-          </p>
-          <div className="hero-actions">
-            <Link className="btn btn-secondary min-h-[48px]" to="/contact">
-              <ArrowRight size={18} />
-              Inquire About Events
-            </Link>
-          </div>
-        </div>
+      <section className="events-intro" aria-labelledby="events-title">
+        <p className="section-kicker">Gather, learn, and grow</p>
+        <h1 id="events-title">Community events and learning experiences.</h1>
+        <p>
+          Discover the workshops, gatherings, and opportunities bringing our community together.
+        </p>
       </section>
 
       <div className="events-layout">
         <main id="events-list" className="events-main">
           <div className="events-toolbar">
-            <p className="events-count">Showing {displayedEvents.length} of {events.length} events</p>
+            <p className="events-count">
+              Showing {displayedEvents.length} of {events.length} events
+            </p>
           </div>
 
           {loading ? (
@@ -111,9 +105,11 @@ export default function Events() {
                       </span>
                     </div>
                     <div className="event-card__content">
-                      <div className="event-card__header">
-                        {event.featured ? <span className="event-card__badge">Featured</span> : null}
-                      </div>
+                      {event.featured ? (
+                        <div className="event-card__header">
+                          <span className="event-card__badge">Featured</span>
+                        </div>
+                      ) : null}
                       <h3>{event.title}</h3>
                       <p>{event.description}</p>
                       <div className="event-card__details">

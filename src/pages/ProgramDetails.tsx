@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, HeartHandshake, PhoneCall } from 'lucide-react'
+import { ArrowLeft, ArrowRight, HeartHandshake, PhoneCall } from 'lucide-react'
 import { programs } from '../data/programs.ts'
 import carpentryImage from '../assets/carpentry.webp'
 import cookeryImage from '../assets/cookery2.webp'
@@ -60,29 +60,35 @@ export default function ProgramDetails() {
     )
   }
 
-  if (program.slug === 'vocational-training') {
-    return (
-      <div className="program-detail-shell vocational-shell">
-        <section className="program-detail-hero vocational-hero">
-          <button className="link-back min-h-[44px] mb-2" type="button" onClick={() => navigate('/programs')}>
-            <ArrowLeft size={18} />
-            <span>Back to all programs</span>
-          </button>
-          <h1>{program.title}</h1>
-          <p className="program-detail-summary">{program.summary}</p>
-        </section>
+  return (
+    <div className="program-detail-shell">
+      <section className="program-detail-hero">
+        <button className="link-back min-h-[44px] mb-2" type="button" onClick={() => navigate('/programs')}>
+          <ArrowLeft size={18} />
+          <span>Back to all programs</span>
+        </button>
+        <p className="section-kicker">Our programs</p>
+        <h1>{program.title}</h1>
+        <p className="program-detail-summary">{program.summary}</p>
+      </section>
 
-        <section className="vocational-spotlight">
-          <div className="vocational-spotlight-copy">
-            <p className="section-kicker">Trades & Careers</p>
-            <h2>Four certified training pathways to employment and entrepreneurship.</h2>
-            <p>
-              The Mwayi Trust Vocational Training Centre in Mbvundula Village equips young people with certified practical trades, workplace readiness, and micro-enterprise mentoring.
-            </p>
-          </div>
-        </section>
+      <section className="program-detail-feature">
+        <div className="program-detail-image-wrap">
+          <img src={program.detailImage} alt={program.title} loading="lazy" decoding="async" />
+        </div>
+        <div className="program-detail-overview">
+          <p className="section-kicker">Overview</p>
+          <h2>What this program offers</h2>
+          <p>{program.overview}</p>
+        </div>
+      </section>
 
+      {program.slug === 'vocational-training' ? (
         <section className="program-detail-section vocational-courses">
+          <div className="program-detail-heading">
+            <p className="section-kicker">Training pathways</p>
+            <h2>Skills for work and business</h2>
+          </div>
           <div className="course-grid">
             {vocationalCourses.map((course) => (
               <article key={course.title} className="course-card">
@@ -98,87 +104,51 @@ export default function ProgramDetails() {
             ))}
           </div>
         </section>
+      ) : null}
 
-        <div className="program-detail-actions vocational-actions flex-col sm:flex-row gap-3">
-          <Link className="btn btn-primary min-h-[48px] w-full sm:w-auto justify-center" to="/contact">
-            <PhoneCall size={18} />
-            <span>Contact Us to Enroll</span>
-          </Link>
-          <Link className="btn btn-secondary min-h-[48px] w-full sm:w-auto justify-center" to="/donate">
-            <HeartHandshake size={18} />
-            <span>Support a Vocational Trainee</span>
-          </Link>
+      <section className="program-detail-info-grid">
+        <div className="program-detail-section">
+          <p className="section-kicker">What’s included</p>
+          <h2>Program highlights</h2>
+          <ul className="program-detail-list">
+            {program.highlights.map((item) => <li key={item}>{item}</li>)}
+          </ul>
         </div>
-      </div>
-    )
-  }
 
-  return (
-    <div className="program-detail-shell">
-      <section className="program-detail-hero">
-        <button className="link-back min-h-[44px] mb-2" type="button" onClick={() => navigate('/programs')}>
-          <ArrowLeft size={18} />
-          <span>Back to all programs</span>
-        </button>
-        <h1>{program.title}</h1>
-        <p className="program-detail-summary">{program.summary}</p>
+        <div className="program-detail-section">
+          <p className="section-kicker">The difference</p>
+          <h2>Expected outcomes</h2>
+          <ul className="program-detail-list">
+            {program.outcomes.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
       </section>
 
-      <section className="program-detail-content">
-        <div className="program-detail-image-wrap">
-          <img src={program.detailImage} alt={program.title} loading="lazy" decoding="async" />
+      <section className="program-detail-section program-enrollment">
+        <div className="program-detail-heading">
+          <p className="section-kicker">Getting started</p>
+          <h2>How to enroll</h2>
         </div>
-        <div className="program-detail-copy">
-          <div className="program-detail-section">
-            <p className="section-kicker">Program Overview</p>
-            <h2>What this program offers</h2>
-            <p className="text-slate-600 leading-relaxed">{program.overview}</p>
-          </div>
+        <ol className="program-enrollment-steps">
+          {program.enrollSteps.map((step, index) => (
+            <li key={step}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <p>{step}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-          <div className="program-detail-section">
-            <p className="section-kicker">Key Highlights</p>
-            <ul className="program-detail-list">
-              {program.highlights.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2 size={18} className="text-emerald-600 shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="program-detail-section">
-            <p className="section-kicker">Expected Outcomes</p>
-            <ul className="program-detail-list">
-              {program.outcomes.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2 size={18} className="text-[#034694] shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="program-detail-section">
-            <p className="section-kicker">How to Enroll</p>
-            <ol className="program-detail-list program-detail-list--numbered">
-              {program.enrollSteps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="program-detail-actions flex-col sm:flex-row gap-3">
-            <Link className="btn btn-primary min-h-[48px] w-full sm:w-auto justify-center" to="/contact">
-              <PhoneCall size={18} />
-              <span>Contact Us to Enroll</span>
-            </Link>
-            <Link className="btn btn-secondary min-h-[48px] w-full sm:w-auto justify-center" to="/donate">
-              <HeartHandshake size={18} />
-              <span>Support This Program</span>
-            </Link>
-          </div>
-        </div>
+      <section className="program-detail-actions" aria-label="Program actions">
+        <Link className="btn btn-primary min-h-[48px] justify-center" to="/contact">
+          <PhoneCall size={18} />
+          <span>Contact Us to Enroll</span>
+          <ArrowRight size={16} />
+        </Link>
+        <Link className="btn btn-secondary min-h-[48px] justify-center" to="/donate">
+          <HeartHandshake size={18} />
+          <span>{program.slug === 'vocational-training' ? 'Support a Vocational Trainee' : 'Support This Program'}</span>
+        </Link>
       </section>
     </div>
   )

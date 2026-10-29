@@ -1,4 +1,4 @@
-import { BookOpen, CalendarDays, HeartHandshake, Image as ImageIcon, Info, Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
+import { BookOpen, CalendarDays, FileText, HeartHandshake, Image as ImageIcon, Info, Mail, Menu, MessageCircle, ShieldCheck, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
@@ -9,6 +9,11 @@ const links = [
   { label: 'Events', href: '/events', icon: CalendarDays },
   { label: 'Gallery', href: '/gallery', icon: ImageIcon },
   { label: 'Contact', href: '/contact', icon: Mail },
+]
+
+const legalLinks = [
+  { label: 'Terms of Use', href: '/terms-of-use', icon: FileText },
+  { label: 'Privacy Policy', href: '/privacy-policy', icon: ShieldCheck },
 ]
 
 export default function Navbar() {
@@ -129,7 +134,7 @@ export default function Navbar() {
         <div className="mobile-drawer-footer">
           <Link
             to="/donate"
-            className="btn btn-primary w-full justify-center mb-3"
+            className="btn btn-primary w-full justify-center"
             onClick={() => setMenuOpen(false)}
           >
             <HeartHandshake size={18} />
@@ -137,11 +142,6 @@ export default function Navbar() {
           </Link>
 
           <div className="mobile-quick-connect">
-            <p className="mobile-quick-connect-title">Direct Contact in Malawi</p>
-            <a href="tel:+265881452554" className="mobile-quick-connect-item">
-              <Phone size={16} />
-              <span>+265 881 45 25 54</span>
-            </a>
             <a
               href="https://wa.me/265881452554?text=Hello%20Mwayi%20Trust,%20I%20would%20like%20to%20learn%20more%20about%20your%20programs."
               target="_blank"
@@ -152,6 +152,23 @@ export default function Navbar() {
               <span>Chat on WhatsApp</span>
             </a>
           </div>
+
+          <nav className="mobile-drawer-legal" aria-label="Legal links">
+            {legalLinks.map((link) => {
+              const Icon = link.icon
+              return (
+                <NavLink
+                  key={link.href}
+                  to={link.href}
+                  className={({ isActive }) => `mobile-drawer-legal-link ${isActive ? 'active' : ''}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Icon size={16} />
+                  <span>{link.label}</span>
+                </NavLink>
+              )
+            })}
+          </nav>
         </div>
       </aside>
     </>
