@@ -44,6 +44,15 @@ a {
   margin: 0 auto;
 }
 
+html:has(.homepage-shell) {
+  scroll-snap-type: y proximity;
+}
+
+html:has(.homepage-shell) .homepage-shell > section,
+html:has(.homepage-shell) .footer-shell {
+  scroll-snap-align: start;
+}
+
 .hero-section {
   position: relative;
   min-height: 560px;
@@ -596,6 +605,36 @@ a {
   padding: 1.5rem;
   margin-top: 1rem;
   border-radius: 0.75rem;
+}
+
+.footer-back-to-top-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.footer-back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 0.35rem;
+  background: transparent;
+  color: #034694;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.footer-back-to-top:hover,
+.footer-back-to-top:focus-visible {
+  color: #012d6b;
+}
+
+.footer-back-to-top:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .footer-legal-bar {
@@ -4268,21 +4307,22 @@ a {
 }
 
 .consent-dialog {
+  position: fixed;
+  inset: auto 1.5rem 1.5rem auto;
   width: min(100% - 2rem, 34rem);
   max-height: min(90dvh, 42rem);
   overflow-y: auto;
-  margin: auto;
+  margin: 0;
   padding: clamp(1.5rem, 5vw, 2.5rem);
   border: 1px solid #dbeafe;
   border-radius: 1rem;
   color: #0f172a;
   background: #fff;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.3);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.24);
 }
 
 .consent-dialog::backdrop {
-  background: rgba(15, 23, 42, 0.72);
-  backdrop-filter: blur(3px);
+  background: transparent;
 }
 
 .consent-dialog h2 {
@@ -4366,8 +4406,10 @@ a {
 
 @media (max-width: 640px) {
   .consent-dialog {
-    width: calc(100% - 1.5rem);
-    padding: 1.5rem;
+    inset: auto 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+    width: auto;
+    max-height: min(90dvh, 42rem);
+    padding: 1.25rem;
   }
 }
 

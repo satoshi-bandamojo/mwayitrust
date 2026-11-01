@@ -1,4 +1,4 @@
-import { Globe, Mail, MapPin, MessageSquare, Phone } from 'lucide-react'
+import { ArrowUp, Globe, Mail, MapPin, MessageSquare, Phone } from 'lucide-react'
 import logoBlue from '../../assets/logo_blue.png'
 
 const quickLinks = [
@@ -48,6 +48,16 @@ export default function Footer() {
             <a href="#" aria-label="Email"><Mail size={18} /></a>
           </div>
         </div>
+      </div>
+      <div className="footer-back-to-top-row">
+        <button
+          className="footer-back-to-top"
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <ArrowUp size={16} aria-hidden="true" />
+          Back to top
+        </button>
       </div>
       <div className="footer-legal-bar">
         <nav aria-label="Legal links">

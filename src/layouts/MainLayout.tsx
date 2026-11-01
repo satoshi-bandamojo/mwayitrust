@@ -37,15 +37,14 @@ export default function MainLayout() {
   const [consent, setConsent] = useState(readConsent)
   const [isChecked, setIsChecked] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const isPolicyPage = ['/terms-of-use', '/privacy-policy'].includes(location.pathname)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     const dialog = dialogRef.current
-    if (consent.required && !isPolicyPage && dialog && !dialog.open) {
+    if (consent.required && dialog && !dialog.open) {
       dialog.showModal()
     }
-  }, [consent.required, isPolicyPage])
+  }, [consent.required])
 
   const acceptTerms = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -92,14 +91,13 @@ export default function MainLayout() {
       </main>
       <Footer />
 
-      {consent.required && !isPolicyPage ? (
+      {consent.required ? (
         <dialog
           ref={dialogRef}
           className="consent-dialog"
           aria-labelledby="consent-title"
           onCancel={(event) => event.preventDefault()}
         >
-          <p className="section-kicker">Welcome to Malawi</p>
           <h2 id="consent-title">Welcome to Mwayi Trust</h2>
           <p>
             Please review our website terms and privacy notice before browsing. We are dedicated to youth education and community development in Chileka, Blantyre.
