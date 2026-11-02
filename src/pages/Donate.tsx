@@ -16,7 +16,7 @@ interface DonationTier {
 const donationTiers: DonationTier[] = [
   {
     type: 'learning_materials',
-    amount: 100,
+    amount: 30000,
     label: 'Learning Materials',
     description: 'Exercise books, pens, school bag & geometry set for 1 pupil.',
     emoji: '📚',
