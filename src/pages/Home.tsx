@@ -4,8 +4,8 @@ import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { programs } from '../data/programs.ts'
 import type { Story } from '../types/index.ts'
-import heroImage from '../assets/hero.webp'
 import LoadingState from '../components/ui/LoadingState.tsx'
+import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
 const stats = [
   { value: '3,000+', label: 'students supported' },
@@ -95,7 +95,7 @@ export default function Home() {
     <div className="homepage-shell">
       {/* Mobile-First Hero Section */}
       <section className="hero-section">
-        <img className="hero-image" src={heroImage} alt="Mwayi Trust Students and Community" fetchPriority="high" />
+        <img className="hero-image" src="/home.webp" alt="Mwayi Trust Students and Community" fetchPriority="high" />
         <div className="hero-overlay" />
         <div className="hero-content">
           <h1 className="hero-slogan">
@@ -173,7 +173,7 @@ export default function Home() {
           {featuredPrograms.map((program) => (
             <Link key={program.slug} to={`/programs/${program.slug}`} className="home-program-card">
               <div className="home-program-image-wrap">
-                <img src={program.image} alt={program.title} loading="lazy" decoding="async" />
+                <ProgramImageSlides images={program.images} title={program.title} />
               </div>
               <div className="home-program-body">
                 <h3>{program.title}</h3>
@@ -254,11 +254,11 @@ export default function Home() {
       <section className="section-divider content-section">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Real impact</p>
+            <p className="section-kicker">Impact</p>
             <h2>Stories from our students and community.</h2>
           </div>
         </div>
-        <div className="card-grid">
+        <div className="card-grid home-featured-stories-grid">
           {storiesLoading ? (
             <LoadingState label="Loading featured stories" />
           ) : storiesError ? (
@@ -277,7 +277,7 @@ export default function Home() {
                   </div>
                   <h3>{story.title}</h3>
                   <p>{story.excerpt}</p>
-                  <Link to={`/stories/${story.slug}`} className="mt-3 text-sm font-bold text-[#034694] inline-flex items-center gap-1">
+                  <Link to={`/stories/${encodeURIComponent(story.id)}`} className="mt-3 text-sm font-bold text-[#034694] inline-flex items-center gap-1">
                     <span>Read story</span>
                     <ArrowRight size={14} />
                   </Link>

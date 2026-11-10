@@ -6,7 +6,7 @@ import cookeryImg from '../assets/cookery2.webp'
 import houseKeepingImg from '../assets/house-keeping.webp'
 import homeworkImg from '../assets/program-homework.webp'
 import homework1Img from '../assets/program-homework1.webp'
-import vocationalImg from '../assets/program-vocational.webp'
+import vocationalImg from '../assets/program-vocational1.webp'
 import gardenImg from '../assets/program-community-garden2.webp'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL

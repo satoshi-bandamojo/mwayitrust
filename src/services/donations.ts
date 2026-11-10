@@ -3,7 +3,6 @@ import { supabase } from './supabase'
 export interface CreateDonationPayload {
   donor_name?: string | null
   email: string
-  phone?: string | null
   amount: number
   currency?: string
   payment_reference?: string
@@ -22,7 +21,6 @@ export async function createDonation(payload: CreateDonationPayload) {
     body: {
       donor_name: payload.donor_name ?? null,
       email: payload.email,
-      phone: payload.phone ?? null,
       amount: payload.amount,
       currency: payload.currency ?? 'MWK',
       payment_reference: payload.payment_reference ?? null,

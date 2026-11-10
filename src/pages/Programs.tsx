@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, HeartHandshake } from 'lucide-react'
 import { programs } from '../data/programs.ts'
+import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
 export default function Programs() {
   return (
@@ -17,7 +18,7 @@ export default function Programs() {
         {programs.map((program) => (
           <Link key={program.slug} to={`/programs/${program.slug}`} className="program-card">
             <div className="program-image-wrap">
-              <img src={program.image} alt={program.title} loading="lazy" decoding="async" />
+              <ProgramImageSlides images={program.images} title={program.title} />
             </div>
             <div className="program-body">
               <span className="program-card-kicker">Our programs</span>

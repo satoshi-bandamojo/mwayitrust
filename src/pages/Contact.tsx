@@ -13,7 +13,7 @@ const locations = [
 const contactMethods = [
   {
     icon: <Phone size={20} />,
-    label: 'Call Us (Malawi)',
+    label: 'Call Us ',
     value: 'Sandra Trevethan',
     detail: '+265 881 45 25 54',
     note: 'Available 8 AM - 5 PM (Mon - Fri)',

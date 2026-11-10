@@ -79,7 +79,7 @@ export default function Stories() {
           <div className="story-grid">
             {publishedStories.map((story) => (
               <article key={story.id} className="story-card">
-                <Link to={`/stories/${story.slug}`} className="story-card__link">
+                <Link to={`/stories/${encodeURIComponent(story.id)}`} className="story-card__link">
                   {coverImage(story) ? (
                     <div className="story-card__image-wrap">
                       <img src={coverImage(story)} alt={story.title} loading="lazy" decoding="async" />

@@ -69,7 +69,6 @@ const minCustomAmount = 500
 const initialForm = {
   donor_name: '',
   email: '',
-  phone: '',
 }
 
 export default function Donate() {
@@ -80,7 +79,6 @@ export default function Donate() {
     amount: '',
     donor_name: '',
     email: '',
-    phone: '',
   })
   const [submitMessage, setSubmitMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -96,7 +94,7 @@ export default function Donate() {
   }, [customAmount, selectedTier])
 
   const clearErrors = () => {
-    setErrors({ amount: '', donor_name: '', email: '', phone: '' })
+    setErrors({ amount: '', donor_name: '', email: '' })
   }
 
   const validate = () => {
@@ -104,7 +102,6 @@ export default function Donate() {
       amount: '',
       donor_name: '',
       email: '',
-      phone: '',
     }
 
     let valid = true
@@ -120,6 +117,11 @@ export default function Donate() {
         nextErrors.amount = `Please enter an amount of at least MK ${minCustomAmount.toLocaleString()}.`
         valid = false
       }
+    }
+
+    if (!form.donor_name.trim()) {
+      nextErrors.donor_name = 'Full name is required.'
+      valid = false
     }
 
     if (!form.email.trim()) {
@@ -146,9 +148,8 @@ export default function Donate() {
     setSubmitMessage('Preparing secure checkout...')
 
     const payload = {
-      donor_name: form.donor_name || null,
+      donor_name: form.donor_name.trim(),
       email: form.email,
-      phone: form.phone || null,
       amount: finalAmount,
       currency: 'MWK',
       purpose: selectedTier === 'custom' ? 'Custom donation' : selectedTier || null,
@@ -289,15 +290,20 @@ export default function Donate() {
             </h2>
             <div className="form-grid">
               <label className="form-field">
-                <span className="form-label">Full Name (optional)</span>
+                <span className="form-label">Full Name *</span>
                 <input
-                  className="form-input"
+                  className={`form-input ${errors.donor_name ? 'form-input--error' : ''}`}
                   autoComplete="name"
                   placeholder="e.g. Mary Banda"
                   type="text"
                   value={form.donor_name}
-                  onChange={(event) => setForm((current) => ({ ...current, donor_name: event.target.value }))}
+                  onChange={(event) => {
+                    setForm((current) => ({ ...current, donor_name: event.target.value }))
+                    setErrors((current) => ({ ...current, donor_name: '' }))
+                  }}
+                  required
                 />
+                {errors.donor_name ? <small className="form-hint text-red-600">{errors.donor_name}</small> : null}
               </label>
 
               <label className="form-field">
@@ -313,22 +319,6 @@ export default function Donate() {
                   required
                 />
                 {errors.email ? <small className="form-hint text-red-600">{errors.email}</small> : null}
-              </label>
-
-              <label className="form-field form-field--full">
-                <span className="form-label">
-                  Mobile Number (for Airtel Money / Mpamba)
-                </span>
-                <input
-                  className="form-input"
-                  autoComplete="tel"
-                  inputMode="tel"
-                  placeholder="e.g. 0991234567 or 0881234567"
-                  type="tel"
-                  value={form.phone}
-                  onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
-                />
-                <small className="form-hint">Used to complete your mobile money payment.</small>
               </label>
             </div>
           </section>

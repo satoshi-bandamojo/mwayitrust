@@ -6,6 +6,7 @@ import carpentryImage from '../assets/carpentry.webp'
 import cookeryImage from '../assets/cookery2.webp'
 import houseKeepingImage from '../assets/house-keeping.webp'
 import tailoringImage from '../assets/converted_image (16).webp'
+import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
 const vocationalCourses = [
   {
@@ -74,7 +75,7 @@ export default function ProgramDetails() {
 
       <section className="program-detail-feature">
         <div className="program-detail-image-wrap">
-          <img src={program.detailImage} alt={program.title} loading="lazy" decoding="async" />
+          <ProgramImageSlides images={program.images} title={program.title} />
         </div>
         <div className="program-detail-overview">
           <p className="section-kicker">Overview</p>
@@ -127,7 +128,7 @@ export default function ProgramDetails() {
       <section className="program-detail-section program-enrollment">
         <div className="program-detail-heading">
           <p className="section-kicker">Getting started</p>
-          <h2>{program.slug === 'vocational-training' || program.slug === 'speak-english-chileka' ? 'How to enroll' : 'How to get involved'}</h2>
+          <h2>{program.slug === 'vocational-training' ? 'How to enroll' : 'How to get involved'}</h2>
         </div>
         <ol className="program-enrollment-steps">
           {program.enrollSteps.map((step, index) => (
@@ -143,11 +144,9 @@ export default function ProgramDetails() {
         <Link className="btn btn-primary min-h-[48px] justify-center" to="/contact">
           <PhoneCall size={18} />
           <span>
-            {program.slug === 'speak-english-chileka'
-              ? 'Ask About 2027 Restart'
-              : program.slug === 'vocational-training'
-                ? 'Enquire About Enrollment'
-                : 'Contact Us to Get Involved'}
+            {program.slug === 'vocational-training'
+              ? 'Enquire About Enrollment'
+              : 'Contact Us to Get Involved'}
           </span>
           <ArrowRight size={16} />
         </Link>
