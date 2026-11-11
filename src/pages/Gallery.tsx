@@ -66,6 +66,7 @@ export default function Gallery() {
 
   const thumbnailFor = (item: GalleryImage) => item.thumbnail_url || item.image_url || ''
   const imageFor = (item: GalleryImage) => item.image_url || item.thumbnail_url || ''
+  const captionFor = (item: GalleryImage) => item.caption?.trim() || item.description?.trim() || ''
   const displayDate = (item: GalleryImage) => (item.created_at ? formatDate(item.created_at) : '')
 
   const displayedItems = filteredItems.slice(0, displayCount)
@@ -168,7 +169,7 @@ export default function Gallery() {
                 <div className="gallery-card__content">
                   <span className="gallery-card__category">{item.category || 'Community'}</span>
                   <h3>{item.title}</h3>
-                  {item.description ? <p>{item.description}</p> : null}
+                  {captionFor(item) ? <p>{captionFor(item)}</p> : null}
                   {displayDate(item) && <span className="gallery-card__date">{displayDate(item)}</span>}
                 </div>
               </article>
@@ -233,7 +234,7 @@ export default function Gallery() {
             <div className="lightbox__info">
               <span className="gallery-card__category">{selectedItem.category}</span>
               <h2>{selectedItem.title}</h2>
-              <p>{selectedItem.description}</p>
+              {captionFor(selectedItem) ? <p>{captionFor(selectedItem)}</p> : null}
               <div className="lightbox__meta">
                 <span>{displayDate(selectedItem)}</span>
                 {selectedItem.author ? <span>Taken by {selectedItem.author}</span> : null}

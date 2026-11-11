@@ -2,8 +2,8 @@ import homeworkImage from '../assets/program-homework.webp'
 import homeworkDetail from '../assets/program-homework1.webp'
 import girlsImage from '../assets/program-girls-sponsorship.webp'
 import girlsDetail from '../assets/program-girls-sponsorship (2).webp'
-import vocationalImage from '../assets/program-vocational1.webp'
-import vocationalDetail from '../assets/program-vocational2.webp'
+import vocationalCentreImage from '../assets/hero.webp'
+import vocationalGraduationImage from '../assets/graduation.webp'
 import communityGardenImage from '../assets/program-community-garden2.webp'
 import communityGardenDetail from '../assets/program-comunity-garden.webp'
 
@@ -68,11 +68,11 @@ export const programs: Program[] = [
     ],
   },
   {
-    title: 'Vocational Training Centre',
+    title: 'Vocational College',
     slug: 'vocational-training',
     summary:
       'Inclusive, hands-on training to build practical skills for employment and self-employment.',
-    images: [vocationalImage, vocationalDetail],
+    images: [vocationalCentreImage, vocationalGraduationImage],
     overview:
       'Our competency-based courses combine practical vocational training with business communication, entrepreneurship, and life skills. Courses are selected with input from local communities and businesses, and availability may vary by intake. Young people with special educational needs are encouraged to apply and can take the time they need to achieve course competencies.',
     highlights: [

@@ -1,4 +1,4 @@
-import { ArrowUp, Globe, Mail, MapPin, MessageSquare, Phone } from 'lucide-react'
+import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
 import logoBlue from '../../assets/logo_blue.png'
 
 const quickLinks = [
@@ -43,9 +43,16 @@ export default function Footer() {
         <div>
           <h4>Follow us</h4>
           <div className="social-links">
-            <a href="#" aria-label="Website"><Globe size={18} /></a>
-            <a href="#" aria-label="Messages"><MessageSquare size={18} /></a>
-            <a href="#" aria-label="Email"><Mail size={18} /></a>
+            <a
+              href="https://web.facebook.com/profile.php?id=100025107360897"
+              aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.1H7v3.2h2.8V21h3.7Z" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>

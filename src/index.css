@@ -4742,6 +4742,25 @@ html:has(.homepage-shell) .footer-shell {
   will-change: opacity, transform;
 }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.scroll-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .app-layout-shell {
   min-height: 100vh;
   display: flex;

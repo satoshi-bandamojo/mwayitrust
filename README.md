@@ -74,6 +74,7 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 - Admin authentication is handled through Supabase auth. Use Supabase to create admin users or manage roles.
 - `ProtectedRoute` checks for an admin profile using `getCurrentAdminProfile()` — ensure your Supabase `admins` (or equivalent) table and the server-side function match this lookup.
 - Admin pages call Supabase directly via the anon key — secure server-side operations (like marking a donation as verified) should be done through server functions or using Row Level Security (RLS) with service role keys on trusted server endpoints.
+- Apply `supabase/migrations/202611110001_gallery_storage_policies.sql` to create the public `gallery` storage bucket, allow public reads, and restrict writes to authenticated users with an admin role in `public.profiles`.
 
 ## Donation integration details
 

@@ -38,6 +38,7 @@ export default function MainLayout() {
   const [isChecked, setIsChecked] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const pageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -45,6 +46,33 @@ export default function MainLayout() {
       dialog.showModal()
     }
   }, [consent.required])
+
+  useEffect(() => {
+    const page = pageRef.current
+    if (!page || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+
+    const targets = page.querySelectorAll('section, .program-card, .home-program-card, .story-card, .event-card')
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-reveal--visible')
+            currentObserver.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12 },
+    )
+
+    targets.forEach((target) => {
+      target.classList.add('scroll-reveal')
+      observer.observe(target)
+    })
+
+    return () => observer.disconnect()
+  }, [location.pathname])
 
   const acceptTerms = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -85,7 +113,7 @@ export default function MainLayout() {
       <ScrollToTop />
       <Navbar />
       <main className="main-content-flow pb-6" id="main-content">
-        <div key={location.pathname} className="page-transition">
+        <div key={location.pathname} ref={pageRef} className="page-transition">
           <Outlet />
         </div>
       </main>

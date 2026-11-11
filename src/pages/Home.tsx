@@ -28,7 +28,9 @@ const missionSnapshot = [
   },
 ]
 
-const featuredPrograms = programs.slice(0, 3)
+const featuredPrograms = ['vocational-training', 'homework-centre', 'girls-sponsorship'].flatMap((slug) =>
+  programs.filter((program) => program.slug === slug),
+)
 const coverImage = (story: Story) => story.cover_image || story.featured_image || story.image_url || ''
 
 export default function Home() {
@@ -163,10 +165,6 @@ export default function Home() {
             <p className="section-kicker">Key initiatives</p>
             <h2>Hands-on programs</h2>
           </div>
-          <Link to="/programs" className="font-semibold text-[#034694] hover:underline flex items-center gap-1">
-            <span>View all programs</span>
-            <ArrowRight size={16} />
-          </Link>
         </div>
 
         <div className="home-programs-grid">
@@ -185,6 +183,11 @@ export default function Home() {
               </div>
             </Link>
           ))}
+        </div>
+        <div className="section-cta">
+          <Link className="btn btn-primary min-h-[48px]" to="/programs">
+            View All Programs
+          </Link>
         </div>
       </section>
 

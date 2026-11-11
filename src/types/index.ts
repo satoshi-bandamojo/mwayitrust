@@ -37,6 +37,7 @@ export type GalleryImage = {
   title: string
   image_url: string
   thumbnail_url?: string
+  caption?: string | null
   description?: string
   category?: string
   author?: string

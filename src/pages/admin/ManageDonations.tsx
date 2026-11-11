@@ -25,6 +25,11 @@ export default function ManageDonations() {
     void refreshDonations()
   }, [])
 
+  const successfulDonationsTotal = donations.reduce(
+    (total, donation) => donation.status === 'Completed' && Number.isFinite(donation.amount) ? total + donation.amount : total,
+    0,
+  )
+
   const handleDelete = async (id: number | string) => {
     const confirmed = window.confirm('Delete this donation record?')
     if (!confirmed) return
@@ -52,6 +57,16 @@ export default function ManageDonations() {
       {statusMessage ? (
         <div className={`admin-alert admin-alert--${statusType}`}>{statusMessage}</div>
       ) : null}
+
+      <section className="admin-panel" aria-label="Successful donations total">
+        <h2>Successful donations total</h2>
+        <p className="admin-page-title">
+          {loading ? '…' : `MK ${successfulDonationsTotal.toLocaleString()}`}
+        </p>
+        <p className="admin-page-subtitle">
+          {loading ? 'Loading confirmed donations…' : 'Sum of completed donations only.'}
+        </p>
+      </section>
 
       <section className="admin-panel">
         {loading ? (
