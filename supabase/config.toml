@@ -416,6 +416,10 @@ enabled = true
 enabled = true
 verify_jwt = false
 
+[functions.confirm-donation]
+enabled = true
+verify_jwt = false
+
 [functions.record-consent]
 enabled = true
 verify_jwt = false

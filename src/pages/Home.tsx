@@ -263,7 +263,7 @@ export default function Home() {
         </div>
         <div className="card-grid home-featured-stories-grid">
           {storiesLoading ? (
-            <LoadingState label="Loading featured stories" />
+            <LoadingState label="Loading featured stories" variant="cards" />
           ) : storiesError ? (
             <p className="error-message">{storiesError}</p>
           ) : (
@@ -280,9 +280,8 @@ export default function Home() {
                   </div>
                   <h3>{story.title}</h3>
                   <p>{story.excerpt}</p>
-                  <Link to={`/stories/${encodeURIComponent(story.id)}`} className="mt-3 text-sm font-bold text-[#034694] inline-flex items-center gap-1">
-                    <span>Read story</span>
-                    <ArrowRight size={14} />
+                  <Link to={`/stories/${encodeURIComponent(story.id)}`} className="home-story-read-link">
+                    Read
                   </Link>
                 </div>
               </article>

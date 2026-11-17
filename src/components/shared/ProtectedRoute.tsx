@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { getCurrentAdminProfile } from '../../services/admin.ts'
 import { supabase } from '../../services/supabase.ts'
+import LoadingState from '../ui/LoadingState.tsx'
 
 export default function ProtectedRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -43,12 +44,7 @@ export default function ProtectedRoute() {
 
   if (loading) {
     return (
-      <div className="page-shell">
-        <div className="page-block">
-          <p className="section-kicker">Checking access</p>
-          <h1>Verifying admin access…</h1>
-        </div>
-      </div>
+      <LoadingState label="Verifying admin access" />
     )
   }
 

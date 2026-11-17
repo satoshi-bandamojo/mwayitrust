@@ -8,7 +8,7 @@ Configure `PAYCHANGU_SECRET_KEY`, `PAYCHANGU_WEB_SECRET`, and `APP_URL` in Supab
 src/
 ├── services/
 │   ├── paychangu.ts          ← Payment verification & checkout
-│   └── donations.ts          ← Supabase donation service (updated)
+│   └── donations.ts          ← Supabase donation and confirmation services
 ├── pages/
 │   ├── Donate.tsx            ← Donation form (updated)
 │   └── DonationCallback.tsx   ← Payment result handler (NEW)
@@ -27,16 +27,17 @@ PAYCHANGU_SETUP.md           ← Full setup documentation (NEW)
 ### `src/services/donations.ts`
 - `createDonation(payload)` - Save donation to Supabase
 - `getDonationByReference(reference)` - Fetch donation record
+- `confirmDonation(reference)` - Ask the server to verify and record the PayChangu transaction
 
 ## Payment States
 
 | State | Status | Action |
 |-------|--------|--------|
 | Pending | User fills form | Save to DB, redirect to Paychangu |
-| Processing | User completes payment | Wait for signed webhook update |
-| Success | Webhook confirms payment | Show success page |
-| Failed | Webhook reports failure | Show error page |
-| Cancelled | Webhook reports cancellation | Show cancel page |
+| Processing | User completes payment | Verify on callback and wait for webhook updates |
+| Success | Server-side PayChangu verification confirms payment | Show success page |
+| Failed | Server-side PayChangu verification confirms failure | Show error page |
+| Cancelled | Server-side PayChangu verification confirms cancellation | Show cancel page |
 
 ## Testing Checklist
 

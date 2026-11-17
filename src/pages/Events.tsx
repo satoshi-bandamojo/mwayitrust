@@ -89,7 +89,7 @@ export default function Events() {
           </div>
 
           {loading ? (
-            <LoadingState label="Loading events" />
+            <LoadingState label="Loading events" variant="cards" />
           ) : error ? (
             <p className="error-message">{error}</p>
           ) : displayedEvents.length ? (

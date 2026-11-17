@@ -570,6 +570,16 @@ html:has(.homepage-shell) .footer-shell {
   aspect-ratio: 16 / 8;
 }
 
+.home-story-read-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #034694;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .home-program-body span {
   display: inline-flex;
   align-items: center;
@@ -1921,36 +1931,177 @@ html:has(.homepage-shell) .footer-shell {
 }
 
 .loading-state {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  background: rgba(14, 165, 233, 0.06);
-  border: 1px solid rgba(56, 189, 248, 0.18);
+  --skeleton-base: #e2e8f0;
+  --skeleton-highlight: #f8fafc;
+  width: 100%;
+  min-width: 0;
+}
+
+.loading-state__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.loading-state__block {
+  background: linear-gradient(
+    100deg,
+    var(--skeleton-base) 20%,
+    var(--skeleton-highlight) 45%,
+    var(--skeleton-base) 70%
+  );
+  background-size: 200% 100%;
+  animation: loading-state-shimmer 1.5s ease-in-out infinite;
+}
+
+.loading-state__page {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2rem);
+}
+
+.loading-state__intro {
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.loading-state__line {
+  height: 0.85rem;
+  width: 100%;
   border-radius: 999px;
-  color: #0f172a;
-  font-weight: 600;
-  margin: 0.25rem 0;
+  margin-top: 0.9rem;
 }
 
-.loading-state__pulse {
-  border-radius: 999px;
-  background: linear-gradient(135deg, #034694, #7ca7ff);
+.loading-state__line--short {
+  width: 22%;
+  height: 0.65rem;
+  margin: 0 auto;
 }
 
-.loading-state__pulse--large {
-  width: 0.75rem;
-  height: 0.75rem;
+.loading-state__line--title {
+  height: 1.1rem;
+  width: 72%;
+  margin-top: 1.4rem;
 }
 
-.loading-state__pulse--medium {
-  width: 0.55rem;
-  height: 0.55rem;
+.loading-state__line--heading {
+  width: min(78%, 34rem);
+  height: clamp(1.8rem, 5vw, 3rem);
+  margin: 1rem auto 0;
 }
 
-.loading-state__pulse--small {
-  width: 0.35rem;
-  height: 0.35rem;
+.loading-state__line--intro {
+  width: min(92%, 32rem);
+  margin: 1.25rem auto 0;
+}
+
+.loading-state__line--medium {
+  width: 68%;
+}
+
+.loading-state__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.4vw, 1.75rem);
+  width: 100%;
+}
+
+.loading-state--cards {
+  grid-column: 1 / -1;
+}
+
+.loading-state__card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.loading-state__card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.loading-state__card-content {
+  padding: clamp(1rem, 2vw, 1.4rem);
+}
+
+.loading-state__detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2rem);
+}
+
+.loading-state__detail-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 1rem;
+}
+
+.loading-state__detail-content {
+  padding-top: 0.5rem;
+}
+
+.loading-state__detail-content .loading-state__line--heading {
+  width: 90%;
+  margin: 1rem 0 1.75rem;
+}
+
+@keyframes loading-state-shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@media (max-width: 760px) {
+  .loading-state__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .loading-state__grid .loading-state__card:last-child {
+    display: none;
+  }
+
+  .loading-state__detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .loading-state__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .loading-state__grid .loading-state__card:nth-child(n + 2) {
+    display: none;
+  }
+
+  .loading-state__intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .loading-state__line--short {
+    width: 34%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-state__block {
+    animation: none;
+  }
 }
 
 

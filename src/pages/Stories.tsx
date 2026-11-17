@@ -72,7 +72,7 @@ export default function Stories() {
 
       <section id="story-grid" className="story-list-section" aria-label="Stories">
         {loading ? (
-          <div className="story-loading"><LoadingState label="Loading stories" /></div>
+          <div className="story-loading"><LoadingState label="Loading stories" variant="cards" /></div>
         ) : error ? (
           <p className="error-message" role="alert">{error}</p>
         ) : publishedStories.length ? (

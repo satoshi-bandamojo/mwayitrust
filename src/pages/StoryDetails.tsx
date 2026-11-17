@@ -73,7 +73,7 @@ export default function StoryDetails() {
   if (loading) {
     return (
       <div className="page-shell">
-        <LoadingState label="Loading story" />
+        <LoadingState label="Loading story" variant="detail" />
       </div>
     )
   }

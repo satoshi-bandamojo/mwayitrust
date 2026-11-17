@@ -17,7 +17,6 @@ export const termsOfUse = {
     {
       heading: 'Purpose of the Website',
       paragraphs: [
-        'The Mwayi Trust website is intended to:',
         'We aim to keep the information on this website accurate and up to date. However, information may occasionally change, and we cannot guarantee that every page will always be complete, current or free from errors.',
         'The website is primarily an information and communication platform. Unless we expressly state otherwise, information published here should not be interpreted as a guarantee that a particular programme, service, event or opportunity will be available to every visitor.',
       ],
@@ -32,8 +31,8 @@ export const termsOfUse = {
     {
       heading: 'Acceptable Use',
       paragraphs: [
-        'You agree to use this website responsibly and for lawful purposes. When using the website, you must not:',
         'We reserve the right to restrict access, investigate suspected misuse and take appropriate action where these terms have been breached.',
+        'You agree to use this website responsibly and for lawful purposes. When using the website, you must not:',
       ],
       listItems: [
         'Use it in a way that violates applicable laws or regulations.',
@@ -226,10 +225,9 @@ export const termsOfUse = {
       paragraphs: [
         'If you have questions about these Terms of Use, wish to request permission to use our content, or need to report an issue relating to the website, please contact us through the contact details published on the official Mwayi Trust website.',
         'Organisation: Mwayi Trust',
-        'Website: https://mwayitrust.netlify.app/',
+        'Website: mwayitrust.org',
         'Email: sandy.mwayi@gmail.com',
         'Telephone: +265 881 452 554',
-        'Postal or physical address: Please use the contact details published on our official website.',
         'We will review enquiries and respond where appropriate.',
       ],
     },
@@ -248,7 +246,7 @@ export const privacyNotice = {
       paragraphs: [
         'Mwayi Trust respects the privacy of the people who visit our website, support our work, participate in our programmes and communicate with us.',
         'We understand that when you share your personal information with us, you trust us to handle it responsibly. This Privacy Policy explains what information we may collect, why we collect it, how we use and protect it, and the choices available to you.',
-        'This policy applies to the Mwayi Trust website at https://mwayitrust.netlify.app/ and to personal information collected through the website’s features, including contact forms, newsletter subscriptions and online donation facilities.',
+        'This policy applies to the Mwayi Trust website at https://mwayitrust.org/ and to personal information collected through the website’s features, including contact forms, newsletter subscriptions and online donation facilities.',
         'It also explains how we approach the use of photographs, stories and other information relating to the children, young people, families and communities connected to our work.',
         'Mwayi Trust aims to handle personal information fairly, responsibly and in accordance with applicable data protection laws, including the laws of the Republic of Malawi.',
       ],
@@ -259,10 +257,10 @@ export const privacyNotice = {
         'For the purposes of this policy, “Mwayi Trust”, “we”, “our” and “us” refer to Mwayi Trust.',
         'We use our website to share information about our organisation, vocational training, community activities, events, stories and opportunities for people to support our work.',
         'Organisation: Mwayi Trust',
-        'Website: https://mwayitrust.netlify.app/',
+        'Website: https://mwayitrust.org/',
         'Telephone: +265 881 452 554',
         'Privacy enquiries: sandy.mwayi@gmail.com',
-        'Postal or physical address: Please use the contact details published on our official website.',
+        'Location: Mbvundula Village, TA Kunthembwe in Chileka, Blantyre.',
         'For privacy questions, requests concerning your personal information or concerns about content published on our website, please use the contact details above.',
       ],
     },
@@ -275,7 +273,7 @@ export const privacyNotice = {
         {
           heading: '3.1 Information You Provide Directly',
           paragraphs: [
-            'When you contact us, subscribe to updates or make a donation, we may collect information such as:',
+            'When you contact us, subscribe to updates or make a donation, we may collect information such as name, phone or email.',
             'You can choose not to provide certain information. However, if information is necessary to respond to your enquiry or complete a transaction, we may be unable to provide the requested service without it.',
             'Please avoid including sensitive personal information in general contact forms unless it is genuinely necessary for your enquiry.',
           ],
@@ -292,7 +290,7 @@ export const privacyNotice = {
         {
           heading: '3.2 Donation Information',
           paragraphs: [
-            'If you make a donation through our website, we may collect or receive information such as:',
+            'If you make a donation through our website, we may collect or receive information such as name, phone or email',
             'We use this information to initiate and administer donations, reconcile transactions, respond to payment enquiries, maintain appropriate financial records and help prevent fraudulent or incorrect transactions.',
             'Payment card details and security codes should be entered only through the appropriate payment provider’s secure payment interface. Mwayi Trust does not intend to collect payment card security codes through its own general website forms.',
             'The information actually collected during a transaction depends on the payment method and provider used.',
@@ -304,7 +302,6 @@ export const privacyNotice = {
             'The donation amount and currency.',
             'Your donation purpose, where applicable.',
             'A transaction reference or payment reference.',
-            'The payment method selected.',
             'The status of the transaction, such as pending, successful or unsuccessful.',
             'Relevant transaction details returned by the payment provider.',
           ],
@@ -321,7 +318,6 @@ export const privacyNotice = {
           heading: '3.4 Technical and Usage Information',
           paragraphs: [
             'When you visit the website, certain technical information may be processed by the website’s hosting provider or other services used to operate the website. Depending on the services and settings in use, this may include:',
-            'We do not claim to collect every category listed above directly. The information available depends on the website’s configuration and the services operating behind it.',
           ],
           listItems: [
             'Your internet protocol (IP) address.',
@@ -367,8 +363,6 @@ export const privacyNotice = {
       heading: 'Our Reasons for Processing Information',
       paragraphs: [
         'Where required by applicable law, Mwayi Trust will identify and rely on an appropriate legal basis for processing personal information. Depending on the circumstances, this may include:',
-        'For example, we may use your email address to respond to a message you have sent us. If you subscribe to a newsletter, we may use your email address to send the updates you requested, subject to applicable consent requirements.',
-        'Where consent is the appropriate basis, you may withdraw it. Withdrawal will not affect the lawfulness of processing carried out before the withdrawal, and some information may still need to be retained or processed for other lawful reasons.',
       ],
       listItems: [
         'Your consent.',
@@ -376,64 +370,6 @@ export const privacyNotice = {
         'Meeting legal or regulatory obligations.',
         'Legitimate organisational purposes, where permitted by law and where the individual’s rights and interests are appropriately considered.',
         'Other lawful grounds recognised by applicable law.',
-      ],
-    },
-    {
-      heading: 'How We Share Personal Information',
-      paragraphs: [
-        'Mwayi Trust does not intend to sell personal information collected through its website.',
-        'We may share relevant information with trusted service providers where necessary to operate the website, deliver a requested service, administer donations or meet legal obligations. These providers may include:',
-      ],
-      subsections: [
-        {
-          heading: '6.1 Website Hosting',
-          paragraphs: [
-            'Our website is hosted through Netlify. Technical information may be processed by the hosting service as necessary to deliver website pages, maintain reliability and support security.',
-          ],
-        },
-        {
-          heading: '6.2 Database and Website Services',
-          paragraphs: [
-            'We use Supabase for certain website functions, including storing and managing information used by the website. Depending on the features you use, information may be stored or processed through Supabase services. Access to that information should be limited according to the permissions and security controls configured for the website.',
-          ],
-        },
-        {
-          heading: '6.3 Payment Providers',
-          paragraphs: [
-            'Online donations may involve PayChangu or another payment provider made available on the website. The payment provider may receive information necessary to process a transaction, verify payment details, prevent fraud and comply with its own legal obligations. The provider’s own privacy policy and terms may also apply to information it processes independently.',
-          ],
-        },
-        {
-          heading: '6.4 Legal and Safety Requirements',
-          paragraphs: [
-            'We may disclose personal information where we reasonably believe disclosure is necessary to comply with applicable law, respond to a lawful request, investigate suspected fraud, protect someone’s safety or address a serious security concern. Where required, we will consider the applicable legal requirements before disclosing information.',
-          ],
-        },
-        {
-          heading: '6.5 Other Disclosures',
-          paragraphs: [
-            'We may share information with another organisation where you have authorised the disclosure or where another lawful basis permits it. We do not authorise service providers to use personal information entrusted to them for unrelated purposes merely because they provide services to Mwayi Trust.',
-          ],
-        },
-      ],
-    },
-    {
-      heading: 'International Processing and Storage',
-      paragraphs: [
-        'Some of the technology providers used to operate our website may store or process information in countries outside Malawi.',
-        'For example, website hosting, database services and payment processing may involve infrastructure located in another country, depending on the provider’s arrangements and configuration.',
-        'Where personal information is transferred internationally, Mwayi Trust aims to take the steps required by applicable law to ensure that the transfer and subsequent processing are handled appropriately.',
-        'The laws applying in another country may differ from those in Malawi. If you have questions about where particular information is stored or processed, you may contact us for further information.',
-      ],
-    },
-    {
-      heading: 'Cookies and Similar Technologies',
-      paragraphs: [
-        'Cookies are small files that websites may store on your device. Similar technologies may be used to maintain sessions, remember preferences or support website security and performance.',
-        'The technologies used on the Mwayi Trust website depend on the services and settings currently enabled.',
-        'Some cookies or similar technologies may be necessary for a website feature to function correctly. If analytics, advertising or other optional tracking technologies are introduced, we will consider whether additional notices or consent mechanisms are required by applicable law.',
-        'You can usually manage or delete cookies through your browser settings. Blocking certain cookies may affect the operation of some website features.',
-        'We do not claim to use advertising cookies, analytics tools or tracking technologies unless they are actually enabled on the website.',
       ],
     },
     {

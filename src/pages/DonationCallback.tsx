@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BadgeCheck, AlertCircle, Loader, ArrowRight } from 'lucide-react'
-import { getDonationByReference } from '../services/donations'
+import { confirmDonation, getDonationByReference } from '../services/donations'
 import { extractPaymentCallbackParams } from '../services/paychangu'
 
 type CallbackState = 'loading' | 'success' | 'failed' | 'processing'
@@ -29,6 +29,17 @@ export default function DonationCallback() {
       if (!active) return
 
       try {
+        if (attempts === 0 || attempts % 5 === 0) {
+          try {
+            const { error: confirmationError } = await confirmDonation(txRef)
+            if (confirmationError) {
+              console.warn('Server-side payment confirmation is unavailable:', confirmationError.message)
+            }
+          } catch (confirmationError) {
+            console.warn('Server-side payment confirmation failed:', confirmationError)
+          }
+        }
+
         const { data: donationData, error: dbError } = await getDonationByReference(txRef)
 
         if (dbError || !donationData) {

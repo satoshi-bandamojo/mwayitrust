@@ -72,9 +72,10 @@ Configure these values as Supabase Edge Function secrets. Do not use a `VITE_` p
 5. **Payment Callback**
    - Paychangu redirects to `/donation-callback?tx_ref=...&status=success`
    - Callback page ignores the URL status and reads the donation by `tx_ref`
-   - The webhook validates the HMAC signature and re-verifies the transaction with PayChangu before updating status
+   - The callback asks the `confirm-donation` Edge Function to verify the transaction with PayChangu; it validates the reference, amount, and currency before updating status
+   - The webhook independently validates its HMAC signature and re-verifies the transaction with PayChangu before updating status
    - The callback polls the stored status briefly and shows success only when it is `completed`
-   - Admins cannot manually mark a donation as paid; the verified webhook is the payment-status writer
+   - Only the server-side PayChangu-verified callback or webhook can update payment status
 
 6. **Confirmation**
    - Success: Shows donation amount, reference, email confirmation
@@ -165,14 +166,15 @@ Configure the server-only secrets:
 supabase secrets set PAYCHANGU_SECRET_KEY="your-paychangu-secret-key" PAYCHANGU_WEB_SECRET="your-paychangu-webhook-secret" APP_URL="https://mwayitrust.netlify.app"
 ```
 
-Deploy both functions:
+Deploy all three functions:
 
 ```powershell
 supabase functions deploy create-donation
+supabase functions deploy confirm-donation --no-verify-jwt
 supabase functions deploy paychangu-webhook --no-verify-jwt
 ```
 
-The webhook uses `--no-verify-jwt` because PayChangu authenticates the request with its webhook signature, not a Supabase user JWT. It also verifies the transaction against PayChangu's verification API before changing the donation record. Configure PayChangu to send webhooks to:
+`confirm-donation` is public so the donation callback can call it without a user login; it uses PayChangu's server-side verification API and validates the transaction before changing the donation record. The webhook uses `--no-verify-jwt` because PayChangu authenticates the request with its webhook signature, not a Supabase user JWT. It also verifies the transaction against PayChangu's verification API before changing the donation record. Configure PayChangu to send webhooks to:
 
 ```text
 https://ghbjhzkalqtdnizwoeyt.supabase.co/functions/v1/paychangu-webhook
@@ -231,7 +233,9 @@ In Supabase, check `payment_metadata` column (JSONB):
 ### Issue: Payment status not updating in Supabase
 - **Check**: Are Supabase credentials valid?
 - **Check**: Is the signed webhook reaching `paychangu-webhook`?
-- **Solution**: Check Supabase function logs and confirm `PAYCHANGU_WEB_SECRET` matches PayChangu
+- **Check**: Is `confirm-donation` deployed with JWT verification disabled?
+- **Solution**: Check Supabase function logs and confirm `PAYCHANGU_SECRET_KEY` is valid; confirm `PAYCHANGU_WEB_SECRET` matches PayChangu for webhook updates
+- **Existing paid donation**: Reopen its `/donation-callback?tx_ref=...` URL after deploying `confirm-donation` to reconcile it
 
 ## 📞 Support
 

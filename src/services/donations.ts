@@ -40,3 +40,10 @@ export async function getDonationByReference(reference: string) {
   const { data, error } = await supabase.from('donations').select('*').eq('payment_reference', reference).maybeSingle()
   return { data, error }
 }
+
+export async function confirmDonation(reference: string) {
+  const { data, error } = await supabase.functions.invoke<{ success: boolean; status: string }>('confirm-donation', {
+    body: { tx_ref: reference },
+  })
+  return { data, error }
+}
