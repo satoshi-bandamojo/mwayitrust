@@ -12,7 +12,7 @@ import gardenImg from '../assets/program-community-garden2.webp'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-const hasSupabaseConfig = Boolean(
+export const hasSupabaseConfig = Boolean(
   supabaseUrl &&
     supabaseAnonKey &&
     supabaseUrl.startsWith('http') &&

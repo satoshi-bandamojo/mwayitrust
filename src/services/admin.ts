@@ -245,9 +245,34 @@ export async function getEvents(): Promise<EventItem[]> {
 }
 
 export async function addEvent(event: Partial<EventItem>) {
-  const { data, error } = await supabase.from('events').insert([event]).select().single()
-  if (error) throw error
-  return data as EventItem
+  const imageUrl = event.image_url || event.image || event.cover_image
+  const baseEvent = { ...event }
+  delete baseEvent.image_url
+  delete baseEvent.image
+  delete baseEvent.cover_image
+  const imageColumns = ['image_url', 'image', 'cover_image'] as const
+
+  if (!imageUrl) {
+    const { data, error } = await supabase.from('events').insert([event]).select().single()
+    if (error) throw error
+    return data as EventItem
+  }
+
+  let lastError: { code: string; message: string } | null = null
+  for (const column of imageColumns) {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{ ...baseEvent, [column]: imageUrl }])
+      .select()
+      .single()
+
+    if (!error) return data as EventItem
+
+    lastError = error
+    if (!['42703', 'PGRST204'].includes(error.code)) throw error
+  }
+
+  throw lastError ?? new Error('Unable to save the event image.')
 }
 
 export async function deleteEvent(id: string) {

@@ -1,5 +1,7 @@
 import { Pencil, Plus, Star, Trash2, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import AdminImageUpload from '../../components/admin/AdminImageUpload.tsx'
+import { deleteContentImage, uploadContentImage } from '../../services/contentImages.ts'
 import { storiesService } from '../../services/stories.ts'
 import type { Story } from '../../types/index.ts'
 
@@ -48,6 +50,7 @@ export default function ManageStories() {
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<FormState>(emptyForm)
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
   const [slugTouched, setSlugTouched] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -81,6 +84,7 @@ export default function ManageStories() {
   const openCreateForm = () => {
     setEditingId(null)
     setForm(emptyForm)
+    setCoverImageFile(null)
     setSlugTouched(false)
     setShowForm(true)
   }
@@ -98,6 +102,7 @@ export default function ManageStories() {
       featured: Boolean(story.featured),
       published: story.published !== false,
     })
+    setCoverImageFile(null)
     setSlugTouched(true)
     setShowForm(true)
   }
@@ -106,6 +111,7 @@ export default function ManageStories() {
     setShowForm(false)
     setEditingId(null)
     setForm(emptyForm)
+    setCoverImageFile(null)
   }
 
   const handleTitleChange = (value: string) => {
@@ -123,8 +129,19 @@ export default function ManageStories() {
       return
     }
 
+    if (!editingId && !coverImageFile) {
+      setStatusType('error')
+      setStatusMessage('Upload a cover image before creating the story.')
+      return
+    }
+
     setSaving(true)
+    let uploadedImageUrl = ''
     try {
+      if (coverImageFile) {
+        uploadedImageUrl = await uploadContentImage('stories', coverImageFile)
+      }
+
       const payload: Partial<Story> = {
         title: form.title.trim(),
         slug: form.slug.trim(),
@@ -132,7 +149,7 @@ export default function ManageStories() {
         content: form.content,
         author: form.author.trim() || undefined,
         category: form.category.trim() || undefined,
-        cover_image: form.cover_image.trim() || undefined,
+        cover_image: uploadedImageUrl || form.cover_image.trim() || undefined,
         featured: form.featured,
         published: form.published,
         published_at: form.published ? new Date().toISOString() : undefined,
@@ -150,10 +167,34 @@ export default function ManageStories() {
         setStatusMessage('Story created.')
       }
 
+      if (uploadedImageUrl && form.cover_image) {
+        try {
+          await deleteContentImage('stories', form.cover_image)
+        } catch (cleanupError) {
+          setStatusType('error')
+          setStatusMessage(
+            `Story saved, but its previous cover image could not be removed: ${
+              cleanupError instanceof Error ? cleanupError.message : 'Storage cleanup failed.'
+            }`,
+          )
+        }
+      }
+
       closeForm()
     } catch (err) {
+      let cleanupMessage = ''
+      if (uploadedImageUrl) {
+        try {
+          await deleteContentImage('stories', uploadedImageUrl)
+        } catch (cleanupError) {
+          console.error('Unable to clean up an unused story cover image', cleanupError)
+          cleanupMessage = ' The uploaded image could not be removed from storage.'
+        }
+      }
       setStatusType('error')
-      setStatusMessage(err instanceof Error ? err.message : 'Unable to save the story.')
+      setStatusMessage(
+        `${err instanceof Error ? err.message : 'Unable to save the story.'}${cleanupMessage}`,
+      )
     } finally {
       setSaving(false)
     }
@@ -163,11 +204,25 @@ export default function ManageStories() {
     const confirmed = window.confirm('Delete this story? This cannot be undone.')
     if (!confirmed) return
 
+    const story = stories.find((item) => item.id === id)
     try {
       await storiesService.remove(id)
       setStories((current) => current.filter((item) => item.id !== id))
       setStatusType('success')
       setStatusMessage('Story deleted.')
+      const coverImage = story?.cover_image || story?.featured_image || story?.image_url
+      if (coverImage) {
+        try {
+          await deleteContentImage('stories', coverImage)
+        } catch (cleanupError) {
+          setStatusType('error')
+          setStatusMessage(
+            `Story deleted, but its cover image could not be removed: ${
+              cleanupError instanceof Error ? cleanupError.message : 'Storage cleanup failed.'
+            }`,
+          )
+        }
+      }
     } catch {
       setStatusType('error')
       setStatusMessage('Unable to delete the story.')
@@ -188,9 +243,10 @@ export default function ManageStories() {
   }
 
   return (
-    <div className="admin-page-shell">
+    <div className="admin-page-shell admin-content-page admin-stories">
       <section className="admin-page-header">
         <div>
+          <p className="admin-content-page__eyebrow">Content management</p>
           <h1 className="admin-page-title">Stories</h1>
           <p className="admin-page-subtitle">Create, edit, publish, and remove impact stories.</p>
         </div>
@@ -204,7 +260,7 @@ export default function ManageStories() {
         <div className={`admin-alert admin-alert--${statusType}`}>{statusMessage}</div>
       ) : null}
 
-      <section className="admin-panel">
+      <section className="admin-panel admin-stories__panel">
         {loading ? (
           <div className="admin-panel__empty">
             <p>Loading stories…</p>
@@ -214,8 +270,8 @@ export default function ManageStories() {
             <p>No stories have been created yet.</p>
           </div>
         ) : (
-          <div className="donations-table-wrapper">
-            <table className="donations-table">
+          <div className="donations-table-wrapper admin-stories__table-wrap">
+            <table className="donations-table admin-stories__table">
               <thead>
                 <tr>
                   <th>Title</th>
@@ -229,11 +285,23 @@ export default function ManageStories() {
               <tbody>
                 {sortedStories.map((story) => (
                   <tr key={story.id}>
-                    <td>
-                      {story.title}
-                      {story.featured ? (
-                        <Star size={14} style={{ marginLeft: 6, verticalAlign: 'middle' }} fill="currentColor" />
-                      ) : null}
+                    <td className="admin-stories__title-cell">
+                      <div className="admin-stories__row-title">
+                        {story.cover_image || story.featured_image || story.image_url ? (
+                          <img
+                            className="admin-stories__thumbnail"
+                            src={story.cover_image || story.featured_image || story.image_url}
+                            alt=""
+                            loading="lazy"
+                          />
+                        ) : null}
+                        <span className="admin-stories__title">
+                          {story.title}
+                          {story.featured ? (
+                          <Star className="admin-stories__featured-icon" size={15} aria-label="Featured" fill="currentColor" />
+                          ) : null}
+                        </span>
+                      </div>
                     </td>
                     <td>{story.category || '—'}</td>
                     <td>{story.author || '—'}</td>
@@ -271,10 +339,10 @@ export default function ManageStories() {
       </section>
 
       {showForm ? (
-        <div className="admin-modal-overlay" role="dialog" aria-modal="true">
-          <div className="admin-modal">
+        <div className="admin-modal-overlay admin-content-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="story-form-title">
+          <div className="admin-modal admin-content-modal">
             <div className="admin-modal__header">
-              <h2>{editingId ? 'Edit story' : 'New story'}</h2>
+              <h2 id="story-form-title">{editingId ? 'Edit story' : 'New story'}</h2>
               <button type="button" className="admin-modal__close" onClick={closeForm} aria-label="Close">
                 <X size={18} />
               </button>
@@ -323,15 +391,14 @@ export default function ManageStories() {
                 </label>
               </div>
 
-              <label className="admin-form-field">
-                <span>Cover image URL</span>
-                <input
-                  type="text"
-                  value={form.cover_image}
-                  onChange={(e) => setForm((current) => ({ ...current, cover_image: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </label>
+              <AdminImageUpload
+                label="Cover image"
+                imageUrl={form.cover_image}
+                file={coverImageFile}
+                onChange={setCoverImageFile}
+                required={!editingId && !form.cover_image}
+                disabled={saving}
+              />
 
               <label className="admin-form-field">
                 <span>Excerpt</span>

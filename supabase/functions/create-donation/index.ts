@@ -114,6 +114,10 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: 'Unsupported currency' }, 400)
     }
 
+    if (currency === 'MWK' && donationType === 'custom' && amount < 500) {
+      return jsonResponse({ error: 'Custom donations must be at least MK 500' }, 400)
+    }
+
     if (donorName.length > 160 || phone.length > 40 || purpose.length > 120 || donationType.length > 120) {
       return jsonResponse({ error: 'One or more donation fields are too long' }, 400)
     }

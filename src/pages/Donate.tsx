@@ -133,14 +133,15 @@ export default function Donate() {
     }
 
     setErrors(nextErrors)
-    return valid
+    return { valid, errors: nextErrors }
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (!validate()) {
-      setSubmitMessage('')
+    const validation = validate()
+    if (!validation.valid) {
+      setSubmitMessage(validation.errors.amount || 'Please check your donation details.')
       return
     }
 
@@ -213,6 +214,7 @@ export default function Donate() {
                       setSelectedTier(tier.type)
                       clearErrors()
                       setCustomAmount('')
+                      setSubmitMessage('')
                     }}
                   >
                     <div className="impact-card-top-row">
@@ -238,6 +240,7 @@ export default function Donate() {
               onClick={() => {
                 setSelectedTier('custom')
                 clearErrors()
+                setSubmitMessage('')
               }}
             >
               <span className="donate-toggle__emoji" aria-hidden="true">✍️</span>
@@ -256,22 +259,28 @@ export default function Donate() {
                     className={`form-input pl-12 ${errors.amount ? 'form-input--error' : ''}`}
                     min={minCustomAmount}
                     inputMode="numeric"
-                    placeholder="e.g. 50000"
+                    placeholder="Enter 500 or more"
                     type="number"
                     value={customAmount}
                     onChange={(event) => {
                       setCustomAmount(event.target.value)
                       setErrors((current) => ({ ...current, amount: '' }))
+                      setSubmitMessage('')
                     }}
                   />
                 </div>
+                <small className="form-hint">Minimum donation: MK {minCustomAmount.toLocaleString()}.</small>
                 <div className="quick-amount-chips">
                   {[10000, 25000, 50000, 100000].map((amt) => (
                     <button
                       key={amt}
                       type="button"
                       className="quick-chip-btn"
-                      onClick={() => setCustomAmount(String(amt))}
+                      onClick={() => {
+                        setCustomAmount(String(amt))
+                        setErrors((current) => ({ ...current, amount: '' }))
+                        setSubmitMessage('')
+                      }}
                     >
                       +MK {amt.toLocaleString()}
                     </button>
@@ -300,6 +309,7 @@ export default function Donate() {
                   onChange={(event) => {
                     setForm((current) => ({ ...current, donor_name: event.target.value }))
                     setErrors((current) => ({ ...current, donor_name: '' }))
+                    setSubmitMessage('')
                   }}
                   required
                 />
@@ -315,7 +325,11 @@ export default function Donate() {
                   placeholder="name@example.com"
                   type="email"
                   value={form.email}
-                  onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+                  onChange={(event) => {
+                    setForm((current) => ({ ...current, email: event.target.value }))
+                    setErrors((current) => ({ ...current, email: '' }))
+                    setSubmitMessage('')
+                  }}
                   required
                 />
                 {errors.email ? <small className="form-hint text-red-600">{errors.email}</small> : null}
@@ -358,19 +372,15 @@ export default function Donate() {
             </div>
           </div>
 
-          {submitMessage ? (
-            <div className={`donation-status-box ${isSubmitting ? 'donation-status-box--loading' : ''}`}>
-              {submitMessage}
-            </div>
-          ) : null}
-
           <button
             className="submit-button min-h-[52px] w-full text-base font-bold shadow-lg"
             type="submit"
-            disabled={isSubmitting || finalAmount < minCustomAmount}
+            disabled={isSubmitting}
           >
             <HeartHandshake size={20} />
-            <span>{isSubmitting ? 'Preparing Payment…' : `Donate ${finalAmount.toLocaleString()} Now`}</span>
+            <span className="text-center break-words" aria-live="polite">
+              {submitMessage || `Donate ${finalAmount.toLocaleString()} Now`}
+            </span>
           </button>
 
           <div className="donation-note">
