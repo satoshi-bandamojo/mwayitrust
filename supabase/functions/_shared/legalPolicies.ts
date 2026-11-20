@@ -376,9 +376,9 @@ export const privacyNotice = {
       heading: 'How We Protect Personal Information',
       paragraphs: [
         'Mwayi Trust recognises the importance of protecting the information entrusted to us.',
-        'We aim to use appropriate technical and organisational measures to reduce the risk of unauthorised access, disclosure, alteration, loss or misuse. Depending on the information and system involved, these measures may include:',
         'No website, database or method of transmitting information over the internet can be guaranteed to be completely secure. We therefore cannot promise absolute security.',
         'If a personal data breach occurs, we will assess the circumstances and take the steps required by applicable law, which may include notifying affected individuals or the relevant authority.',
+        'We aim to use appropriate technical and organisational measures to reduce the risk of unauthorised access, disclosure, alteration, loss or misuse. Depending on the information and system involved, these measures may include:',
       ],
       listItems: [
         'Limiting access to authorised personnel who need information for their responsibilities.',
@@ -393,10 +393,10 @@ export const privacyNotice = {
     {
       heading: 'How Long We Keep Information',
       paragraphs: [
-        'We retain personal information only for as long as reasonably necessary for the purposes described in this policy, subject to applicable legal, financial and operational requirements.',
-        'Retention periods may differ depending on the type of information. For example:',
         'We do not specify fixed retention periods here because these depend on our actual systems, record-keeping practices and applicable legal requirements.',
         'When information is no longer required, we aim to delete it or otherwise handle it appropriately, unless we are required or permitted to retain it.',
+        'We retain personal information only for as long as reasonably necessary for the purposes described in this policy, subject to applicable legal, financial and operational requirements.',
+        'Retention periods may differ depending on the type of information. For example:',
       ],
       listItems: [
         'Contact enquiries: kept for as long as necessary to respond, follow up and maintain appropriate records.',
@@ -410,9 +410,6 @@ export const privacyNotice = {
       heading: 'Your Privacy Rights',
       paragraphs: [
         'Subject to applicable law and the circumstances of the request, you may have rights concerning your personal information. These may include the right to:',
-        'These rights are not absolute in every circumstance. For example, Mwayi Trust may need to retain certain donation records to meet legal or financial obligations even if a deletion request is received.',
-        'To exercise a privacy right, contact us using the details in Section 17. Please describe your request clearly and provide enough information for us to identify the relevant records.',
-        'We may ask for reasonable information to verify your identity before responding, particularly where the request involves confidential records. We will handle requests in accordance with applicable legal requirements.',
       ],
       listItems: [
         'Ask whether we hold personal information about you.',
@@ -428,10 +425,10 @@ export const privacyNotice = {
     {
       heading: 'Children’s Privacy and Vulnerable Individuals',
       paragraphs: [
-        'Mwayi Trust’s work may involve children, young people and families who face difficult circumstances. We recognise that information about these individuals requires particular care. We aim to:',
         'We do not intend to collect unnecessary personal information about children through general website forms.',
         'Where information about a child is submitted to us, we will consider the purpose of the submission and the safeguards appropriate to the circumstances.',
         'If a parent, guardian or authorised representative believes that information about a child has been published or collected inappropriately, please contact us so that we can review the matter.',
+        'Mwayi Trust’s work may involve children, young people and families who face difficult circumstances. We recognise that information about these individuals requires particular care. We aim to:',
       ],
       listItems: [
         'Treat children and vulnerable individuals with dignity and respect.',
@@ -479,10 +476,10 @@ export const privacyNotice = {
       paragraphs: [
         'For questions about this Privacy Policy, requests relating to personal information, or concerns about photographs and stories published on the website, please contact:',
         'Mwayi Trust',
-        'Website: https://mwayitrust.netlify.app/',
+        'Website: https://mwayitrust.org/',
         'Telephone: +265 881 452 554',
         'Email: sandy.mwayi@gmail.com',
-        'Postal or physical address: Please use the contact details published on our official website.',
+        'Location:  Mbvundula Village, TA Kunthembwe in Chileka, Blantyre.',
         'Please include enough information for us to understand your enquiry. Avoid sending passwords, payment card security codes or other sensitive credentials by email.',
       ],
     },
