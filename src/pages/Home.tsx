@@ -7,6 +7,8 @@ import type { Story } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
 import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
+const heroImages = [1, 2, 3, 4, 5].map((image) => `/hero_rotate/${image}.webp`)
+
 const stats = [
   { value: '3,000+', label: 'students supported' },
   { value: '6', label: 'learning hubs' },
@@ -15,16 +17,16 @@ const stats = [
 
 const missionSnapshot = [
   {
-    title: 'Our Mission',
-    icon: Target,
-    description:
-      'To enable young people and the community to access vocational training and educational support programs which increase potential for gaining employment and developing positive lifestyles.',
-  },
-  {
     title: 'Our Vision',
     icon: Eye,
     description:
       'To build the capacity of the community and enhance quality of life by working together to promote: educational support programs and vocational training, and -  cultural and socio-economic activities',
+  },
+  {
+    title: 'Our Mission',
+    icon: Target,
+    description:
+      'To enable young people and the community to access vocational training and educational support programs which increase potential for gaining employment and developing positive lifestyles.',
   },
 ]
 
@@ -96,8 +98,28 @@ export default function Home() {
   return (
     <div className="homepage-shell">
       {/* Mobile-First Hero Section */}
-      <section className="hero-section">
-        <img className="hero-image" src="/home.webp" alt="Mwayi Trust Students and Community" fetchPriority="high" />
+      <section className="hero-section" aria-label="Mwayi Trust photo highlights">
+        <div className="hero-track">
+          {heroImages.map((image, index) => (
+            <img
+              key={image}
+              className="hero-image"
+              src={image}
+              alt={`Mwayi Trust photo ${index + 1}`}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+              loading="eager"
+              decoding="async"
+            />
+          ))}
+          <img
+            className="hero-image"
+            src={heroImages[0]}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
         <div className="hero-overlay" />
         <div className="hero-content">
           <h1 className="hero-slogan">
@@ -106,7 +128,7 @@ export default function Home() {
             <span>Opening</span>
             <span>Doors.</span>
           </h1>
-          <p className="hero-lead-text">
+          <p>
             Mwayi Trust equips young Malawians with education, vocational trade certificates, and community mentorship.
           </p>
 

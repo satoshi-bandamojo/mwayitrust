@@ -6,7 +6,7 @@ import App from './App'
 import './index.css'
 
 if (window.location.pathname === '/') {
-  preload('/home.webp', { as: 'image', fetchPriority: 'high' })
+  preload('/hero_rotate/1.webp', { as: 'image', fetchPriority: 'high' })
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
