@@ -69,7 +69,7 @@ html:has(.homepage-shell) .footer-shell {
   display: flex;
   width: 1200%;
   height: 100%;
-  animation: hero-photo-sweep 55s linear infinite;
+  animation: hero-photo-sweep 95s linear infinite;
 }
 
 .hero-image {

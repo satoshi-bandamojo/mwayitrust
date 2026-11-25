@@ -23,7 +23,7 @@ const vocationalCourses = [
   },
   {
     title: 'Housekeeping',
-    description: 'A practical course for girls with learning difficulties and women who did not complete or attend secondary school, taught in a model hotel room with an ensuite.',
+    description: 'A practical course for young people with learning difficulties and women who did not complete or attend secondary school.',
     image: houseKeepingImage,
     tag: 'Hospitality services',
   },

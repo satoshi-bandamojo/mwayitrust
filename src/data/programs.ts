@@ -26,7 +26,7 @@ export const programs: Program[] = [
       'Supports vulnerable learners with tutoring, mentoring, and after-school learning in nearby primary schools.',
     images: [homeworkImage, homeworkDetail],
     overview:
-      'Operating since 2010, our Homework Centres help learners with special educational needs and learning difficulties remain in school. The centres operate in Michiru, Chikuli, Chigumukire, Chilangoma, and Andiseni Primary Schools. Three afternoons each week, trained secondary-school volunteers tutor learners in Standards 3, 4, and 5, with participating-school teachers volunteering as Patrons to supervise.',
+      'Operating since 2010, our Homework Centres help learners with special educational needs and learning difficulties remain in school. The centres operate in Michiru, Chikuli, Chigumukire, Chilangoma, and Andiseni Primary Schools. Three afternoons a week,  secondary-school volunteers trained as Peer Educators tutor identified students in standards 3,4 and 5. Teachers volunteer as Patrons.',
     highlights: [
       'More than 200 learners receive support each week, and over 1,000 learners have benefited since the program began.',
       'Each year, 50–75 young people in Forms 1 and 3 from four local secondary schools train as Peer Educators in a 3–5 day workshop.',
@@ -50,20 +50,22 @@ export const programs: Program[] = [
       'Helps girls stay in school through fee support, mentorship, and life-skills coaching to reduce dropout risk.',
     images: [girlsImage, girlsDetail],
     overview:
-      'Established in 2015, this program responds to girls leaving school because of family pressure, pregnancy, or early marriage—barriers that can limit access to meaningful employment. Sponsors from around the world help provide students with their school requirements. Sponsorship costs US$150 per student per year. More than 55 girls have been sponsored, helping them remain in school and complete secondary education.',
+      'Established in 2015, this program assists girls to remain in school who would have been forced to leave due to family pressures, early marriage or lack of school fees. Sponsors from around the world help provide students with their school requirements. Sponsorship costs US$180 per student per year. More than 55 girls have been sponsored, helping them remain in school and complete their secondary education.',
     highlights: [
-      'Sponsors contribute US$150 per student per year toward school requirements.',
+      'Sponsors contribute US$180 per student per year toward school requirements.',
       'The current sponsorship cohort includes 11 girls and, in response to requests, 7 boys.',
       'Many sponsored girls have also volunteered as Peer Educators in the Homework Centre Program.',
+       'A case in point is Miriam. Mwayi Trust sponsered her for two years to complete her secondary school education. During that time she volunteered as a Peer Educator. After that she attained her MSCE, and applied for and receiced a scholarship for Proffesional Cookery. After graduationg, she gained employement with a local carteering company. And has been employed in other businesses ever since.'
+      
     ],
     outcomes: [
-      'More than 55 girls have received support to stay in school and complete secondary education.',
-      'Twelve girls have received Vocational College scholarships and completed Professional Cookery or Tailoring courses.',
-      'Several graduates are employed full-time, including in their own businesses, cafes, and lodges around Blantyre; one is working in South Africa.',
+      'Girls remaining in school and completing their secondary education.',
+      'Increased Self esteem and Confidence about their future.',
+      'Girls receiving Vocational college scholarships for Proffesional Cookery, Tailoring, Carpentry and Housekeeping.',
     ],
     enrollSteps: [
       'Contact the Mwayi Trust team to discuss sponsoring a student.',
-      'Arrange a sponsorship contribution of US$150 per student per year.',
+      'Arrange a sponsorship contribution of US$150 per year.',
       'Speak with the team about current sponsorship needs and how support is provided.',
     ],
   },
@@ -71,14 +73,16 @@ export const programs: Program[] = [
     title: 'Vocational College',
     slug: 'vocational-training',
     summary:
-      'Inclusive, hands-on training to build practical skills for employment and self-employment.',
+      'Inclusive, hands-on training to build practical skills for employment.',
     images: [vocationalCentreImage, vocationalGraduationImage],
     overview:
-      'Our competency-based courses combine practical vocational training with business communication, entrepreneurship, and life skills. Courses are selected with input from local communities and businesses, and availability may vary by intake. Young people with special educational needs are encouraged to apply and can take the time they need to achieve course competencies.',
+      'This programme offers opportunities for young people from rural areas, to access competency-based vocational training regardless of their educational background. Our competency-based courses combine practical vocational training with business communication and entrepreneurship. Courses are selected with input from local communities and businesses, and availability may vary by intake. Young people with special educational needs are encouraged to apply and can take the time they need to achieve course competencies.',
     highlights: [
-      'Training pathways include Professional Cookery, Tailoring, Housekeeping, and Carpentry.',
-      'Housekeeping offers practical training in a model hotel room with an ensuite and is designed for girls with learning difficulties and women who did not complete or attend secondary school.',
-      'Fees are kept as low as possible, and scholarships may be available for former Peer Educators, young people with special educational needs, and applicants from villages that contributed to the Centre.',
+      'All courses provide sufficient hands on  practical training to ensure competency.',
+      'Work experience and opportunities are provided through local business parteners.',
+      'Fees are kept as low as possible, and scholarships are available for former Peer Educators, young people with special educational needs, and applicants from villages that contributed to the Centre.',
+      'Employers are now contacting the college for suitable employees.',
+      'Over 50 graaduates are now employeed by recognised local businesses e.g hotels, cafes, building constructors, furniture makers etc.',
     ],
     outcomes: [
       'Build practical skills and business know-how for employment or self-employment.',

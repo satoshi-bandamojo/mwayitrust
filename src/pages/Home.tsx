@@ -158,7 +158,7 @@ export default function Home() {
       <section className="section-divider mission-snapshot-section" aria-label="Who we are">
         <div className="section-heading mission-snapshot-heading">
           <div>
-            <h2>Community-led empowerment built to open doors through skills and education.</h2>
+            <h2>Community-led empowerment built to open doors through educational support and vocational training.</h2>
           </div>
         </div>
         <p className="mission-snapshot-lead">
