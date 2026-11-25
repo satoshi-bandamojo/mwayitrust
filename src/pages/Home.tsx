@@ -7,7 +7,7 @@ import type { Story } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
 import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
-const heroImages = [1, 2, 3, 4, 5].map((image) => `/hero_rotate/${image}.webp`)
+const heroImages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((image) => `/hero_rotate/${image}.webp`)
 
 const stats = [
   { value: '3,000+', label: 'students supported' },

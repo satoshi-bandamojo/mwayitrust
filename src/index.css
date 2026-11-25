@@ -67,15 +67,15 @@ html:has(.homepage-shell) .footer-shell {
 
 .hero-track {
   display: flex;
-  width: 600%;
+  width: 1200%;
   height: 100%;
-  animation: hero-photo-sweep 30s linear infinite;
+  animation: hero-photo-sweep 55s linear infinite;
 }
 
 .hero-image {
   display: block;
-  flex: 0 0 16.666667%;
-  width: 16.666667%;
+  flex: 0 0 8.333333%;
+  width: 8.333333%;
   height: 100%;
   object-fit: cover;
   object-position: center;
@@ -157,7 +157,7 @@ html:has(.homepage-shell) .footer-shell {
 
 @keyframes hero-photo-sweep {
   from { transform: translateX(0); }
-  to { transform: translateX(-83.333333%); }
+  to { transform: translateX(-91.666667%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
