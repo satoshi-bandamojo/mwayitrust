@@ -3,7 +3,7 @@ import homeworkDetail from '../assets/program-homework1.webp'
 import girlsImage from '../assets/program-girls-sponsorship.webp'
 import girlsDetail from '../assets/program-girls-sponsorship (2).webp'
 import vocationalCentreImage from '../assets/program-vocational2.webp'
-import vocationalGraduationImage from '../assets/graduation.webp'
+import vocationalGraduationImage from '../assets/graduation.jpg'
 import communityGardenImage from '../assets/program-community-garden2.webp'
 import communityGardenDetail from '../assets/program-comunity-garden.webp'
 

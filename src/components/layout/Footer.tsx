@@ -53,6 +53,16 @@ export default function Footer() {
                 <path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.1H7v3.2h2.8V21h3.7Z" />
               </svg>
             </a>
+            <a
+              href="https://www.linkedin.com/in/sandra-trevethan-a0885247/"
+              aria-label="LinkedIn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M5.4 7.7A2.1 2.1 0 1 1 5.4 3.5a2.1 2.1 0 0 1 0 4.2ZM3.7 9h3.4v11H3.7V9Zm5.7 0h3.2v1.5h.1c.4-.8 1.5-2 3.7-2 4 0 4.7 2.6 4.7 6V20h-3.4v-4.9c0-1.2 0-2.8-1.7-2.8-1.7 0-2 1.3-2 2.7V20H9.4V9Z" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>

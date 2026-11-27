@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import graduationImg from '../assets/graduation.webp'
+import graduationImg from '../assets/graduation.jpg'
 import graduation1Img from '../assets/graduation1.webp'
 import carpentryImg from '../assets/carpentry.webp'
 import cookeryImg from '../assets/cookery2.webp'

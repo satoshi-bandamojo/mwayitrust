@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, HeartHandshake, Landmark, ShieldCheck, Smartphone } from 'lucide-react'
+import { ArrowRight, CheckCircle2, HeartHandshake, Landmark, Smartphone } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { createDonation } from '../services/donations'
 
@@ -384,8 +384,7 @@ export default function Donate() {
           </button>
 
           <div className="donation-note">
-            <ShieldCheck size={18} className="text-emerald-600 shrink-0" />
-            <span>Encrypted and secured.</span>
+            <span>Encrypted and secure</span>
           </div>
         </form>
 

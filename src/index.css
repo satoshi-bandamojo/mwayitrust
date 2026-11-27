@@ -67,18 +67,49 @@ html:has(.homepage-shell) .footer-shell {
 
 .hero-track {
   display: flex;
-  width: 1200%;
   height: 100%;
-  animation: hero-photo-sweep 95s linear infinite;
+}
+
+.hero-track--mobile {
+  width: 1000%;
+  animation: hero-photo-sweep-mobile 95s linear infinite;
+}
+
+.hero-track--desktop {
+  display: none;
+  width: 800%;
+  animation: hero-photo-sweep-desktop 90s linear infinite;
 }
 
 .hero-image {
   display: block;
-  flex: 0 0 8.333333%;
-  width: 8.333333%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.hero-track--mobile .hero-image {
+  flex: 0 0 10%;
+  width: 10%;
+}
+
+.hero-track--desktop .hero-image {
+  flex: 0 0 12.5%;
+  width: 12.5%;
+}
+
+@media (min-width: 1024px) {
+  .hero-section {
+    height: clamp(640px, 80svh, 900px);
+  }
+
+  .hero-track--mobile {
+    display: none;
+  }
+
+  .hero-track--desktop {
+    display: flex;
+  }
 }
 
 .hero-overlay {
@@ -155,9 +186,14 @@ html:has(.homepage-shell) .footer-shell {
   color: white;
 }
 
-@keyframes hero-photo-sweep {
+@keyframes hero-photo-sweep-mobile {
   from { transform: translateX(0); }
-  to { transform: translateX(-91.666667%); }
+  to { transform: translateX(-90%); }
+}
+
+@keyframes hero-photo-sweep-desktop {
+  from { transform: translateX(0); }
+  to { transform: translateX(-87.5%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3625,20 +3661,15 @@ html:has(.homepage-shell) .footer-shell {
 }
 
 .donation-note {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  align-self: stretch;
   margin-top: 0.85rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid #bbf7d0;
-  border-radius: 0.65rem;
-  background: #f0fdf4;
-  color: #15803d;
+  padding: 0.25rem 0;
+  color: #64748b;
   font-size: 0.9rem;
-}
-
-.donation-note svg {
-  color: #16a34a;
+  text-align: center;
 }
 
 .impact-card--active {

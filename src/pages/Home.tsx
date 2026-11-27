@@ -7,7 +7,20 @@ import type { Story } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
 import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
-const heroImages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((image) => `/hero_rotate/${image}.webp`)
+const mobileHeroImages = [1, 3, 4, 6, 7, 8, 9, 10, 11].map((image) => ({
+  src: `/hero_rotate/${image}.webp`,
+  alt: `Mwayi Trust photo ${image}`,
+}))
+
+const desktopHeroImages = [
+  { src: '/hero_rotate/4.webp', alt: 'Mwayi Trust photo 4', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/3.webp', alt: 'Mwayi Trust photo 3', objectPosition: 'center 70%' },
+  { src: '/hero_rotate/11.jpeg', alt: 'Mwayi Trust photo 11', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/7.jpg', alt: 'Mwayi Trust photo 7', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/8.jpeg', alt: 'Mwayi Trust photo 8', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/9.jpeg', alt: 'Mwayi Trust photo 9', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/6.webp', alt: 'Mwayi Trust photo 6', objectPosition: 'center' },
+]
 
 const stats = [
   { value: '3,000+', label: 'students supported' },
@@ -99,13 +112,13 @@ export default function Home() {
     <div className="homepage-shell">
       {/* Mobile-First Hero Section */}
       <section className="hero-section" aria-label="Mwayi Trust photo highlights">
-        <div className="hero-track">
-          {heroImages.map((image, index) => (
+        <div className="hero-track hero-track--mobile">
+          {mobileHeroImages.map((image, index) => (
             <img
-              key={image}
+              key={image.src}
               className="hero-image"
-              src={image}
-              alt={`Mwayi Trust photo ${index + 1}`}
+              src={image.src}
+              alt={image.alt}
               fetchPriority={index === 0 ? 'high' : 'auto'}
               loading="eager"
               decoding="async"
@@ -113,9 +126,32 @@ export default function Home() {
           ))}
           <img
             className="hero-image"
-            src={heroImages[0]}
+            src={mobileHeroImages[0].src}
             alt=""
             aria-hidden="true"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div className="hero-track hero-track--desktop">
+          {desktopHeroImages.map((image, index) => (
+            <img
+              key={image.src}
+              className="hero-image"
+              src={image.src}
+              alt={image.alt}
+              style={{ objectPosition: image.objectPosition }}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+              loading="eager"
+              decoding="async"
+            />
+          ))}
+          <img
+            className="hero-image"
+            src={desktopHeroImages[0].src}
+            alt=""
+            aria-hidden="true"
+            style={{ objectPosition: desktopHeroImages[0].objectPosition }}
             loading="eager"
             decoding="async"
           />
@@ -218,10 +254,10 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="section-kicker">How to participate</p>
-            <h2 id="how-to-help-title">Multiple ways to stand with a young learner.</h2>
+            <h2 id="how-to-help-title">Multiple ways to stand with a student.</h2>
           </div>
           <p className="help-intro">
-            Whether you donate via Airtel Money/Mpamba, provide learning materials, or volunteer your expertise, your support keeps classroom doors open.
+            Whether you donate via our platform, provide learning materials, or volunteer your expertise, your support keeps classroom doors open.
           </p>
         </div>
 
@@ -271,7 +307,7 @@ export default function Home() {
 
         <div className="help-note">
           <BookOpen size={20} />
-          <p>Every contribution, big or small, impacts a real family in Chileka.</p>
+          <p>Every contribution, big or small, impacts a real families in Chileka.</p>
         </div>
       </section>
 
@@ -322,7 +358,7 @@ export default function Home() {
         <div className="newsletter-copy">
           <p className="section-kicker">Stay updated</p>
           <h2>Connect with Mwayi Trust</h2>
-          <p>Receive periodic updates on student graduations, community garden yields, and events.</p>
+          <p>Receive periodic updates on student events.</p>
         </div>
         <form className="newsletter-form" onSubmit={handleSubscribe} noValidate>
           <input
