@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { getCurrentAdminProfile } from '../../services/admin.ts'
+import { recordSecurityEvent } from '../../services/securityEvents.ts'
 import { supabase } from '../../services/supabase.ts'
 import LoadingState from '../ui/LoadingState.tsx'
 
@@ -17,6 +18,10 @@ export default function ProtectedRoute() {
       } = await supabase.auth.getSession()
       const profile = session ? await getCurrentAdminProfile() : null
 
+      if (session && !profile) {
+        void recordSecurityEvent('unauthorized_admin_access')
+      }
+
       if (!isMounted) return
 
       setIsAuthenticated(Boolean(profile))
@@ -29,6 +34,10 @@ export default function ProtectedRoute() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const profile = session ? await getCurrentAdminProfile() : null
+
+      if (session && !profile) {
+        void recordSecurityEvent('unauthorized_admin_access')
+      }
 
       if (!isMounted) return
 

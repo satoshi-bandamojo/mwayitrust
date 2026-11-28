@@ -13,8 +13,8 @@ export async function createContactMessage(payload: ContactMessagePayload) {
     message: payload.message,
   }
 
-  const { data, error } = await supabase.from('contact_messages').insert([insert]).select().single()
-  return { data, error }
+  const { error } = await supabase.from('contact_messages').insert([insert])
+  return { data: null, error }
 }
 
 export async function listContactMessages() {

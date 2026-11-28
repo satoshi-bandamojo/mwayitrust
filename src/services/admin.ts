@@ -101,7 +101,7 @@ export async function signInAdmin(email: string, password: string) {
 
   if (!profile) {
     await supabase.auth.signOut()
-    throw new Error('This account is not registered as an admin in the profiles table.')
+    throw new Error('Invalid email or password.')
   }
 
   return data

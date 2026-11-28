@@ -71,13 +71,13 @@ html:has(.homepage-shell) .footer-shell {
 }
 
 .hero-track--mobile {
-  width: 1000%;
+  width: 1200%;
   animation: hero-photo-sweep-mobile 95s linear infinite;
 }
 
 .hero-track--desktop {
   display: none;
-  width: 800%;
+  width: 1200%;
   animation: hero-photo-sweep-desktop 90s linear infinite;
 }
 
@@ -89,13 +89,13 @@ html:has(.homepage-shell) .footer-shell {
 }
 
 .hero-track--mobile .hero-image {
-  flex: 0 0 10%;
-  width: 10%;
+  flex: 0 0 8.3333%;
+  width: 8.3333%;
 }
 
 .hero-track--desktop .hero-image {
-  flex: 0 0 12.5%;
-  width: 12.5%;
+  flex: 0 0 8.3333%;
+  width: 8.3333%;
 }
 
 @media (min-width: 1024px) {
@@ -188,12 +188,12 @@ html:has(.homepage-shell) .footer-shell {
 
 @keyframes hero-photo-sweep-mobile {
   from { transform: translateX(0); }
-  to { transform: translateX(-90%); }
+  to { transform: translateX(-91.6667%); }
 }
 
 @keyframes hero-photo-sweep-desktop {
   from { transform: translateX(0); }
-  to { transform: translateX(-87.5%); }
+  to { transform: translateX(-91.6667%); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BadgeCheck, AlertCircle, Loader, ArrowRight } from 'lucide-react'
-import { confirmDonation, getDonationByReference } from '../services/donations'
+import { confirmDonation } from '../services/donations'
 import { extractPaymentCallbackParams } from '../services/paychangu'
 
 type CallbackState = 'loading' | 'success' | 'failed' | 'processing'
@@ -9,7 +9,7 @@ type CallbackState = 'loading' | 'success' | 'failed' | 'processing'
 export default function DonationCallback() {
   const navigate = useNavigate()
   const [state, setState] = useState<CallbackState>('loading')
-  const [donation, setDonation] = useState<{ reference: string; amount: number; email: string } | null>(null)
+  const [reference, setReference] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -30,47 +30,46 @@ export default function DonationCallback() {
 
       try {
         if (attempts === 0 || attempts % 5 === 0) {
+          let confirmedStatus: string | null = null
           try {
-            const { error: confirmationError } = await confirmDonation(txRef)
+            const { data, error: confirmationError } = await confirmDonation(txRef)
             if (confirmationError) {
               console.warn('Server-side payment confirmation is unavailable:', confirmationError.message)
+            } else if (data) {
+              confirmedStatus = String(data.status).toLowerCase()
             }
           } catch (confirmationError) {
             console.warn('Server-side payment confirmation failed:', confirmationError)
           }
-        }
 
-        const { data: donationData, error: dbError } = await getDonationByReference(txRef)
+          if (confirmedStatus) {
+            setReference(txRef)
 
-        if (dbError || !donationData) {
-          console.error('Failed to fetch donation:', dbError)
-          setError('Donation record not found. Please contact support with your reference.')
-          setState('failed')
-          return
-        }
+            if (confirmedStatus === 'completed') {
+              setState('success')
+              return
+            }
 
-        setDonation({
-          reference: donationData.payment_reference,
-          amount: donationData.amount,
-          email: donationData.email,
-        })
-
-        const status = String(donationData.status).toLowerCase()
-        if (status === 'completed') {
-          setState('success')
-        } else if (status === 'failed' || status === 'cancelled' || status === 'canceled') {
-          setError(
-            status === 'cancelled' || status === 'canceled'
-              ? 'Payment was cancelled. Your donation was not processed.'
-              : 'Payment failed. Please try again.',
-          )
-          setState('failed')
-        } else {
-          setState('processing')
-          if (attempts < 19) {
-            attempts += 1
-            timeout = window.setTimeout(() => void checkDonationStatus(), 3000)
+            if (confirmedStatus === 'failed' || confirmedStatus === 'cancelled' || confirmedStatus === 'canceled') {
+              setError(
+                confirmedStatus === 'cancelled' || confirmedStatus === 'canceled'
+                  ? 'Payment was cancelled. Your donation was not processed.'
+                  : 'Payment failed. Please try again.',
+              )
+              setState('failed')
+              return
+            }
           }
+        }
+
+        setReference(txRef)
+        if (attempts < 19) {
+          setState('processing')
+          attempts += 1
+          timeout = window.setTimeout(() => void checkDonationStatus(), 3000)
+        } else {
+          setError('Payment confirmation is taking longer than expected. Please contact support with your reference.')
+          setState('failed')
         }
       } catch (err) {
         console.error('Callback processing error:', err)
@@ -106,19 +105,11 @@ export default function DonationCallback() {
           <BadgeCheck className="callback-icon callback-icon--success" size={64} />
           <h1>Thank you for your generous donation!</h1>
           <p>Your payment has been successfully processed.</p>
-          {donation && (
+          {reference && (
             <div className="callback-details">
               <div className="detail-row">
-                <span className="detail-label">Amount:</span>
-                <span className="detail-value">MK {donation.amount.toLocaleString()}</span>
-              </div>
-              <div className="detail-row">
                 <span className="detail-label">Reference:</span>
-                <span className="detail-value">{donation.reference}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Email:</span>
-                <span className="detail-value">{donation.email}</span>
+                <span className="detail-value">{reference}</span>
               </div>
             </div>
           )}
@@ -145,11 +136,11 @@ export default function DonationCallback() {
             again automatically for about one minute. If it is still processing, contact support with your reference
             before trying another payment.
           </p>
-          {donation ? (
+          {reference ? (
             <div className="callback-details">
               <div className="detail-row">
                 <span className="detail-label">Reference:</span>
-                <span className="detail-value">{donation.reference}</span>
+                <span className="detail-value">{reference}</span>
               </div>
             </div>
           ) : null}
@@ -169,11 +160,11 @@ export default function DonationCallback() {
         <AlertCircle className="callback-icon callback-icon--error" size={64} />
         <h1>Payment could not be processed</h1>
         <p>{error || 'An unexpected error occurred.'}</p>
-        {donation && (
+        {reference && (
           <div className="callback-details">
             <div className="detail-row">
               <span className="detail-label">Reference:</span>
-              <span className="detail-value">{donation.reference}</span>
+              <span className="detail-value">{reference}</span>
             </div>
           </div>
         )}

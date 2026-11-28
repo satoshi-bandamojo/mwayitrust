@@ -1,15 +1,14 @@
 import { supabase } from './supabase.ts'
-import type { Subscriber } from '../types/index.ts'
 
 export const subscribersService = {
-  async subscribe(email: string): Promise<Subscriber> {
+  async subscribe(email: string): Promise<void> {
     const payload = {
       email,
       subscribed: true,
       source: 'website',
     }
 
-    const { data, error } = await supabase.from('subscribers').insert(payload).select().single()
+    const { error } = await supabase.from('subscribers').insert(payload)
 
     if (error) {
       const message = (error.message ?? '').toLowerCase()
@@ -24,7 +23,5 @@ export const subscribersService = {
 
       throw error
     }
-
-    return data as unknown as Subscriber
   },
 }

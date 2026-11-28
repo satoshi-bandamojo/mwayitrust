@@ -423,6 +423,10 @@ verify_jwt = false
 [functions.record-consent]
 enabled = true
 verify_jwt = false
+
+[functions.record-security-event]
+enabled = true
+verify_jwt = false
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
 # Specifies static files to be bundled with the function. Supports glob patterns.

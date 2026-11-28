@@ -18,8 +18,13 @@ export const hasSupabaseConfig = Boolean(
     supabaseUrl.startsWith('http') &&
     !supabaseUrl.includes('your-project')
 )
+const useMockSupabase = import.meta.env.DEV && import.meta.env.VITE_ENABLE_MOCK_SUPABASE === 'true'
 
-// Initial mock data used when Supabase credentials are not provided
+if (!hasSupabaseConfig && !useMockSupabase) {
+  throw new Error('Supabase configuration is required. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.')
+}
+
+// Initial mock data is available only with the explicit development mock flag.
 const INITIAL_STORIES = [
   {
     id: 'story-1',
@@ -281,9 +286,6 @@ const tables: Record<string, any[]> = {
   subscribers: getStorage('subscribers', INITIAL_SUBSCRIBERS),
 }
 
-let currentMockUser: { id: string; email: string; user_metadata?: Record<string, unknown> } | null =
-  getStorage('auth_user', [INITIAL_PROFILES[0]])[0] || null
-
 function createMockQueryBuilder(tableName: string) {
   if (!tables[tableName]) {
     tables[tableName] = []
@@ -417,35 +419,23 @@ function createMockQueryBuilder(tableName: string) {
 const mockSupabaseClient = {
   auth: {
     async getUser() {
-      return { data: { user: currentMockUser }, error: null }
+      return { data: { user: null }, error: null }
     },
     async getSession() {
-      return {
-        data: {
-          session: currentMockUser ? { user: currentMockUser, access_token: 'mock-session-token' } : null,
-        },
-        error: null,
-      }
+      return { data: { session: null }, error: null }
     },
-    async signInWithPassword({ email }: { email: string; password?: string }) {
-      const profile = tables.profiles.find((p) => p.email.toLowerCase() === email.toLowerCase()) || {
-        id: 'admin-user-1',
-        email,
-        full_name: 'Mwayi Trust Admin',
-        role: 'admin',
+    async signInWithPassword() {
+      return {
+        data: { user: null, session: null },
+        error: new Error('Authentication is unavailable in mock mode. Configure Supabase to sign in.'),
       }
-      currentMockUser = { id: profile.id, email: profile.email }
-      setStorage('auth_user', [currentMockUser])
-      return { data: { user: currentMockUser, session: { user: currentMockUser } }, error: null }
     },
     async signOut() {
-      currentMockUser = null
-      setStorage('auth_user', [])
       return { error: null }
     },
     onAuthStateChange(callback: (event: string, session: any) => void) {
       setTimeout(() => {
-        callback(currentMockUser ? 'SIGNED_IN' : 'SIGNED_OUT', { user: currentMockUser })
+        callback('SIGNED_OUT', null)
       }, 0)
       return { data: { subscription: { unsubscribe: () => undefined } } }
     },

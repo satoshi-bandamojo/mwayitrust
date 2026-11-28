@@ -16,21 +16,14 @@ interface DonationTier {
 const donationTiers: DonationTier[] = [
   {
     type: 'learning_materials',
-    amount: 30000,
+    amount: 80000,
     label: 'Learning Materials',
     description: 'Exercise books, pens, school bag & geometry set for 1 pupil.',
     emoji: '📚',
   },
   {
-    type: 'student_term',
-    amount: 60000,
-    label: 'Support One Term',
-    description: 'School fees & tutoring for a vulnerable secondary school learner.',
-    emoji: '🎓',
-  },
-  {
     type: 'student_year',
-    amount: 180000,
+    amount: 230000,
     label: 'Support One Full Year',
     description: 'Complete academic sponsorship, uniform & mentoring for a full year.',
     emoji: '🌟',

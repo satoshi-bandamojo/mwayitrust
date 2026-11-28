@@ -7,19 +7,32 @@ import type { Story } from '../types/index.ts'
 import LoadingState from '../components/ui/LoadingState.tsx'
 import ProgramImageSlides from '../components/shared/ProgramImageSlides.tsx'
 
-const mobileHeroImages = [1, 3, 4, 6, 7, 8, 9, 10, 11].map((image) => ({
-  src: `/hero_rotate/${image}.webp`,
-  alt: `Mwayi Trust photo ${image}`,
-}))
+const mobileHeroImages = [
+  { src: '/hero_rotate/1.webp', alt: 'Mwayi Trust photo 1' },
+  { src: '/hero_rotate/2.jpeg', alt: 'Mwayi Trust photo 2' },
+  { src: '/hero_rotate/3.webp', alt: 'Mwayi Trust photo 3' },
+  { src: '/hero_rotate/4.webp', alt: 'Mwayi Trust photo 4' },
+  { src: '/hero_rotate/6.webp', alt: 'Mwayi Trust photo 6' },
+  { src: '/hero_rotate/7.jpg', alt: 'Mwayi Trust photo 7' },
+  { src: '/hero_rotate/8.jpg', alt: 'Mwayi Trust photo 8' },
+  { src: '/hero_rotate/9.jpeg', alt: 'Mwayi Trust photo 9' },
+  { src: '/hero_rotate/10.jpeg', alt: 'Mwayi Trust photo 10' },
+  { src: '/hero_rotate/11.jpeg', alt: 'Mwayi Trust photo 11' },
+  { src: '/hero_rotate/12.jpg', alt: 'Mwayi Trust photo 12' },
+]
 
 const desktopHeroImages = [
-  { src: '/hero_rotate/4.webp', alt: 'Mwayi Trust photo 4', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/1.webp', alt: 'Mwayi Trust photo 1', objectPosition: 'center' },
+  { src: '/hero_rotate/2.jpeg', alt: 'Mwayi Trust photo 2', objectPosition: 'center' },
   { src: '/hero_rotate/3.webp', alt: 'Mwayi Trust photo 3', objectPosition: 'center 70%' },
-  { src: '/hero_rotate/11.jpeg', alt: 'Mwayi Trust photo 11', objectPosition: 'center 25%' },
-  { src: '/hero_rotate/7.jpg', alt: 'Mwayi Trust photo 7', objectPosition: 'center 25%' },
-  { src: '/hero_rotate/8.jpeg', alt: 'Mwayi Trust photo 8', objectPosition: 'center 25%' },
-  { src: '/hero_rotate/9.jpeg', alt: 'Mwayi Trust photo 9', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/4.webp', alt: 'Mwayi Trust photo 4', objectPosition: 'center 25%' },
   { src: '/hero_rotate/6.webp', alt: 'Mwayi Trust photo 6', objectPosition: 'center' },
+  { src: '/hero_rotate/7.jpg', alt: 'Mwayi Trust photo 7', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/8.jpg', alt: 'Mwayi Trust photo 8', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/9.jpeg', alt: 'Mwayi Trust photo 9', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/10.jpeg', alt: 'Mwayi Trust photo 10', objectPosition: 'center' },
+  { src: '/hero_rotate/11.jpeg', alt: 'Mwayi Trust photo 11', objectPosition: 'center 25%' },
+  { src: '/hero_rotate/12.jpg', alt: 'Mwayi Trust photo 12', objectPosition: 'center' },
 ]
 
 const stats = [

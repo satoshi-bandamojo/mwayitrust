@@ -17,11 +17,10 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 
 2. Donation flow (`/donate`)
   - User chooses a donation tier or enters a custom amount, selects a payment method, and fills contact details.
-  - The frontend creates a donation record via `src/services/donations.ts -> createDonation()`, which inserts into the `donations` table in Supabase and returns a `payment_reference`.
-  - The frontend invokes the Supabase `create-donation` Edge Function, which creates the PayChangu checkout session server-side and returns a checkout URL.
+  - The frontend invokes the Supabase `create-donation` Edge Function, which creates the donation record and PayChangu checkout session server-side and returns a checkout URL.
 
 3. Donation reconciliation and webhooks
-  - The Supabase `paychangu-webhook` Edge Function is the only trusted payment status writer. The browser callback is read-only and displays the status recorded by the webhook.
+  - The `confirm-donation` Edge Function verifies payment server-side and returns only a sanitized status. The browser callback does not query donation rows or receive donor details.
 
 4. Admin interface
   - Admin pages live under `/admin/*` and are protected by `src/components/shared/ProtectedRoute.tsx` which verifies the Supabase session and admin profile via `getCurrentAdminProfile()`.
@@ -33,7 +32,7 @@ This repository contains the frontend for Mwayi Trust, a React + TypeScript + Vi
 - `src/main.tsx` — App entry and router mounting.
 - `src/router.tsx` — App routes and lazy-loaded pages (public + admin).
 - `src/pages/Donate.tsx` — Donation UI and client-side validation; uses `src/services/donations.ts` to save donations.
-- `src/services/supabase.ts` — Supabase client wrapper that uses `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; provides a no-op client when env vars are missing (safe local dev).
+- `src/services/supabase.ts` — Supabase client wrapper that requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; optional mock data requires the development-only `VITE_ENABLE_MOCK_SUPABASE=true` flag and does not provide authentication.
 - `src/services/donations.ts` — Helper functions for creating donations and reading their server-written status.
 - `src/components/shared/ProtectedRoute.tsx` — Protects admin routes by checking Supabase auth and the current admin profile.
 - `src/data/programs.ts` — Local program data and image imports used by the Programs page.
@@ -72,9 +71,11 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 ## Admin setup and notes
 
 - Admin authentication is handled through Supabase auth. Use Supabase to create admin users or manage roles.
-- `ProtectedRoute` checks for an admin profile using `getCurrentAdminProfile()` — ensure your Supabase `admins` (or equivalent) table and the server-side function match this lookup.
-- Admin pages call Supabase directly via the anon key — secure server-side operations (like marking a donation as verified) should be done through server functions or using Row Level Security (RLS) with service role keys on trusted server endpoints.
+- `ProtectedRoute` checks for an admin profile using `getCurrentAdminProfile()` — ensure `public.profiles` has the user's `id` and an admin `role`.
+- Admin pages call Supabase through the user's authenticated client. Database access must be enforced with RLS; service-role keys belong only in trusted Edge Functions.
 - Apply `supabase/migrations/202611110001_gallery_storage_policies.sql` to create the public `gallery` storage bucket, allow public reads, and restrict writes to authenticated users with an admin role in `public.profiles`.
+- Apply `supabase/migrations/202611280001_core_table_rls.sql` to restrict the core tables to administrators and allow only validated public contact/subscriber inserts. It expects the existing columns used by the app and replaces existing policies on the affected tables; verify hosted-project policies and schema before applying.
+- Apply `supabase/migrations/202611280002_security_events_rls.sql` to deny browser roles access to security-event writes and allow administrator reads. Deploy `supabase/functions/record-security-event` and set `SECURITY_EVENT_ALLOWED_ORIGINS`; trusted Edge Functions can write through the service role.
 
 ## Donation integration details
 
@@ -95,6 +96,8 @@ Static files will be emitted to `dist/`. Deploy these to your preferred static h
 
 - `VITE_SUPABASE_URL` — your Supabase project URL.
 - `VITE_SUPABASE_ANON_KEY` — public anon key for Supabase (used by the frontend).
+- `VITE_ENABLE_MOCK_SUPABASE` — optional development-only flag to use local mock content when Supabase is unavailable. Mock mode never authenticates an admin.
+- `SECURITY_EVENT_ALLOWED_ORIGINS` — comma-separated exact origins allowed to call the security-event Edge Function, for example `https://www.example.org,https://example.org`. Configure this as a Supabase Edge Function secret.
 
 ## Troubleshooting
 

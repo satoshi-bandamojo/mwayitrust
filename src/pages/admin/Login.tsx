@@ -2,6 +2,7 @@ import { ArrowLeft, Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signInAdmin } from '../../services/admin.ts'
+import { recordSecurityEvent } from '../../services/securityEvents.ts'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -49,8 +50,8 @@ export default function Login() {
       await signInAdmin(credentials.email.trim(), credentials.password)
       navigate('/admin', { replace: true })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Invalid email or password.'
-      setSubmitError(message)
+      void recordSecurityEvent('admin_login_failed')
+      setSubmitError(error instanceof Error ? error.message : 'Invalid email or password.')
     } finally {
       setIsSubmitting(false)
     }

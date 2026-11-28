@@ -104,14 +104,13 @@ export const programs: Program[] = [
     overview:
       'Shoprite sponsored the establishment of the on-site vegetable garden and provided its initial resources. The garden has supported six local young women over time; three currently work in it each day. The women had not completed secondary school and receive a small allowance, maize, meals, and vegetables from the garden. They learn current gardening and vegetable-production techniques while maintaining the garden.',
     highlights: [
-      'Garden produce is used in the Professional Cookery course and shared with the gardeners.',
-      'Produce not used for cookery or taken home is sold locally or to Shoprite.',
-      'Each year, one or two gardeners receive a scholarship for a course at the Vocational College.',
+      'Garden produce is used in the Professional Cookery course, shared with the gardeners or sold locally.',
+      'All six women were offered a scholarship to study at the Vocational College. They chose tailoring, successfully completed the course, and now use the college sewing space to run their own businesses.',
     ],
     outcomes: [
       'Young women gain practical experience in gardening and vegetable production.',
       'Daily work provides an allowance and food support, including maize, meals, and vegetables.',
-      'Scholarships create a pathway from garden work into vocational training.',
+      'Tailoring scholarships have helped the women turn their training into businesses using the college sewing space.',
     ],
     enrollSteps: [
       'Contact the Mwayi Trust team to learn about the garden and current opportunities.',
